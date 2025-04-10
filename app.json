@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.sebaschips.BitByBit"
+        "package": "com.sebaschips.BitByBit"
     },
     "web": {
       "bundler": "metro",
