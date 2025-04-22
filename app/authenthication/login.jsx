@@ -26,6 +26,9 @@ import {
 } from "./styles";
 
 WebBrowser.maybeCompleteAuthSession();
+
+
+
 const Login = () => {
   const navigation = useNavigation();
 
@@ -56,45 +59,69 @@ const Login = () => {
     }
   }, [response]);
 
-  const handleLogin = async (typeLogin) => {
-    try {
-      switch (typeLogin) {
-        case 0: // Login con email/password
-          const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-          if (!emailRegex.test(email)) {
-            Alert.alert("Error", "Por favor ingresa un correo válido");
-            return;
-          }
-          if (password.length < 6) {
-            Alert.alert(
-              "Error",
-              "La contraseña debe tener al menos 6 caracteres"
-            );
-            return;
-          }
-          if (typeLogin === 0 && !password) {
-            Alert.alert("Error", "Por favor ingresa tu contraseña");
-            return;
-          }
-          const userCredential = await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
-          const user = userCredential.user;
-          Alert.alert("Éxito", "Inicio de sesión correcto");
-          break;
-
-        case 1: // Login con Google
-          await promptAsync();
-          break;
-        default:
-          break;
-      }
-    } catch (error) {
-      Alert.alert("Error", error.message);
-    }
-  };
+    const handleLogin = async (typeLogin) => {
+        try {
+            switch (typeLogin) {
+                case 0: // Login con email/password
+                try {
+                    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                    if (!emailRegex.test(email)) {
+                        Alert.alert('Error', 'Por favor ingresa un correo válido');
+                        return;
+                    }
+                    
+                    if (password.length < 6) {
+                        Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
+                        return;
+                    }
+                    
+                    if (typeLogin === 0 && !password) {
+                        Alert.alert('Error', 'Por favor ingresa tu contraseña');
+                        return;
+                    }
+                    
+                    // Autenticación con Firebase
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    
+                    
+                    // Navegación a pantalla principal
+                    navigation.navigate('main',{ 
+                        user: userCredential.user 
+                    });
+                    
+                } catch (error) {
+                    console.error('Error en login:', error);
+                    
+                    let errorMessage = 'Ocurrió un error al iniciar sesión';
+                    switch (error.code) {
+                        case 'auth/invalid-credential':
+                        case 'auth/wrong-password':
+                        case 'auth/user-not-found':
+                            errorMessage = 'Credenciales incorrectas';
+                            break;
+                        case 'auth/too-many-requests':
+                            errorMessage = 'Demasiados intentos. Intenta más tarde';
+                            break;
+                        case 'auth/user-disabled':
+                            errorMessage = 'Tu cuenta ha sido deshabilitada';
+                            break;
+                    }
+                    
+                    Alert.alert('Error', errorMessage);
+                }
+                break;
+                    
+                case 1: // Login con Google
+                    await promptAsync();
+                    break;
+                default:
+                    break;
+            }
+        } catch (error) {
+            Alert.alert('Error', error.message);
+        }
+    };
 
   return (
     <View style={formStyles.container}>
