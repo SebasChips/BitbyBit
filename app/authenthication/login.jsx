@@ -1,127 +1,82 @@
-import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  Button,
-  Text,
-  Alert,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, TextInput, Text, Image, TouchableOpacity } from "react-native";
 import { auth } from "../../firebase/firebaseConfig.jsx";
-import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithCredential,
-} from "firebase/auth";
+import  {signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
+import { makeRedirectUri } from "expo-auth-session";
 import { useNavigation } from "@react-navigation/native";
-import {
-  colors,
-  spacing,
-  textStyles,
-  formStyles,
-  buttonStyles,
-} from "./styles";
+import { colors, spacing, textStyles, formStyles, buttonStyles} from "./styles";
+import Toast from 'react-native-toast-message';
 
 WebBrowser.maybeCompleteAuthSession();
 
-
-
 const Login = () => {
   const navigation = useNavigation();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isPasswordVisible] = useState(false);
-  const [request, response, /* inicia sesión en ventana externa*/ promptAsync] =
-    Google.useAuthRequest({
-      webClientId:
-        "61966159852-30er87tn5uojd5l0p8ndhriu144tpuj0.apps.googleusercontent.com",
-      expoClientId:
-        "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
-      androidClientId:
-        "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
-    });
 
-  React.useEffect(() => {
+
+  // Construye un redirectUri compatible con Expo Proxy para móvil
+  const redirectUri = makeRedirectUri({ useProxy: true });
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    webClientId: "61966159852-30er87tn5uojd5l0p8ndhriu144tpuj0.apps.googleusercontent.com",
+    expoClientId: "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
+    androidClientId: "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
+    iosClientId: "61966159852-bk80mn0a9pfuitkj1i8qv0f4kqtug8nu.apps.googleusercontent.com",
+    redirectUri,
+    scopes: ["openid", "profile", "email"],
+  });
+
+  useEffect(() => {
     if (response?.type === "success") {
-      const { id_token } = response.params;
-      const credential = GoogleAuthProvider.credential(id_token);
+      const { id_token, access_token } = response.params;
+      const credential = GoogleAuthProvider.credential(id_token, access_token);
       signInWithCredential(auth, credential)
         .then(() => {
-          Alert.alert("Éxito", "Inicio de sesión con Google correcto");
+          navigation.navigate("main");
         })
         .catch((error) => {
-          Alert.alert("Error", error.message);
+          console.error("Error en signInWithCredential:", error);
         });
     }
   }, [response]);
 
-    const handleLogin = async (typeLogin) => {
-        try {
-            switch (typeLogin) {
-                case 0: // Login con email/password
-                try {
-                    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-                    if (!emailRegex.test(email)) {
-                        Alert.alert('Error', 'Por favor ingresa un correo válido');
-                        return;
-                    }
-                    
-                    if (password.length < 6) {
-                        Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
-                        return;
-                    }
-                    
-                    if (typeLogin === 0 && !password) {
-                        Alert.alert('Error', 'Por favor ingresa tu contraseña');
-                        return;
-                    }
-                    
-                    // Autenticación con Firebase
-                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                    const user = userCredential.user;
-                    
-                    
-                    // Navegación a pantalla principal
-                    navigation.navigate('main',{ 
-                        user: userCredential.user 
-                    });
-                    
-                } catch (error) {
-                    console.error('Error en login:', error);
-                    
-                    let errorMessage = 'Ocurrió un error al iniciar sesión';
-                    switch (error.code) {
-                        case 'auth/invalid-credential':
-                        case 'auth/wrong-password':
-                        case 'auth/user-not-found':
-                            errorMessage = 'Credenciales incorrectas';
-                            break;
-                        case 'auth/too-many-requests':
-                            errorMessage = 'Demasiados intentos. Intenta más tarde';
-                            break;
-                        case 'auth/user-disabled':
-                            errorMessage = 'Tu cuenta ha sido deshabilitada';
-                            break;
-                    }
-                    
-                    Alert.alert('Error', errorMessage);
-                }
-                break;
-                    
-                case 1: // Login con Google
-                    await promptAsync();
-                    break;
-                default:
-                    break;
-            }
-        } catch (error) {
-            Alert.alert('Error', error.message);
-        }
-    };
+
+
+  const handleLogin = async (typeLogin) => {
+    if (typeLogin === 0) {
+      if (!/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,6}$/.test(email)) {
+        Toast.show({
+          type: 'error',
+          text1: 'Incorrecto',
+          text2: 'El correo electrónico no es válido',
+        });
+        return;
+      }
+      if (password.length < 6) {
+        Toast.show({
+          type: 'error',
+          text1: 'Incorrecto',
+          text2: 'La contraseña debe tener al menos 6 caracteres',
+        });
+        return;
+      }
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        navigation.navigate('main', { user: userCredential.user });
+      } catch (error) {
+        console.error('Error en login email/password:', error);
+      }
+    } else if (typeLogin === 1) {
+      try {
+        await promptAsync({ useProxy: true });
+      } catch (error) {
+        console.error('Error al iniciar promptAsync:', error);
+      }
+    }
+  };
 
   return (
     <View style={formStyles.container}>
@@ -139,7 +94,7 @@ const Login = () => {
         placeholder="Contraseña"
         value={password}
         onChangeText={setPassword}
-        secureTextEntry={!isPasswordVisible}
+        secureTextEntry={true}
         style={formStyles.input}
       />
 
