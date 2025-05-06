@@ -1,22 +1,63 @@
 import React, {useState, useEffect} from 'react';
 import { Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { auth } from "../../firebase/firebaseConfig.jsx";
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import * as WebBrowser from "expo-web-browser";
+import { auth } from "../../firebase/firebaseConfig";
+import { createUserWithEmailAndPassword , GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import * as Google from "expo-auth-session/providers/google";
 import { makeRedirectUri } from "expo-auth-session";
 import { useNavigation } from "@react-navigation/native";
-import { colors, spacing, textStyles, formStyles, buttonStyles} from "./styles";
+import { colors, spacing, formStyles, buttonStyles} from "./styles";
 import Toast from 'react-native-toast-message';
 
 
+const  register = async(email, password) => {
+  if(!email || !password){
+    Toast.show({
+      type: 'error',
+      text1: 'Incorrecto',
+      text2: 'No se permiten campos vacíos',
+    });
+    return;
+  }
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    Toast.show({
+      type: 'success',
+      text1: 'Registro exitoso',
+      text2: 'Inicia sesión con tu correo electrónico',
+    });
+  } catch (error) {
+    if (error.code === 'auth/email-already-in-use') {
+      Toast.show({
+      type: 'error',
+      text1: 'Correo ya en uso',
+      text2: 'El correo electrónico ya está en uso, ingrese con su correo',
+    });
+    } else if (error.code === 'auth/invalid-email') {
+      errorMessage = 'El correo electrónico no es válido';
+    } else if (error.code === 'auth/weak-password') {
+      Toast.show({
+        type: 'error',
+        text1: 'Contraseña débil',
+        text2: 'La contraseña debe tener al menos 6 caracteres',
+      });
+    }
+    Toast.show({
+      type: 'error',
+      text1: error,
+      text2: 'El correo electrónico ya está en uso, ingrese con su correo',
+    });
+ }
 
+
+
+}
 const SignIn = () => {
-  const [text, onChangeText] = React.useState('Useless Text');
-  const [number, onChangeNumber] = React.useState('');
   const navigation = useNavigation();
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
+  
 
   // Construye un redirectUri compatible con Expo Proxy para móvil
     const redirectUri = makeRedirectUri({ useProxy: true });
@@ -49,24 +90,30 @@ const SignIn = () => {
     <SafeAreaProvider>
       <SafeAreaView>
         <TextInput
-          onChangeText={onChangeText}
           placeholder="Correo electrónico"
+          onChangeText={setEmail}
         />
         <TextInput
-          onChangeText={onChangeNumber}
-          value={number}
           placeholder="Contraseña"
+          onChangeText={setPassword}
+          secureTextEntry={true}
         />
 
-        <TouchableOpacity
-                //onPress={() => handleLogin(0)}
+        <TouchableOpacity onPress={() => register(email, password)}
                 style={[buttonStyles.primary, { marginTop: spacing.large }]}
               >
                 <Text style={{ color: "white", textAlign: "center" }}>
                   Registrarse
                 </Text>
-              </TouchableOpacity>
-
+        </TouchableOpacity>
+  <TouchableOpacity
+        onPress={() => navigation.navigate("login")}
+        style={[buttonStyles.secondary, { marginBottom: spacing.large }]}
+      >
+        <Text style={{ color: colors.primary, textAlign: "center" }}>
+          Inicio sesión
+        </Text>
+      </TouchableOpacity>
 
          <TouchableOpacity onPress={() => promptAsync({ useProxy: true })} disabled={!request}>
           <Image
