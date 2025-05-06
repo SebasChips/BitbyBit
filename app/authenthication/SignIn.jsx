@@ -19,6 +19,7 @@ const  register = async(email, password) => {
     });
     return;
   }
+  //soy isidro
   try {
     await createUserWithEmailAndPassword(auth, email, password);
     Toast.show({
