@@ -55,14 +55,6 @@ const Login = () => {
         });
         return;
       }
-      if (password.length < 6) {
-        Toast.show({
-          type: 'error',
-          text1: 'Incorrecto',
-          text2: 'La contraseña debe tener al menos 6 caracteres',
-        });
-        return;
-      }
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         navigation.navigate('main', { user: userCredential.user });
