@@ -20,6 +20,7 @@ const  register = async(email, password) => {
     return;
   }
   //soy isidro
+  // Verifica si el correo electrónico es válido
   try {
     await createUserWithEmailAndPassword(auth, email, password);
     Toast.show({
