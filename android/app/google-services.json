@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "61966159852",
+    "project_id": "bit-by-bit-a7551",
+    "storage_bucket": "bit-by-bit-a7551.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:61966159852:android:404e62bb9c9a0a460d7ac9",
+        "android_client_info": {
+          "package_name": "com.sebaschips.BitByBit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "61966159852-semk8h7q0dd2g8i2d7g1bncb4lfshkdo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sebaschips.BitByBit",
+            "certificate_hash": "029f431295a36d3c9c42c9a6fcc144bfa4670466"
+          }
+        },
+        {
+          "client_id": "61966159852-30er87tn5uojd5l0p8ndhriu144tpuj0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA--_9hNfZPMuRQJiKEUQZy2pCOrzLK1-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "61966159852-30er87tn5uojd5l0p8ndhriu144tpuj0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "61966159852-bk80mn0a9pfuitkj1i8qv0f4kqtug8nu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sebaschips.BitByBit"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
