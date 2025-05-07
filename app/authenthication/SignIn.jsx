@@ -19,8 +19,7 @@ const  register = async(email, password) => {
     });
     return;
   }
-  //soy isidro aaaa
-  // Verifica si el correo electrónico es válido
+
   try {
     await createUserWithEmailAndPassword(auth, email, password);
     Toast.show({
@@ -44,11 +43,6 @@ const  register = async(email, password) => {
         text2: 'La contraseña debe tener al menos 6 caracteres',
       });
     }
-    Toast.show({
-      type: 'error',
-      text1: error,
-      text2: 'El correo electrónico ya está en uso, ingrese con su correo',
-    });
  }
 
 

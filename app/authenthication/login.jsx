@@ -59,7 +59,12 @@ const Login = () => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         navigation.navigate('main', { user: userCredential.user });
       } catch (error) {
-        console.error('Error en login email/password:', error);
+        if (error.code === 'auth/invalid-credential') {
+        Toast.show({
+              type: 'error',
+              text1: 'Contraseña y/o correo incorrecto',
+            });
+        }
       }
     } else if (typeLogin === 1) {
       try {
