@@ -1,6 +1,9 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { styles } from "./styles";
+import { checkUserSession, logOut } from "../controllers/auths";
+import { useNavigation } from "@react-navigation/native";
+
 
 const topics = [
   'Matemáticas',
@@ -11,6 +14,18 @@ const topics = [
 ];
 
 export default function UserInfoForm() {
+  const navigation = useNavigation();
+  useEffect(() => {
+    const unsubscribe = checkUserSession((user) => {
+      if (!user) {
+        navigation.navigate("Login"); 
+      }
+    });
+    return () => unsubscribe(); 
+  }, [navigation]);
+
+
+
   const [fatherName, setFatherName] = useState('');
   const [fatherAge, setFatherAge] = useState('');
   const [childName, setChildName] = useState('');
@@ -28,7 +43,11 @@ export default function UserInfoForm() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Hola, queremos conocer un poco más de ti...</Text>
-      
+
+      <TouchableOpacity onPress={() => logOut()} style={styles.submitButton}>
+        <Text>Cerrar sesión</Text>
+      </TouchableOpacity>
+
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Información del Padre/Madre/Tutor</Text>
         <TextInput

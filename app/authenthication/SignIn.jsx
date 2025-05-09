@@ -2,52 +2,15 @@ import React, {useState, useEffect} from 'react';
 import { Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { auth } from "../../firebase/firebaseConfig";
-import { createUserWithEmailAndPassword , GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import * as Google from "expo-auth-session/providers/google";
 import { makeRedirectUri } from "expo-auth-session";
 import { useNavigation } from "@react-navigation/native";
 import { colors, spacing, formStyles, buttonStyles} from "./styles";
-import Toast from 'react-native-toast-message';
-
-
-const  register = async(email, password) => {
-  if(!email || !password){
-    Toast.show({
-      type: 'error',
-      text1: 'Incorrecto',
-      text2: 'No se permiten campos vacíos',
-    });
-    return;
-  }
-
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    Toast.show({
-      type: 'success',
-      text1: 'Registro exitoso',
-      text2: 'Inicia sesión con tu correo electrónico',
-    });
-  } catch (error) {
-    if (error.code === 'auth/email-already-in-use') {
-      Toast.show({
-      type: 'error',
-      text1: 'Correo ya en uso',
-      text2: 'El correo electrónico ya está en uso, ingrese con su correo',
-    });
-    } else if (error.code === 'auth/invalid-email') {
-      errorMessage = 'El correo electrónico no es válido';
-    } else if (error.code === 'auth/weak-password') {
-      Toast.show({
-        type: 'error',
-        text1: 'Contraseña débil',
-        text2: 'La contraseña debe tener al menos 6 caracteres',
-      });
-    }
- }
+import { RegisterEmailAndPass } from "../controllers/auths";
 
 
 
-}
 const SignIn = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
@@ -95,12 +58,10 @@ const SignIn = () => {
           secureTextEntry={true}
         />
 
-        <TouchableOpacity onPress={() => register(email, password)}
-                style={[buttonStyles.primary, { marginTop: spacing.large }]}
-              >
-                <Text style={{ color: "white", textAlign: "center" }}>
-                  Registrarse
-                </Text>
+        <TouchableOpacity onPress={() => RegisterEmailAndPass(email, password)} style={[buttonStyles.primary, { marginTop: spacing.large }]}>
+          <Text style={{ color: "white", textAlign: "center" }}>
+            Registrarse
+          </Text>
         </TouchableOpacity>
   <TouchableOpacity
         onPress={() => navigation.navigate("login")}
