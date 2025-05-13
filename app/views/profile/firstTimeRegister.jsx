@@ -3,7 +3,7 @@ import { View, Text, TextInput, ScrollView, TouchableOpacity, Platform } from 'r
 import { styles } from "./styles";
 import { checkUserSession, logOut } from "../../controllers/auths";
 import { useNavigation } from "@react-navigation/native";
-import { registrarUsuario } from "../controllers/querys";
+import { registrarUsuario } from "../../controllers/querys";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const topics = [

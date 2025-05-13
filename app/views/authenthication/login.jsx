@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, TextInput, Text, Image, TouchableOpacity } from "react-native";
-import { auth, db } from "../../firebase/firebaseConfig.jsx";
+import { auth, db } from "../../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import * as WebBrowser from "expo-web-browser";
 import { useNavigation } from "@react-navigation/native";
 import { formStyles, textStyles, buttonStyles, imageStyles } from "./styles.js";
-import { LogInEmailAndPass } from "../../controllers/auths.js";
+import { LogInEmailAndPass } from "../../controllers/auths";
 import * as Google from "expo-auth-session/providers/google";
 import { makeRedirectUri } from "expo-auth-session";
 import { doc, getDoc } from "firebase/firestore";
