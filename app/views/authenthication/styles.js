@@ -36,10 +36,8 @@ export const textStyles = StyleSheet.create({
 export const formStyles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing.md,
-    backgroundColor: colors.background,
+    justifyContent: layout.center,
+    alignItems: layout.center,
   },
   input: {
     width: dimensions.inputWidth,
@@ -49,28 +47,18 @@ export const formStyles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radii.pill,
   },
-  formWrapper: {
-    backgroundColor: colors.background,
-    padding: spacing.lg,
-    borderRadius: radii.lg,
-    marginTop: spacing.xl,
-    width: '100%',
-    ...shadows.sm,
-  },
-
   formContent: {
     width: dimensions.inputWidth,
-    alignSelf: 'center',
+    alignItems: layout.center,
+    justifyContent: layout.center,
   },
-
   socialContainer: {
     flexDirection: layout.row,
     justifyContent: layout.center,
     marginTop: spacing.md,
   },
-
   dividerText: {
-    textAlign: 'center',
+    textAlign: layout.center,
     color: colors.muted,
     marginTop: spacing.md,
     fontSize: fontSizes.sm,
