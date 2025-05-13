@@ -31,8 +31,6 @@ const Login = () => {
     scopes: ["openid", "profile", "email"],
   });
 
-
-
   useEffect(() => {
     if (response?.type === "success") {
       const { id_token, access_token } = response.params;
@@ -58,7 +56,6 @@ const Login = () => {
   const handleLogin = async (typeLogin) => {
     if (typeLogin === 0) {
       LogInEmailAndPass(email, password, navigation);
-      
     } else if (typeLogin === 1) {
       try {
         await promptAsync({ useProxy: true });
@@ -70,48 +67,57 @@ const Login = () => {
 
   return (
     <View style={formStyles.container}>
-      <Text style={textStyles.title}>Iniciar Sesión</Text>
-
-      <TextInput
-        placeholder="Correo electrónico"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        style={formStyles.input}
+      <Image
+        source={require("../../assets/images/bitty.png")}
+        style={imageStyles.large}
+        resizeMode="contain"
       />
 
-      <TextInput
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-        style={formStyles.input}
-      />
+      <Text style={textStyles.title}>¡Bienvenido de nuevo!</Text>
+      <Text style={textStyles.subtitle}>Inicia sesión en tu cuenta</Text>
 
-      <TouchableOpacity
-        onPress={() => handleLogin(0)}
-        style={buttonStyles.primary}
-      >
-        <Text style={textStyles.buttonText}>Iniciar Sesión</Text>
-      </TouchableOpacity>
+      <View style={formStyles.formContent}>
+        <TextInput
+          placeholder="Correo electrónico"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          style={formStyles.input}
+        />
+
+        <TextInput
+          placeholder="Contraseña"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={true}
+          style={formStyles.input}
+        />
+
+        <TouchableOpacity
+          onPress={() => handleLogin(0)}
+          style={buttonStyles.primary}
+        >
+          <Text style={textStyles.buttonText}>INICIAR SESIÓN</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Text style={formStyles.dividerText}>O conéctate usando</Text>
+
+      <View style={formStyles.socialContainer}>
+        <TouchableOpacity onPress={() => handleLogin(1)} disabled={!request}>
+          <Image
+            source={require("../../assets/images/logo_google.png")}
+            style={imageStyles.small}
+          />
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity
         onPress={() => navigation.navigate("SignIn")}
-        style={buttonStyles.secondary}
+        style={textStyles.subtitle}
       >
-        <Text style={textStyles.buttonText2}>Registrarse</Text>
+        <Text style={textStyles.link}>¿No tienes cuenta? Regístrate</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => handleLogin(1)} disabled={!request}>
-        <Image
-          source={require("../../assets/images/logo_google.png")}
-          style={imageStyles.medium}
-        />
-      </TouchableOpacity>
-      <Image
-        source={require("../../assets/images/bitty.png")}
-        style={imageStyles.xxlarge}
-      />
     </View>
   );
 };
