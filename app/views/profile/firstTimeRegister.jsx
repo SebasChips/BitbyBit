@@ -3,7 +3,7 @@ import { View, Text, TextInput, ScrollView, TouchableOpacity, Platform } from 'r
 import { styles } from "./styles";
 import { checkUserSession, logOut } from "../../controllers/auths";
 import { useNavigation } from "@react-navigation/native";
-import { registrarUsuario } from "../../controllers/querys";
+import { registerUser } from "../../controllers/querys";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const topics = [
@@ -13,6 +13,8 @@ const topics = [
   'LoL',
 ];
 
+
+
 export default function UserInfoForm() {
   const [fatherName, setFatherName] = useState('');
   const [fatherEmail, setFatherEmail] = useState('');
@@ -21,8 +23,18 @@ export default function UserInfoForm() {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   
+//reformatear fecha
+    const formatDate = (date) => {
+      return date.toLocaleDateString('es-MX', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit'
+      }).replace(/\//g, '/');
+    };
+
+
   // Función para manejar fechas
-  const onChange = (event, selectedDate) => {
+  const onChangeDate = (event, selectedDate) => {
     if (Platform.OS === 'web') {
       // Manejo para web
       setDate(new Date(event.target.value));
@@ -61,45 +73,52 @@ export default function UserInfoForm() {
   };
 
   // Componente DatePicker condicional
-  const renderDatePicker = () => {
-    if (Platform.OS === 'web') {
-      return (
-        <input
-          type="date"
-          value={date.toISOString().split('T')[0]}
-          onChange={onChange}
-          style={{
-            padding: '10px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            width: '100%',
-            marginBottom: '15px'
-          }}
-        />
-      );
-    } else {
-      return (
-        <>
-          <TouchableOpacity 
-            style={styles.input} 
-            onPress={showDatepicker}
-          >
-            <Text>{date.toLocaleDateString()}</Text>
-          </TouchableOpacity>
-          {showDatePicker && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode="date"
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-        </>
-      );
-    }
+const renderDatePicker = () => {
+  const formatDateForDisplay = (date) => {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString().slice(-2);
+    return `${day}/${month}/${year}`;
   };
+
+  if (Platform.OS === 'web') {
+    return (
+      <input
+        type="date"
+        value={date.toISOString().split('T')[0]}
+        onChange={onChangeDate}
+        style={{
+          padding: '10px',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          width: '100%',
+          marginBottom: '15px'
+        }}
+      />
+    );
+  } else {
+    return (
+      <>
+        <TouchableOpacity 
+          style={styles.input} 
+          onPress={showDatepicker}
+        >
+          <Text>{formatDateForDisplay(date)}</Text>
+        </TouchableOpacity>
+        {showDatePicker && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={onChangeDate}
+          />
+        )}
+      </>
+    );
+  }
+};
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -160,7 +179,7 @@ export default function UserInfoForm() {
       </View>
       
       <TouchableOpacity 
-        onPress={() => registrarUsuario(fatherEmail, fatherName)} 
+        onPress={() => registerUser(fatherEmail, childName, fatherName, formatDate(date)) }
         style={styles.submitButton}
       >
         <Text style={styles.submitButtonText}>Continuar</Text>
