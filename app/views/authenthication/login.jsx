@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, TextInput, Text, Image, TouchableOpacity } from "react-native";
-import { auth, db } from "../../firebase/firebaseConfig.jsx";
+import { auth, db } from "../../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import * as WebBrowser from "expo-web-browser";
 import { useNavigation } from "@react-navigation/native";
 import { formStyles, textStyles, buttonStyles, imageStyles } from "./styles.js";
-import { LogInEmailAndPass } from "../../controllers/auths.js";
+import { LogInEmailAndPass } from "../../controllers/auths";
 import * as Google from "expo-auth-session/providers/google";
 import { makeRedirectUri } from "expo-auth-session";
 import { doc, getDoc } from "firebase/firestore";
@@ -16,6 +16,7 @@ const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const redirectUri = makeRedirectUri({ useProxy: true });
   const [request, response, promptAsync] = Google.useAuthRequest({
     webClientId:
@@ -30,6 +31,8 @@ const Login = () => {
     scopes: ["openid", "profile", "email"],
   });
 
+
+
   useEffect(() => {
     if (response?.type === "success") {
       const { id_token, access_token } = response.params;
@@ -38,7 +41,7 @@ const Login = () => {
         .then(async () => {
           const user = auth.currentUser;
           const uid = user.uid;
-          const docRef = doc(db, "usuarios", uid);
+          const docRef = doc(db, "users", uid);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             navigation.navigate("main");
@@ -55,6 +58,7 @@ const Login = () => {
   const handleLogin = async (typeLogin) => {
     if (typeLogin === 0) {
       LogInEmailAndPass(email, password, navigation);
+      
     } else if (typeLogin === 1) {
       try {
         await promptAsync({ useProxy: true });
