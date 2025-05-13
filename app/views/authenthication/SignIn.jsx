@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, Text, Image, TouchableOpacity } from "react-native";
-import { auth, db } from "../../firebase/firebaseConfig.jsx";
+import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import { auth } from "../../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import * as WebBrowser from "expo-web-browser";
-import { useNavigation } from "@react-navigation/native";
-import { formStyles, textStyles, buttonStyles, imageStyles } from "./styles";
-import { LogInEmailAndPass } from "../controllers/auths";
 import * as Google from "expo-auth-session/providers/google";
 import { makeRedirectUri } from "expo-auth-session";
-import { doc, getDoc } from "firebase/firestore";
+import { useNavigation } from "@react-navigation/native";
+import { formStyles, textStyles, buttonStyles, imageStyles } from "./styles";
+import { RegisterEmailAndPass } from "../../controllers/auths";
 
-WebBrowser.maybeCompleteAuthSession();
-
-const Login = () => {
+const SignIn = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Construye un redirectUri compatible con Expo Proxy para móvil
   const redirectUri = makeRedirectUri({ useProxy: true });
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     webClientId:
       "61966159852-30er87tn5uojd5l0p8ndhriu144tpuj0.apps.googleusercontent.com",
@@ -31,23 +29,13 @@ const Login = () => {
     scopes: ["openid", "profile", "email"],
   });
 
-
-
   useEffect(() => {
     if (response?.type === "success") {
       const { id_token, access_token } = response.params;
       const credential = GoogleAuthProvider.credential(id_token, access_token);
       signInWithCredential(auth, credential)
-        .then(async () => {
-          const user = auth.currentUser;
-          const uid = user.uid;
-          const docRef = doc(db, "users", uid);
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            navigation.navigate("main");
-          } else {
-            navigation.navigate("firstTimeRegister");
-          }
+        .then(() => {
+          navigation.navigate("main");
         })
         .catch((error) => {
           console.error("Error en signInWithCredential:", error);
@@ -55,65 +43,50 @@ const Login = () => {
     }
   }, [response]);
 
-  const handleLogin = async (typeLogin) => {
-    if (typeLogin === 0) {
-      LogInEmailAndPass(email, password, navigation);
-      
-    } else if (typeLogin === 1) {
-      try {
-        await promptAsync({ useProxy: true });
-      } catch (error) {
-        console.error("Error al iniciar promptAsync:", error);
-      }
-    }
-  };
-
   return (
     <View style={formStyles.container}>
-      <Text style={textStyles.title}>Iniciar Sesión</Text>
-
+      <Text style={textStyles.title}>Registrarse</Text>
       <TextInput
         placeholder="Correo electrónico"
-        value={email}
         onChangeText={setEmail}
-        autoCapitalize="none"
         style={formStyles.input}
       />
-
       <TextInput
         placeholder="Contraseña"
-        value={password}
         onChangeText={setPassword}
         secureTextEntry={true}
         style={formStyles.input}
       />
 
       <TouchableOpacity
-        onPress={() => handleLogin(0)}
-        style={buttonStyles.primary}
+        onPress={() => RegisterEmailAndPass(email, password)}
+        style={[buttonStyles.primary]}
       >
-        <Text style={textStyles.buttonText}>Iniciar Sesión</Text>
+        <Text style={textStyles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("SignIn")}
+        onPress={() => navigation.navigate("login")}
         style={buttonStyles.secondary}
       >
-        <Text style={textStyles.buttonText2}>Registrarse</Text>
+        <Text style={textStyles.buttonText2}>Inicio sesión</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handleLogin(1)} disabled={!request}>
+      <TouchableOpacity
+        onPress={() => promptAsync({ useProxy: true })}
+        disabled={!request}
+      >
         <Image
           source={require("../../assets/images/logo_google.png")}
           style={imageStyles.medium}
         />
       </TouchableOpacity>
       <Image
-        source={require("../assets/images/bitty.png")}
+        source={require("../../assets/images/bitty.png")}
         style={imageStyles.xxlarge}
       />
     </View>
   );
 };
 
-export default Login;
+export default SignIn;

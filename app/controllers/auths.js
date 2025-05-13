@@ -1,5 +1,5 @@
 
-import { auth, db } from "../../firebase/firebaseConfig.jsx";
+import { auth, db } from "../firebase/firebaseConfig";
 import { onAuthStateChanged,  } from "firebase/auth";
 import Toast from 'react-native-toast-message';
 import  {signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
