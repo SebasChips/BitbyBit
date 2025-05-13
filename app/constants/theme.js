@@ -81,4 +81,5 @@ export const imageSizes = {
   md: 90,
   lg: 120,
   xl: 180,
+  xxl: 240,
 };

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, spacing, fontSizes, radii, opacities, fontWeights, dimensions, imageSizes } from '../constants/theme';
+import { colors, spacing, fontSizes, fontWeights,  radii, shadows, zIndices, opacities, layout , dimensions, imageSizes } from '../constants/theme';
 
 export const textStyles = StyleSheet.create({
   title: {
@@ -49,13 +49,39 @@ export const formStyles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radii.pill,
   },
+  formWrapper: {
+    backgroundColor: colors.background,
+    padding: spacing.lg,
+    borderRadius: radii.lg,
+    marginTop: spacing.xl,
+    width: '100%',
+    ...shadows.sm,
+  },
+
+  formContent: {
+    width: dimensions.inputWidth,
+    alignSelf: 'center',
+  },
+
+  socialContainer: {
+    flexDirection: layout.row,
+    justifyContent: layout.center,
+    marginTop: spacing.md,
+  },
+
+  dividerText: {
+    textAlign: 'center',
+    color: colors.muted,
+    marginTop: spacing.md,
+    fontSize: fontSizes.sm,
+  },
 });
 
 export const buttonStyles = StyleSheet.create({
   primary: {
     width: dimensions.buttonWidth,
     marginVertical: spacing.sm,
-    marginTop: spacing.sm, 
+    marginTop: spacing.sm,
     backgroundColor: colors.primary,
     borderRadius: radii.pill,
     padding: spacing.sm,
@@ -63,7 +89,7 @@ export const buttonStyles = StyleSheet.create({
   secondary: {
     width: dimensions.buttonWidth,
     marginVertical: spacing.sm,
-    marginTop: spacing.sm, 
+    marginTop: spacing.sm,
     backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: colors.primary,
@@ -96,5 +122,11 @@ export const imageStyles = StyleSheet.create({
     height: imageSizes.xl,
     borderRadius: radii.lg,
     marginBottom: spacing.xl,
+  },
+  xxlarge: {
+    width: imageSizes.xxl,
+    height: imageSizes.xxl,
+    borderRadius: radii.xl,
+    marginBottom: spacing.xxl,
   },
 });

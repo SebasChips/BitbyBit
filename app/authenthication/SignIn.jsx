@@ -84,7 +84,7 @@ const SignIn = () => {
       </TouchableOpacity>
       <Image
         source={require("../assets/images/bitty.png")}
-        style={imageStyles.xlarge}
+        style={imageStyles.xxlarge}
       />
     </View>
   );
