@@ -3,7 +3,7 @@ import { View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-nativ
 import { styles } from "./styles";
 import { checkUserSession, logOut } from "../controllers/auths";
 import { useNavigation } from "@react-navigation/native";
-
+import { registrarUsuario } from "../controllers/querys";
 
 const topics = [
   'Matemáticas',
@@ -12,26 +12,29 @@ const topics = [
   'LoL',
 
 ];
-
+mail = '';
 export default function UserInfoForm() {
+
+  const [fatherName, setFatherName] = useState('');
+  const [fatherEmail, setFatherEmail] = useState('');
+  const [childName, setChildName] = useState('');
+  const [childAge, setChildAge] = useState('');
+  const [selectedTopics, setSelectedTopics] = useState([]);
+
+
   const navigation = useNavigation();
   useEffect(() => {
     const unsubscribe = checkUserSession((user) => {
       if (!user) {
         navigation.navigate("Login"); 
-      }
+      }else{setFatherEmail(user.email);}
     });
     return () => unsubscribe(); 
   }, [navigation]);
 
 
 
-  const [fatherName, setFatherName] = useState('');
-  const [fatherAge, setFatherAge] = useState('');
-  const [childName, setChildName] = useState('');
-  const [childAge, setChildAge] = useState('');
-  const [selectedTopics, setSelectedTopics] = useState([]);
-
+  
   const toggleTopic = (topic) => {
     if (selectedTopics.includes(topic)) {
       setSelectedTopics(selectedTopics.filter(t => t !== topic));
@@ -58,10 +61,10 @@ export default function UserInfoForm() {
         />
         <TextInput
           style={styles.input}
-          placeholder="Edad"
-          keyboardType="numeric"
-          value={fatherAge}
-          onChangeText={setFatherAge}
+          value={fatherEmail} 
+          placeholder="Correo electrónico"
+          keyboardType="email-address"
+          onChangeText={setFatherEmail}
         />
       </View>
       
