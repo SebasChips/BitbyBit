@@ -1,8 +1,9 @@
 
-import { auth } from "../../firebase/firebaseConfig.jsx";
+import { auth, db } from "../../firebase/firebaseConfig.jsx";
 import { onAuthStateChanged,  } from "firebase/auth";
 import Toast from 'react-native-toast-message';
 import  {signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 export const checkUserSession = (callback) => {
   return onAuthStateChanged(auth, (user) => {
@@ -33,7 +34,15 @@ export const LogInEmailAndPass = async (email, password, navigation) => {
 
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    navigation.navigate('main', { user: userCredential.user });
+     const user = auth.currentUser;
+          const uid = user.uid;
+          const docRef = doc(db, "users", uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+          navigation.navigate('main', { user: userCredential.user });
+          } else {
+            navigation.navigate("firstTimeRegister", { user: userCredential.user });
+          }
   } catch (error) {
     if (error.code === 'auth/invalid-credential') {
       Toast.show({

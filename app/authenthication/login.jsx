@@ -16,6 +16,7 @@ const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const redirectUri = makeRedirectUri({ useProxy: true });
   const [request, response, promptAsync] = Google.useAuthRequest({
     webClientId:
@@ -30,6 +31,8 @@ const Login = () => {
     scopes: ["openid", "profile", "email"],
   });
 
+
+
   useEffect(() => {
     if (response?.type === "success") {
       const { id_token, access_token } = response.params;
@@ -38,7 +41,7 @@ const Login = () => {
         .then(async () => {
           const user = auth.currentUser;
           const uid = user.uid;
-          const docRef = doc(db, "usuarios", uid);
+          const docRef = doc(db, "users", uid);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             navigation.navigate("main");
@@ -55,6 +58,7 @@ const Login = () => {
   const handleLogin = async (typeLogin) => {
     if (typeLogin === 0) {
       LogInEmailAndPass(email, password, navigation);
+      
     } else if (typeLogin === 1) {
       try {
         await promptAsync({ useProxy: true });
