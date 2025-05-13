@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { auth } from "../../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import * as Google from "expo-auth-session/providers/google";
 import { makeRedirectUri } from "expo-auth-session";
 import { useNavigation } from "@react-navigation/native";
 import { formStyles, textStyles, buttonStyles, imageStyles } from "./styles";
-import { RegisterEmailAndPass } from "../controllers/auths";
+import { RegisterEmailAndPass } from "../../controllers/auths";
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -83,7 +82,7 @@ const SignIn = () => {
         />
       </TouchableOpacity>
       <Image
-        source={require("../assets/images/bitty.png")}
+        source={require("../../assets/images/bitty.png")}
         style={imageStyles.xxlarge}
       />
     </View>

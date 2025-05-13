@@ -1,4 +1,4 @@
-import { auth } from "../../firebase/firebaseConfig.jsx";
+import { auth } from "../firebase/firebaseConfig.jsx";
 import { collection, addDoc } from "firebase/firestore";
 
 
