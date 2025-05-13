@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, spacing, fontSizes, fontWeights,  radii, shadows, zIndices, opacities, layout , dimensions, imageSizes } from '../constants/theme';
+import { colors, spacing, fontSizes, fontWeights,  radii, shadows, zIndices, opacities, layout , dimensions, imageSizes } from '../../constants/theme';
 
 export const textStyles = StyleSheet.create({
   title: {

@@ -1,9 +1,9 @@
 import { React, useState, useEffect } from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { styles } from "./styles";
-import { checkUserSession, logOut } from "../controllers/auths";
+import { checkUserSession, logOut } from "../../controllers/auths";
 import { useNavigation } from "@react-navigation/native";
-import { registrarUsuario } from "../controllers/querys";
+import { registrarUsuario } from "../../controllers/querys";
 
 const topics = [
   'Matemáticas',

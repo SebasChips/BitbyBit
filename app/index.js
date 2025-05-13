@@ -1,9 +1,9 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SignIn from './authenthication/SignIn';
-import login from './authenthication/login';
-import main from './profile/main';
-import firstTimeRegister from './profile/firstTimeRegister';
+import SignIn from './views/authenthication/SignIn';
+import login from './views/authenthication/login';
+import main from './views/profile/main';
+import firstTimeRegister from './views/profile/firstTimeRegister';
 
 import Toast from 'react-native-toast-message';
 
