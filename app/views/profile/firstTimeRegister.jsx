@@ -153,7 +153,7 @@ const renderDatePicker = () => {
           value={childName}
           onChangeText={setChildName}
         />
-        
+        <Text>Fecha de nacimiento</Text>
         {renderDatePicker()}
       </View>
       
@@ -179,7 +179,7 @@ const renderDatePicker = () => {
       </View>
       
       <TouchableOpacity 
-        onPress={() => registerUser(fatherEmail, childName, fatherName, formatDate(date)) }
+        onPress={() => registerUser(fatherEmail, childName, fatherName, formatDate(date), navigation) }
         style={styles.submitButton}
       >
         <Text style={styles.submitButtonText}>Continuar</Text>
