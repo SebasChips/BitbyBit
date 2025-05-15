@@ -1,43 +1,86 @@
 import { StyleSheet } from 'react-native';
-import { colors, spacing, fontSizes, fontWeights,  radii, shadows, zIndices, opacities, layout , dimensions, imageSizes } from '../../constants/theme';
+import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices } from '../../constants/theme';
+
+export const baseStyles = StyleSheet.create({
+  centerText: {
+    textAlign: layout.alignCenter,
+  },
+  centerItem: {
+    alignItems: layout.alignCenter,
+    justifyContent: layout.alignCenter,
+  },
+  roundedPill: {
+    borderRadius: radii.pill,
+  },
+  paddedButton: {
+    paddingVertical: spacing.sm,
+  },
+});
 
 export const textStyles = StyleSheet.create({
-  title: {
+  heading: {
     fontSize: fontSizes.xxl,
     fontWeight: fontWeights.bold,
+    color: colors.textPrimary,
+    textAlign: layout.alignCenter,
     marginBottom: spacing.lg,
-    color: colors.text,
-    textAlign: 'center',
   },
-  subtitle: {
+  subheading: {
     fontSize: fontSizes.lg,
-    color: colors.muted,
+    color: colors.textSecondary,
     marginBottom: spacing.md,
   },
-  buttonText: {
+  subtitle: {
     fontSize: fontSizes.md,
-    color: colors.background,
-    fontWeight: fontWeights.semibold,
-    textAlign: 'center',
+    fontWeight: fontWeights.medium,
+    color: colors.textSecondary,
   },
-  buttonText2: {
+  body: {
     fontSize: fontSizes.md,
-    color: colors.primary,
-    fontWeight: fontWeights.semibold,
-    textAlign: 'center',
+    color: colors.textPrimary,
   },
   link: {
     color: colors.primary,
     fontWeight: fontWeights.semibold,
-    textAlign: 'center',
-  }
+    textAlign: layout.alignCenter,
+  },
+  buttonPrimary: {
+    fontSize: fontSizes.md,
+    color: colors.background,
+    fontWeight: fontWeights.semibold,
+    textAlign: layout.alignCenter,
+  },
+  buttonSecondary: {
+    fontSize: fontSizes.md,
+    color: colors.primary,
+    fontWeight: fontWeights.semibold,
+    textAlign: layout.alignCenter,
+  },
+  buttonText: {
+    fontSize: fontSizes.md,
+    fontWeight: fontWeights.semibold,
+    textAlign: layout.alignCenter,
+  },
+  caption: {
+    fontSize: fontSizes.xs,
+    color: colors.textMuted,
+  },
+  muted: {
+    fontSize: fontSizes.sm,
+    color: colors.textMuted,
+  },
+  error: {
+    fontSize: fontSizes.sm,
+    color: colors.error,
+    marginTop: spacing.xs,
+  },
 });
 
 export const formStyles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: layout.center,
-    alignItems: layout.center,
+    justifyContent: layout.alignCenter,
+    alignItems: layout.alignCenter,
   },
   input: {
     width: dimensions.inputWidth,
@@ -45,21 +88,39 @@ export const formStyles = StyleSheet.create({
     padding: spacing.md,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: radii.pill,
+    borderRadius: radii.md,
+    backgroundColor: colors.surface,
+    ...shadows.sm,
   },
-  formContent: {
+  inputFocused: {
+    borderColor: colors.primary,
+  },
+  inputError: {
+    borderColor: colors.error,
+  },
+  inputDisabled: {
+    backgroundColor: colors.surfaceDark,
+    opacity: opacities.disabled,
+  },
+  label: {
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.medium,
+    color: colors.textSecondary,
+    marginBottom: spacing.xs,
+  },
+  formGroup: {
     width: dimensions.inputWidth,
-    alignItems: layout.center,
-    justifyContent: layout.center,
+    alignItems: layout.alignCenter,
+    justifyContent: layout.alignCenter,
   },
-  socialContainer: {
+  socialLoginRow: {
     flexDirection: layout.row,
-    justifyContent: layout.center,
+    justifyContent: layout.alignCenter,
     marginTop: spacing.md,
   },
   dividerText: {
-    textAlign: layout.center,
-    color: colors.muted,
+    textAlign: layout.alignCenter,
+    color: colors.textSecondary,
     marginTop: spacing.md,
     fontSize: fontSizes.sm,
   },
@@ -68,54 +129,84 @@ export const formStyles = StyleSheet.create({
 export const buttonStyles = StyleSheet.create({
   primary: {
     width: dimensions.buttonWidth,
-    marginVertical: spacing.sm,
-    marginTop: spacing.sm,
+    paddingVertical: spacing.sm,
     backgroundColor: colors.primary,
     borderRadius: radii.pill,
-    padding: spacing.sm,
+    alignItems: layout.alignCenter,
+    ...shadows.md,
   },
   secondary: {
     width: dimensions.buttonWidth,
-    marginVertical: spacing.sm,
-    marginTop: spacing.sm,
-    backgroundColor: 'transparent',
+    paddingVertical: spacing.sm,
     borderWidth: 1,
     borderColor: colors.primary,
     borderRadius: radii.pill,
-    padding: spacing.sm,
+    backgroundColor: 'transparent',
+    alignItems: layout.alignCenter,
+    ...shadows.sm,
+  },
+  danger: {
+    width: dimensions.buttonWidth,
+    paddingVertical: spacing.sm,
+    backgroundColor: colors.error,
+    borderRadius: radii.pill,
+    alignItems: layout.alignCenter,
+    ...shadows.md,
+  },
+  ghost: {
+    width: dimensions.buttonWidth,
+    paddingVertical: spacing.sm,
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    alignItems: layout.alignCenter,
+  },
+  small: {
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.md,
+  },
+  large: {
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.xl,
+  },
+  disabled: {
+    opacity: opacities.disabled,
   },
 });
 
 export const imageStyles = StyleSheet.create({
-  small: {
+  avatarSmall: {
     width: imageSizes.sm,
     height: imageSizes.sm,
     borderRadius: radii.md,
     marginBottom: spacing.sm,
   },
-  medium: {
+  avatarMedium: {
     width: imageSizes.md,
     height: imageSizes.md,
     borderRadius: radii.md,
     marginBottom: spacing.md,
   },
-  large: {
+  avatarLarge: {
     width: imageSizes.lg,
     height: imageSizes.lg,
     borderRadius: radii.lg,
     marginBottom: spacing.lg,
   },
-  xlarge: {
-    width: imageSizes.xl,
+  banner: {
+    width: dimensions.fullWidth,
     height: imageSizes.xl,
     borderRadius: radii.lg,
     marginBottom: spacing.xl,
+    ...shadows.lg,
   },
-  xxlarge: {
-    width: imageSizes.xxl,
-    height: imageSizes.xxl,
-    borderRadius: radii.xl,
-    marginBottom: spacing.xxl,
+  thumbnail: {
+    width: imageSizes.xs,
+    height: imageSizes.xs,
+    borderRadius: radii.sm,
+  },
+  icon: {
+    width: spacing.lg,
+    height: spacing.lg,
   },
 });
 
@@ -127,32 +218,86 @@ export const scrollStyles = StyleSheet.create({
   },
 });
 
-export const topicStyles = StyleSheet.create({
+export const tagStyles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm, // si tu versión de RN no soporta "gap", usa margin manualmente
+    flexDirection: layout.row,
+    flexWrap: layout.wrap,
+    gap: spacing.sm,
     marginBottom: spacing.md,
   },
   tag: {
     paddingVertical: spacing.xs,
     paddingHorizontal: spacing.md,
-    backgroundColor: colors.backgroundLight || '#f0f0f0',
     borderRadius: radii.pill,
     borderWidth: 1,
     borderColor: colors.primary,
     marginRight: spacing.sm,
     marginBottom: spacing.sm,
   },
+  tagError: {
+    backgroundColor: colors.errorLight,
+    borderColor: colors.error,
+  },
+  tagSuccess: {
+    backgroundColor: colors.successLight,
+    borderColor: colors.success,
+  },
   tagSelected: {
     backgroundColor: colors.primary,
   },
-  tagText: {
+  text: {
     fontSize: fontSizes.sm,
     color: colors.primary,
     fontWeight: fontWeights.medium,
   },
-  tagTextSelected: {
+  textSelected: {
     color: colors.background,
+  },
+});
+
+export const cardStyles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.lg,
+    padding: spacing.md,
+    marginBottom: spacing.lg,
+    ...shadows.md,
+    zIndex: zIndices.base,
+  },
+});
+
+export const modalStyles = StyleSheet.create({
+  backdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: colors.textPrimary,
+    opacity: 0.5,
+    zIndex: zIndices.overlay,
+  },
+  modal: {
+    backgroundColor: colors.background,
+    borderRadius: radii.xl,
+    padding: spacing.lg,
+    marginHorizontal: spacing.md,
+    ...shadows.lg,
+    zIndex: zIndices.modal,
+  },
+  header: {
+    fontSize: fontSizes.lg,
+    fontWeight: fontWeights.bold,
+    color: colors.textPrimary,
+    marginBottom: spacing.md,
+  },
+  body: {
+    fontSize: fontSizes.md,
+    color: colors.textSecondary,
+  },
+  footer: {
+    flexDirection: layout.row,
+    justifyContent: layout.justifyEnd,
+    marginTop: spacing.lg,
   },
 });

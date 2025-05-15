@@ -1,18 +1,39 @@
 import { StyleSheet } from 'react-native';
-import { colors, spacing, fontSizes, fontWeights,  radii, opacities, layout , dimensions, imageSizes } from '../../constants/theme';
+import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices } from '../../constants/theme';
+
+export const baseStyles = StyleSheet.create({
+  centerText: {
+    textAlign: layout.alignCenter,
+  },
+  centerItem: {
+    alignItems: layout.alignCenter,
+    justifyContent: layout.alignCenter,
+  },
+  roundedPill: {
+    borderRadius: radii.pill,
+  },
+  paddedButton: {
+    paddingVertical: spacing.sm,
+  },
+});
 
 export const textStyles = StyleSheet.create({
   heading: {
     fontSize: fontSizes.xxl,
     fontWeight: fontWeights.bold,
     color: colors.textPrimary,
-    textAlign: 'center',
+    textAlign: layout.alignCenter,
     marginBottom: spacing.lg,
   },
   subheading: {
     fontSize: fontSizes.lg,
     color: colors.textSecondary,
     marginBottom: spacing.md,
+  },
+  subtitle: {
+    fontSize: fontSizes.md,
+    fontWeight: fontWeights.medium,
+    color: colors.textSecondary,
   },
   body: {
     fontSize: fontSizes.md,
@@ -21,19 +42,37 @@ export const textStyles = StyleSheet.create({
   link: {
     color: colors.primary,
     fontWeight: fontWeights.semibold,
-    textAlign: 'center',
+    textAlign: layout.alignCenter,
   },
   buttonPrimary: {
     fontSize: fontSizes.md,
     color: colors.background,
     fontWeight: fontWeights.semibold,
-    textAlign: 'center',
+    textAlign: layout.alignCenter,
   },
   buttonSecondary: {
     fontSize: fontSizes.md,
     color: colors.primary,
     fontWeight: fontWeights.semibold,
-    textAlign: 'center',
+    textAlign: layout.alignCenter,
+  },
+  buttonText: {
+    fontSize: fontSizes.md,
+    fontWeight: fontWeights.semibold,
+    textAlign: layout.alignCenter,
+  },
+  caption: {
+    fontSize: fontSizes.xs,
+    color: colors.textMuted,
+  },
+  muted: {
+    fontSize: fontSizes.sm,
+    color: colors.textMuted,
+  },
+  error: {
+    fontSize: fontSizes.sm,
+    color: colors.error,
+    marginTop: spacing.xs,
   },
 });
 
@@ -51,6 +90,23 @@ export const formStyles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radii.md,
     backgroundColor: colors.surface,
+    ...shadows.sm,
+  },
+  inputFocused: {
+    borderColor: colors.primary,
+  },
+  inputError: {
+    borderColor: colors.error,
+  },
+  inputDisabled: {
+    backgroundColor: colors.surfaceDark,
+    opacity: opacities.disabled,
+  },
+  label: {
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.medium,
+    color: colors.textSecondary,
+    marginBottom: spacing.xs,
   },
   formGroup: {
     width: dimensions.inputWidth,
@@ -77,6 +133,7 @@ export const buttonStyles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: radii.pill,
     alignItems: layout.alignCenter,
+    ...shadows.md,
   },
   secondary: {
     width: dimensions.buttonWidth,
@@ -86,6 +143,30 @@ export const buttonStyles = StyleSheet.create({
     borderRadius: radii.pill,
     backgroundColor: 'transparent',
     alignItems: layout.alignCenter,
+    ...shadows.sm,
+  },
+  danger: {
+    width: dimensions.buttonWidth,
+    paddingVertical: spacing.sm,
+    backgroundColor: colors.error,
+    borderRadius: radii.pill,
+    alignItems: layout.alignCenter,
+    ...shadows.md,
+  },
+  ghost: {
+    width: dimensions.buttonWidth,
+    paddingVertical: spacing.sm,
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    alignItems: layout.alignCenter,
+  },
+  small: {
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.md,
+  },
+  large: {
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.xl,
   },
   disabled: {
     opacity: opacities.disabled,
@@ -116,6 +197,16 @@ export const imageStyles = StyleSheet.create({
     height: imageSizes.xl,
     borderRadius: radii.lg,
     marginBottom: spacing.xl,
+    ...shadows.lg,
+  },
+  thumbnail: {
+    width: imageSizes.xs,
+    height: imageSizes.xs,
+    borderRadius: radii.sm,
+  },
+  icon: {
+    width: spacing.lg,
+    height: spacing.lg,
   },
 });
 
@@ -129,8 +220,8 @@ export const scrollStyles = StyleSheet.create({
 
 export const tagStyles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: layout.row,
+    flexWrap: layout.wrap,
     gap: spacing.sm,
     marginBottom: spacing.md,
   },
@@ -143,6 +234,14 @@ export const tagStyles = StyleSheet.create({
     marginRight: spacing.sm,
     marginBottom: spacing.sm,
   },
+  tagError: {
+    backgroundColor: colors.errorLight,
+    borderColor: colors.error,
+  },
+  tagSuccess: {
+    backgroundColor: colors.successLight,
+    borderColor: colors.success,
+  },
   tagSelected: {
     backgroundColor: colors.primary,
   },
@@ -153,5 +252,52 @@ export const tagStyles = StyleSheet.create({
   },
   textSelected: {
     color: colors.background,
+  },
+});
+
+export const cardStyles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.lg,
+    padding: spacing.md,
+    marginBottom: spacing.lg,
+    ...shadows.md,
+    zIndex: zIndices.base,
+  },
+});
+
+export const modalStyles = StyleSheet.create({
+  backdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: colors.textPrimary,
+    opacity: 0.5,
+    zIndex: zIndices.overlay,
+  },
+  modal: {
+    backgroundColor: colors.background,
+    borderRadius: radii.xl,
+    padding: spacing.lg,
+    marginHorizontal: spacing.md,
+    ...shadows.lg,
+    zIndex: zIndices.modal,
+  },
+  header: {
+    fontSize: fontSizes.lg,
+    fontWeight: fontWeights.bold,
+    color: colors.textPrimary,
+    marginBottom: spacing.md,
+  },
+  body: {
+    fontSize: fontSizes.md,
+    color: colors.textSecondary,
+  },
+  footer: {
+    flexDirection: layout.row,
+    justifyContent: layout.justifyEnd,
+    marginTop: spacing.lg,
   },
 });
