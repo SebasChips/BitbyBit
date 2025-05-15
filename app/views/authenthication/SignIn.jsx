@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
-import { auth } from "../../firebase/firebaseConfig";
+import { auth, db } from "../../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import * as Google from "expo-auth-session/providers/google";
 import { makeRedirectUri } from "expo-auth-session";
 import { useNavigation } from "@react-navigation/native";
 import { formStyles, textStyles, buttonStyles, imageStyles } from "./styles";
 import { RegisterEmailAndPass } from "../../controllers/auths";
+import { doc, getDoc } from "firebase/firestore";
+import * as WebBrowser from "expo-web-browser";
+
+WebBrowser.maybeCompleteAuthSession();
 
 const SignIn = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Construye un redirectUri compatible con Expo Proxy para móvil
   const redirectUri = makeRedirectUri({ useProxy: true });
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -33,9 +36,19 @@ const SignIn = () => {
     if (response?.type === "success") {
       const { id_token, access_token } = response.params;
       const credential = GoogleAuthProvider.credential(id_token, access_token);
+
       signInWithCredential(auth, credential)
-        .then(() => {
-          navigation.navigate("main");
+        .then(async () => {
+          const user = auth.currentUser;
+          const uid = user.uid;
+          const docRef = doc(db, "users", uid);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            navigation.navigate("main");
+          } else {
+            navigation.navigate("firstTimeRegister");
+          }
         })
         .catch((error) => {
           console.error("Error en signInWithCredential:", error);
@@ -43,24 +56,35 @@ const SignIn = () => {
     }
   }, [response]);
 
+  const handleGoogleLogin = async () => {
+    try {
+      await promptAsync({ useProxy: true });
+    } catch (error) {
+      console.error("Error al iniciar sesión con Google:", error);
+    }
+  };
+
   return (
     <View style={formStyles.container}>
       <Text style={textStyles.title}>Registrarse</Text>
+
       <TextInput
         placeholder="Correo electrónico"
         onChangeText={setEmail}
+        value={email}
         style={formStyles.input}
       />
       <TextInput
         placeholder="Contraseña"
         onChangeText={setPassword}
+        value={password}
         secureTextEntry={true}
         style={formStyles.input}
       />
 
       <TouchableOpacity
         onPress={() => RegisterEmailAndPass(email, password)}
-        style={[buttonStyles.primary]}
+        style={buttonStyles.primary}
       >
         <Text style={textStyles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
@@ -69,18 +93,20 @@ const SignIn = () => {
         onPress={() => navigation.navigate("login")}
         style={buttonStyles.secondary}
       >
-        <Text style={textStyles.buttonText2}>Inicio sesión</Text>
+        <Text style={textStyles.buttonText2}>Iniciar sesión</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => promptAsync({ useProxy: true })}
+        onPress={handleGoogleLogin}
         disabled={!request}
+        style={{ marginTop: 20 }}
       >
         <Image
           source={require("../../assets/images/logo_google.png")}
           style={imageStyles.medium}
         />
       </TouchableOpacity>
+
       <Image
         source={require("../../assets/images/bitty.png")}
         style={imageStyles.xxlarge}
