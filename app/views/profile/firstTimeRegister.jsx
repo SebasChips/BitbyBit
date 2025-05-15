@@ -1,35 +1,30 @@
-import { React, useState, useEffect } from 'react';
-import { View, Text, TextInput, ScrollView, TouchableOpacity, Platform } from 'react-native';
-import { styles } from "./styles";
+import { React, useState, useEffect } from "react";
+import { View, TextInput, Text, Image, TouchableOpacity, ScrollView, Platform } from "react-native";
+import { formStyles, buttonStyles, imageStyles, textStyles, topicStyles, scrollStyles } from "./styles";
 import { checkUserSession, logOut } from "../../controllers/auths";
 import { useNavigation } from "@react-navigation/native";
 import { registrarUsuario } from "../../controllers/querys";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-const topics = [
-  'Matemáticas',
-  'Programación',
-  'Juegos',
-  'LoL',
-];
+const topics = ["Matemáticas", "Programación", "Juegos", "LoL"];
 
 export default function UserInfoForm() {
-  const [fatherName, setFatherName] = useState('');
-  const [fatherEmail, setFatherEmail] = useState('');
-  const [childName, setChildName] = useState('');
+  const [fatherName, setFatherName] = useState("");
+  const [fatherEmail, setFatherEmail] = useState("");
+  const [childName, setChildName] = useState("");
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  
+
   // Función para manejar fechas
   const onChange = (event, selectedDate) => {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       // Manejo para web
       setDate(new Date(event.target.value));
     } else {
       // Manejo para móvil
       const currentDate = selectedDate || date;
-      setShowDatePicker(Platform.OS === 'ios');
+      setShowDatePicker(Platform.OS === "ios");
       setDate(currentDate);
     }
   };
@@ -38,23 +33,22 @@ export default function UserInfoForm() {
     setShowDatePicker(true);
   };
 
-
   const navigation = useNavigation();
   useEffect(() => {
     const unsubscribe = checkUserSession((user) => {
       if (!user) {
-        navigation.navigate("login"); 
+        navigation.navigate("login");
       } else {
         setFatherEmail(user.email);
         setFatherName(user.displayName);
       }
     });
-    return () => unsubscribe(); 
+    return () => unsubscribe();
   }, [navigation]);
 
   const toggleTopic = (topic) => {
     if (selectedTopics.includes(topic)) {
-      setSelectedTopics(selectedTopics.filter(t => t !== topic));
+      setSelectedTopics(selectedTopics.filter((t) => t !== topic));
     } else if (selectedTopics.length < 5) {
       setSelectedTopics([...selectedTopics, topic]);
     }
@@ -62,28 +56,25 @@ export default function UserInfoForm() {
 
   // Componente DatePicker condicional
   const renderDatePicker = () => {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       return (
         <input
           type="date"
-          value={date.toISOString().split('T')[0]}
+          value={date.toISOString().split("T")[0]}
           onChange={onChange}
           style={{
-            padding: '10px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            width: '100%',
-            marginBottom: '15px'
+            padding: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+            width: "100%",
+            marginBottom: "15px",
           }}
         />
       );
     } else {
       return (
         <>
-          <TouchableOpacity 
-            style={styles.input} 
-            onPress={showDatepicker}
-          >
+          <TouchableOpacity style={styles.input} onPress={showDatepicker}>
             <Text>{date.toLocaleDateString()}</Text>
           </TouchableOpacity>
           {showDatePicker && (
@@ -102,69 +93,89 @@ export default function UserInfoForm() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Hola, queremos conocer un poco más de ti...</Text>
+  <ScrollView style={scrollStyles.container} contentContainerStyle={formStyles.container}>
+    <Image
+            source={require("../../assets/images/bitty.png")}
+            style={imageStyles.large}
+          />
+    <Text style={textStyles.title}>
+      Hola, queremos conocer un poco más de ti...
+    </Text>
 
-      <TouchableOpacity onPress={() => logOut()} style={styles.submitButton}>
-        <Text>Cerrar sesión</Text>
-      </TouchableOpacity>
+    <TouchableOpacity onPress={logOut} style={buttonStyles.secondary}>
+      <Text style={textStyles.buttonText2}>Cerrar sesión</Text>
+    </TouchableOpacity>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Información del Padre/Madre/Tutor</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre"
-          value={fatherName}
-          onChangeText={setFatherName}
-        />
-        <TextInput
-          style={styles.input}
-          value={fatherEmail} 
-          placeholder="Correo electrónico"
-          keyboardType="email-address"
-          onChangeText={setFatherEmail}
-        />
-      </View>
-      
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Información futur@ programador@</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre"
-          value={childName}
-          onChangeText={setChildName}
-        />
-        
-        {renderDatePicker()}
-      </View>
-      
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Selecciona hasta 5 temas de interés para el niño/niña</Text>
-        <View style={styles.topicsContainer}>
-          {topics.map((topic) => (
+    <View style={formStyles.formContent}>
+      <Text style={textStyles.subtitle}>Información del Padre/Madre/Tutor</Text>
+
+      <TextInput
+        placeholder="Nombre"
+        value={fatherName}
+        onChangeText={setFatherName}
+        style={formStyles.input}
+      />
+      <TextInput
+        placeholder="Correo electrónico"
+        value={fatherEmail}
+        keyboardType="email-address"
+        onChangeText={setFatherEmail}
+        style={formStyles.input}
+      />
+    </View>
+
+    <View style={formStyles.formContent}>
+      <Text style={textStyles.subtitle}>Información futur@ programador@</Text>
+
+      <TextInput
+        placeholder="Nombre"
+        value={childName}
+        onChangeText={setChildName}
+        style={formStyles.input}
+      />
+
+      {renderDatePicker()}
+    </View>
+
+    <View style={formStyles.formContent}>
+      <Text style={textStyles.subtitle}>
+        Selecciona hasta 5 temas de interés para el niño/niña
+      </Text>
+
+      <View style={topicStyles.container}>
+        {topics.map((topic) => {
+          const isSelected = selectedTopics.includes(topic);
+          return (
             <TouchableOpacity
               key={topic}
-              style={[
-                styles.topicButton,
-                selectedTopics.includes(topic) && styles.selectedTopic
-              ]}
               onPress={() => toggleTopic(topic)}
+              style={[topicStyles.tag, isSelected && topicStyles.tagSelected]}
             >
-              <Text style={styles.topicText}>{topic}</Text>
+              <Text
+                style={[
+                  topicStyles.tagText,
+                  isSelected && topicStyles.tagTextSelected,
+                ]}
+              >
+                {topic}
+              </Text>
             </TouchableOpacity>
-          ))}
-        </View>
-        <Text style={styles.selectionText}>
-          Seleccionados: {selectedTopics.length}/5
-        </Text>
+          );
+        })}
       </View>
-      
-      <TouchableOpacity 
-        onPress={() => registrarUsuario(fatherEmail, fatherName)} 
-        style={styles.submitButton}
-      >
-        <Text style={styles.submitButtonText}>Continuar</Text>
-      </TouchableOpacity>
-    </ScrollView>
-  );
+
+      <Text style={textStyles.subtitle}>
+        Seleccionados: {selectedTopics.length}/5
+      </Text>
+    </View>
+
+    <TouchableOpacity
+      onPress={() => registrarUsuario(fatherEmail, fatherName)}
+      style={buttonStyles.primary}
+    >
+      <Text style={textStyles.buttonText}>Continuar</Text>
+    </TouchableOpacity>
+  </ScrollView>
+);
+
 }

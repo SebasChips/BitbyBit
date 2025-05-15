@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import { View, TextInput, Text, Image, TouchableOpacity } from "react-native";
 import { auth } from "../../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import * as Google from "expo-auth-session/providers/google";
@@ -45,46 +45,56 @@ const SignIn = () => {
 
   return (
     <View style={formStyles.container}>
-      <Text style={textStyles.title}>Registrarse</Text>
-      <TextInput
-        placeholder="Correo electrónico"
-        onChangeText={setEmail}
-        style={formStyles.input}
-      />
-      <TextInput
-        placeholder="Contraseña"
-        onChangeText={setPassword}
-        secureTextEntry={true}
-        style={formStyles.input}
+      <Image
+        source={require("../../assets/images/bitty.png")}
+        style={imageStyles.large}
       />
 
-      <TouchableOpacity
-        onPress={() => RegisterEmailAndPass(email, password)}
-        style={[buttonStyles.primary]}
-      >
-        <Text style={textStyles.buttonText}>Registrarse</Text>
-      </TouchableOpacity>
+      <Text style={textStyles.title}>¡Bienvenido!</Text>
+      <Text style={textStyles.subtitle}>Ingresa un correo y contraseña</Text>
+
+      <View style={formStyles.formContent}>
+        <TextInput
+          placeholder="Correo electrónico"
+          onChangeText={setEmail}
+          style={formStyles.input}
+        />
+
+        <TextInput
+          placeholder="Contraseña"
+          onChangeText={setPassword}
+          secureTextEntry={true}
+          style={formStyles.input}
+        />
+
+        <TouchableOpacity
+          onPress={() => RegisterEmailAndPass(email, password)}
+          style={[buttonStyles.primary]}
+        >
+          <Text style={textStyles.buttonText}>REGISTRARSE</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Text style={formStyles.dividerText}>O conéctate usando</Text>
+
+      <View style={formStyles.socialContainer}>
+        <TouchableOpacity
+          onPress={() => promptAsync({ useProxy: true })}
+          disabled={!request}
+        >
+          <Image
+            source={require("../../assets/images/logo_google.png")}
+            style={imageStyles.small}
+          />
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity
         onPress={() => navigation.navigate("login")}
-        style={buttonStyles.secondary}
+        style={buttonStyles.subtitle}
       >
-        <Text style={textStyles.buttonText2}>Inicio sesión</Text>
+        <Text style={textStyles.link}>¿Ya tienes cuenta? Inicia Sesión</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() => promptAsync({ useProxy: true })}
-        disabled={!request}
-      >
-        <Image
-          source={require("../../assets/images/logo_google.png")}
-          style={imageStyles.medium}
-        />
-      </TouchableOpacity>
-      <Image
-        source={require("../../assets/images/bitty.png")}
-        style={imageStyles.xxlarge}
-      />
     </View>
   );
 };

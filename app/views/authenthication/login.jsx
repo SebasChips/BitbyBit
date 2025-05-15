@@ -70,7 +70,6 @@ const Login = () => {
       <Image
         source={require("../../assets/images/bitty.png")}
         style={imageStyles.large}
-        resizeMode="contain"
       />
 
       <Text style={textStyles.title}>¡Bienvenido de nuevo!</Text>

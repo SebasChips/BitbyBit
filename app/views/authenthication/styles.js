@@ -118,3 +118,41 @@ export const imageStyles = StyleSheet.create({
     marginBottom: spacing.xxl,
   },
 });
+
+export const scrollStyles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.lg,
+  },
+});
+
+export const topicStyles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm, // si tu versión de RN no soporta "gap", usa margin manualmente
+    marginBottom: spacing.md,
+  },
+  tag: {
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.md,
+    backgroundColor: colors.backgroundLight || '#f0f0f0',
+    borderRadius: radii.pill,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    marginRight: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  tagSelected: {
+    backgroundColor: colors.primary,
+  },
+  tagText: {
+    fontSize: fontSizes.sm,
+    color: colors.primary,
+    fontWeight: fontWeights.medium,
+  },
+  tagTextSelected: {
+    color: colors.background,
+  },
+});

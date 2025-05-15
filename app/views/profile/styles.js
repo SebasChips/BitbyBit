@@ -1,71 +1,158 @@
 import { StyleSheet } from 'react-native';
+import { colors, spacing, fontSizes, fontWeights,  radii, shadows, zIndices, opacities, layout , dimensions, imageSizes } from '../../constants/theme';
 
+export const textStyles = StyleSheet.create({
+  title: {
+    fontSize: fontSizes.xxl,
+    fontWeight: fontWeights.bold,
+    marginBottom: spacing.lg,
+    color: colors.text,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: fontSizes.lg,
+    color: colors.muted,
+    marginBottom: spacing.md,
+  },
+  buttonText: {
+    fontSize: fontSizes.md,
+    color: colors.background,
+    fontWeight: fontWeights.semibold,
+    textAlign: 'center',
+  },
+  buttonText2: {
+    fontSize: fontSizes.md,
+    color: colors.primary,
+    fontWeight: fontWeights.semibold,
+    textAlign: 'center',
+  },
+  link: {
+    color: colors.primary,
+    fontWeight: fontWeights.semibold,
+    textAlign: 'center',
+  }
+});
 
-export const styles = StyleSheet.create({
-    container: {
-      padding: 20,
-      backgroundColor: '#fff',
-    },
-    title: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginBottom: 20,
-      textAlign: 'center',
-    },
-    section: {
-      marginBottom: 25,
-    },
-    sectionTitle: {
-      fontSize: 16,
-      fontWeight: '600',
-      marginBottom: 10,
-      color: '#333',
-    },
-    input: {
-      height: 40,
-      borderColor: '#ccc',
-      borderWidth: 1,
-      borderRadius: 5,
-      paddingHorizontal: 10,
-      marginBottom: 10,
-    },
-    topicsContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-between',
-    },
-    topicButton: {
-      backgroundColor: '#f0f0f0',
-      padding: 10,
-      borderRadius: 5,
-      marginBottom: 10,
-      width: '48%',
-    },
-    selectedTopic: {
-      backgroundColor: '#4CAF50',
-    },
-    topicText: {
-      textAlign: 'center',
-      color: '#333',
-    },
-    selectedTopicText: {
-      color: '#fff',
-    },
-    selectionText: {
-      textAlign: 'right',
-      fontSize: 14,
-      color: '#666',
-    },
-    submitButton: {
-      backgroundColor: '#2196F3',
-      padding: 15,
-      borderRadius: 5,
-      alignItems: 'center',
-      marginTop: 20,
-    },
-    submitButtonText: {
-      color: '#fff',
-      fontWeight: 'bold',
-      fontSize: 16,
-    },
-  });
+export const formStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: layout.center,
+    alignItems: layout.center,
+  },
+  input: {
+    width: dimensions.inputWidth,
+    marginVertical: spacing.sm,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radii.pill,
+  },
+  formContent: {
+    width: dimensions.inputWidth,
+    alignItems: layout.center,
+    justifyContent: layout.center,
+  },
+  socialContainer: {
+    flexDirection: layout.row,
+    justifyContent: layout.center,
+    marginTop: spacing.md,
+  },
+  dividerText: {
+    textAlign: layout.center,
+    color: colors.muted,
+    marginTop: spacing.md,
+    fontSize: fontSizes.sm,
+  },
+});
+
+export const buttonStyles = StyleSheet.create({
+  primary: {
+    width: dimensions.buttonWidth,
+    marginVertical: spacing.sm,
+    marginTop: spacing.sm,
+    backgroundColor: colors.primary,
+    borderRadius: radii.pill,
+    padding: spacing.sm,
+  },
+  secondary: {
+    width: dimensions.buttonWidth,
+    marginVertical: spacing.sm,
+    marginTop: spacing.sm,
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: radii.pill,
+    padding: spacing.sm,
+  },
+});
+
+export const imageStyles = StyleSheet.create({
+  small: {
+    width: imageSizes.sm,
+    height: imageSizes.sm,
+    borderRadius: radii.md,
+    marginBottom: spacing.sm,
+  },
+  medium: {
+    width: imageSizes.md,
+    height: imageSizes.md,
+    borderRadius: radii.md,
+    marginBottom: spacing.md,
+  },
+  large: {
+    width: imageSizes.lg,
+    height: imageSizes.lg,
+    borderRadius: radii.lg,
+    marginBottom: spacing.lg,
+  },
+  xlarge: {
+    width: imageSizes.xl,
+    height: imageSizes.xl,
+    borderRadius: radii.lg,
+    marginBottom: spacing.xl,
+  },
+  xxlarge: {
+    width: imageSizes.xxl,
+    height: imageSizes.xxl,
+    borderRadius: radii.xl,
+    marginBottom: spacing.xxl,
+  },
+});
+
+export const scrollStyles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.lg,
+  },
+});
+
+export const topicStyles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm, // si tu versión de RN no soporta "gap", usa margin manualmente
+    marginBottom: spacing.md,
+  },
+  tag: {
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.md,
+    backgroundColor: colors.backgroundLight || '#f0f0f0',
+    borderRadius: radii.pill,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    marginRight: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  tagSelected: {
+    backgroundColor: colors.primary,
+  },
+  tagText: {
+    fontSize: fontSizes.sm,
+    color: colors.primary,
+    fontWeight: fontWeights.medium,
+  },
+  tagTextSelected: {
+    color: colors.background,
+  },
+});
