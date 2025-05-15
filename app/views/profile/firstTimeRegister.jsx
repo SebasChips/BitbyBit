@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { View, TextInput, Text, Image, TouchableOpacity, ScrollView, Platform } from "react-native";
-import { formStyles, buttonStyles, imageStyles, textStyles, topicStyles, scrollStyles } from "./styles";
+import { formStyles, buttonStyles, imageStyles, textStyles, scrollStyles, tagStyles } from "./styles";
 import { checkUserSession, logOut } from "../../controllers/auths";
 import { useNavigation } from "@react-navigation/native";
 import { registrarUsuario } from "../../controllers/querys";
@@ -93,12 +93,12 @@ export default function UserInfoForm() {
   };
 
   return (
-  <ScrollView style={scrollStyles.container} contentContainerStyle={formStyles.container}>
+  <ScrollView style={scrollStyles.container}>
     <Image
             source={require("../../assets/images/bitty.png")}
-            style={imageStyles.large}
+            style={imageStyles.avatarLarge}
           />
-    <Text style={textStyles.title}>
+    <Text style={textStyles.heading}>
       Hola, queremos conocer un poco más de ti...
     </Text>
 
@@ -142,19 +142,19 @@ export default function UserInfoForm() {
         Selecciona hasta 5 temas de interés para el niño/niña
       </Text>
 
-      <View style={topicStyles.container}>
+      <View style={tagStyles.container}>
         {topics.map((topic) => {
           const isSelected = selectedTopics.includes(topic);
           return (
             <TouchableOpacity
               key={topic}
               onPress={() => toggleTopic(topic)}
-              style={[topicStyles.tag, isSelected && topicStyles.tagSelected]}
+              style={[tagStyles.tag, isSelected && tagStyles.tagSelected]}
             >
               <Text
                 style={[
-                  topicStyles.tagText,
-                  isSelected && topicStyles.tagTextSelected,
+                  tagStyles.tagText,
+                  isSelected && tagStyles.tagTextSelected,
                 ]}
               >
                 {topic}
