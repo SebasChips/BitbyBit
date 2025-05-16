@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
-import { auth, db } from "../../firebase/firebaseConfig";
+import { View, Text, TextInput, TouchableOpacity, Image, Platform, KeyboardAvoidingView, ScrollView, SafeAreaView, StatusBar } from "react-native";
+import { auth } from "../../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import * as Google from "expo-auth-session/providers/google";
 import { makeRedirectUri } from "expo-auth-session";
 import { useNavigation } from "@react-navigation/native";
-import { formStyles, textStyles, buttonStyles, imageStyles } from "./styles";
 import { RegisterEmailAndPass } from "../../controllers/auths";
 import { doc, getDoc } from "firebase/firestore";
 import * as WebBrowser from "expo-web-browser";
 
 WebBrowser.maybeCompleteAuthSession();
+
+import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -20,14 +21,10 @@ const SignIn = () => {
   const redirectUri = makeRedirectUri({ useProxy: true });
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    webClientId:
-      "61966159852-30er87tn5uojd5l0p8ndhriu144tpuj0.apps.googleusercontent.com",
-    expoClientId:
-      "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
-    androidClientId:
-      "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
-    iosClientId:
-      "61966159852-bk80mn0a9pfuitkj1i8qv0f4kqtug8nu.apps.googleusercontent.com",
+    webClientId: "61966159852-30er87tn5uojd5l0p8ndhriu144tpuj0.apps.googleusercontent.com",
+    expoClientId: "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
+    androidClientId: "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
+    iosClientId: "61966159852-bk80mn0a9pfuitkj1i8qv0f4kqtug8nu.apps.googleusercontent.com",
     redirectUri,
     scopes: ["openid", "profile", "email"],
   });
@@ -65,53 +62,52 @@ const SignIn = () => {
   };
 
   return (
-    <View style={formStyles.container}>
-      <Text style={textStyles.title}>Registrarse</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <StatusBar translucent={false} backgroundColor="white" barStyle="dark-content" />
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={scrollStyles.container} keyboardShouldPersistTaps="handled">
+          <View style={formStyles.container}>
+            <Image source={require("../../assets/images/bitty.png")} style={imageStyles.avatarLarge} />
 
-      <TextInput
-        placeholder="Correo electrónico"
-        onChangeText={setEmail}
-        value={email}
-        style={formStyles.input}
-      />
-      <TextInput
-        placeholder="Contraseña"
-        onChangeText={setPassword}
-        value={password}
-        secureTextEntry={true}
-        style={formStyles.input}
-      />
+            <Text style={textStyles.heading}>¡Bienvenido!</Text>
+            <Text style={textStyles.subtitle}>Ingresa un correo y contraseña</Text>
 
-      <TouchableOpacity
-        onPress={() => RegisterEmailAndPass(email, password)}
-        style={buttonStyles.primary}
-      >
-        <Text style={textStyles.buttonText}>Registrarse</Text>
-      </TouchableOpacity>
+            <View style={formStyles.formGroup}>
+              <TextInput
+                placeholder="Correo electrónico"
+                onChangeText={setEmail}
+                style={formStyles.input}
+                placeholderTextColor={textStyles.muted.color}
+              />
+              <TextInput
+                placeholder="Contraseña"
+                onChangeText={setPassword}
+                secureTextEntry={true}
+                style={formStyles.input}
+                placeholderTextColor={textStyles.muted.color}
+              />
 
-      <TouchableOpacity
-        onPress={() => navigation.navigate("login")}
-        style={buttonStyles.secondary}
-      >
-        <Text style={textStyles.buttonText2}>Iniciar sesión</Text>
-      </TouchableOpacity>
+              <TouchableOpacity onPress={() => RegisterEmailAndPass(email, password)} style={[buttonStyles.primary]}>
+                <Text style={textStyles.buttonPrimary}>REGISTRARSE</Text>
+              </TouchableOpacity>
+            </View>
 
-      <TouchableOpacity
-        onPress={handleGoogleLogin}
-        disabled={!request}
-        style={{ marginTop: 20 }}
-      >
-        <Image
-          source={require("../../assets/images/logo_google.png")}
-          style={imageStyles.medium}
-        />
-      </TouchableOpacity>
+            <Text style={formStyles.dividerText}>O conéctate usando</Text>
 
-      <Image
-        source={require("../../assets/images/bitty.png")}
-        style={imageStyles.xxlarge}
-      />
-    </View>
+            <View style={formStyles.socialLoginRow}>
+              <TouchableOpacity onPress={() => promptAsync({ useProxy: true })} disabled={!request}>
+                <Image source={require("../../assets/images/logo_google.png")} style={imageStyles.avatarSmall} />
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity onPress={() => navigation.navigate("login")}>
+              <Text style={textStyles.link}>¿Ya tienes cuenta? Inicia Sesión</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+
   );
 };
 
