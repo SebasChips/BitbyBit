@@ -1,18 +1,3 @@
-import { React, useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, Platform, KeyboardAvoidingView, ScrollView, SafeAreaView, StatusBar } from "react-native";
-
-import { checkUserSession, logOut } from "../../controllers/auths";
-import { useNavigation } from "@react-navigation/native";
-import { registrarUsuario } from "../../controllers/querys";
-import DateTimePicker from "@react-native-community/datetimepicker";
-
-import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
-
-
-const topics = ["Matemáticas", "Programación", "Juegos", "LoL"];
-
-
-
 export default function UserInfoForm() {
   const [fatherName, setFatherName] = useState("");
   const [fatherEmail, setFatherEmail] = useState("");
@@ -21,15 +6,14 @@ export default function UserInfoForm() {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   
-//reformatear fecha
-    const formatDate = (date) => {
-      return date.toLocaleDateString('es-MX', {
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit'
-      }).replace(/\//g, '/');
-    };
-
+  // reformatear fecha
+  const formatDate = (date) => {
+    return date.toLocaleDateString('es-MX', {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit'
+    }).replace(/\//g, '/');
+  };
 
   // Función para manejar fechas
   const onChangeDate = (event, selectedDate) => {
@@ -72,60 +56,35 @@ export default function UserInfoForm() {
   // Componente DatePicker condicional
   const renderDatePicker = () => {
     if (Platform.OS === "web") {
-      return <input type="date" value={date.toISOString().split("T")[0]} onChange={onChange} style={formStyles.dateInputWeb} />;
+      return (
+        <input 
+          type="date" 
+          value={date.toISOString().split("T")[0]} 
+          onChange={(e) => onChangeDate(e, null)}
+          style={formStyles.dateInputWeb} 
+        />
+      );
     } else {
       return (
         <>
           <TouchableOpacity style={formStyles.datePickerButton} onPress={showDatepicker}>
-            <Text style={formStyles.datePickerText}>{date.toLocaleDateString()}</Text>
+            <Text style={formStyles.datePickerText}>{formatDate(date)}</Text>
             <Text style={textStyles.caption}> 📅 </Text> 
           </TouchableOpacity>
           {showDatePicker && (
-            <DateTimePicker testID="dateTimePicker" value={date} mode="date" is24Hour={true} display="default" onChange={onChange} />
+            <DateTimePicker 
+              testID="dateTimePicker" 
+              value={date} 
+              mode="date" 
+              is24Hour={true} 
+              display="default" 
+              onChange={onChangeDate} 
+            />
           )}
         </>
       );
     }
   };
-
-  if (Platform.OS === 'web') {
-    return (
-      <input
-        type="date"
-        value={date.toISOString().split('T')[0]}
-        onChange={onChangeDate}
-        style={{
-          padding: '10px',
-          border: '1px solid #ccc',
-          borderRadius: '4px',
-          width: '100%',
-          marginBottom: '15px'
-        }}
-      />
-    );
-  } else {
-    return (
-      <>
-        <TouchableOpacity 
-          style={styles.input} 
-          onPress={showDatepicker}
-        >
-          <Text>{formatDateForDisplay(date)}</Text>
-        </TouchableOpacity>
-        {showDatePicker && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode="date"
-            is24Hour={true}
-            display="default"
-            onChange={onChangeDate}
-          />
-        )}
-      </>
-    );
-  }
-};
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
