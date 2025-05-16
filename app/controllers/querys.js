@@ -1,36 +1,45 @@
-import { auth } from "../firebase/firebaseConfig.jsx";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc, collection, addDoc } from "firebase/firestore";
+import Toast from 'react-native-toast-message';
+import { auth, db } from "../firebase/firebaseConfig";
 
+export const registerUser = async (email, nameKid, nameTutor, bornDateKid, navigation) => {
+  const user = auth.currentUser;
+  const uid = user.uid;
 
-export const registrarUsuario = async (nombrePadre, correoPadre, nombreProgramador, apellidoProgramador) => {
-    const user = auth.currentUser;
-    const uid = user.uid;
+  if (!email || !nameKid || !nameTutor || !bornDateKid) {
+    Toast.show({
+      type: 'error',
+      text1: 'Faltan campos',
+      text2: 'Por favor completa todos los campos',
+    });
+    return;
+  }
 
-     try {
-      const docRef = await addDoc(collection(db, "tutores"), {
-        nombre: nombrePadre,
-        apellido: correoPadre,
-      });
-      idTutor = docRef.id;
-    } catch (e) {
-      console.error("Error al agregar documento: ", e);
-    }
+  try {
+    await setDoc(doc(db, "users", uid), {
+      bornDateKid,
+      currentLesson: "lesson1",
+      email,
+      nameKid,
+      nameTutor,
+      streak: 0,
+      xp: 0,
+    });
 
-    try {
-      const docRef = await addDoc(collection(db, "usuarios"), {
-        id: uid,
-        nombre: nombreProgramador,
-        apellido: apellidoProgramador,
-        exp: 0,
-        leccionActial: 0,
-        idTutor: idTutor,
+    await setDoc(doc(db, "users", uid, "lessonsProgress", "lesson1"), {
+      attempts: 0,
+      completed: false,
+      levelLesson: 1,
+      score: 0,
+    });
 
-
-      });
-      console.log("Documento escrito con ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error al agregar documento: ", e);
-    }
-  };
-
-  
+    navigation.navigate("main");
+  } catch (e) {
+    console.log("Error al agregar documento: ", e);
+    Toast.show({
+      type: 'error',
+      text1: 'Error',
+      text2: 'No se pudo registrar el usuario',
+    });
+  }
+};

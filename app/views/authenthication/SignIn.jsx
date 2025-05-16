@@ -6,6 +6,10 @@ import * as Google from "expo-auth-session/providers/google";
 import { makeRedirectUri } from "expo-auth-session";
 import { useNavigation } from "@react-navigation/native";
 import { RegisterEmailAndPass } from "../../controllers/auths";
+import { doc, getDoc } from "firebase/firestore";
+import * as WebBrowser from "expo-web-browser";
+
+WebBrowser.maybeCompleteAuthSession();
 
 import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
 
@@ -14,7 +18,6 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Construye un redirectUri compatible con Expo Proxy para móvil
   const redirectUri = makeRedirectUri({ useProxy: true });
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -30,15 +33,33 @@ const SignIn = () => {
     if (response?.type === "success") {
       const { id_token, access_token } = response.params;
       const credential = GoogleAuthProvider.credential(id_token, access_token);
+
       signInWithCredential(auth, credential)
-        .then(() => {
-          navigation.navigate("main");
+        .then(async () => {
+          const user = auth.currentUser;
+          const uid = user.uid;
+          const docRef = doc(db, "users", uid);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            navigation.navigate("main");
+          } else {
+            navigation.navigate("firstTimeRegister");
+          }
         })
         .catch((error) => {
           console.error("Error en signInWithCredential:", error);
         });
     }
   }, [response]);
+
+  const handleGoogleLogin = async () => {
+    try {
+      await promptAsync({ useProxy: true });
+    } catch (error) {
+      console.error("Error al iniciar sesión con Google:", error);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -86,6 +107,7 @@ const SignIn = () => {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
+
   );
 };
 

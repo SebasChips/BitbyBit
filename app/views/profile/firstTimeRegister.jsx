@@ -8,7 +8,10 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
 
+
 const topics = ["Matemáticas", "Programación", "Juegos", "LoL"];
+
+
 
 export default function UserInfoForm() {
   const [fatherName, setFatherName] = useState("");
@@ -17,10 +20,20 @@ export default function UserInfoForm() {
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  
+//reformatear fecha
+    const formatDate = (date) => {
+      return date.toLocaleDateString('es-MX', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit'
+      }).replace(/\//g, '/');
+    };
+
 
   // Función para manejar fechas
-  const onChange = (event, selectedDate) => {
-    if (Platform.OS === "web") {
+  const onChangeDate = (event, selectedDate) => {
+    if (Platform.OS === 'web') {
       // Manejo para web
       setDate(new Date(event.target.value));
     } else {
@@ -74,6 +87,45 @@ export default function UserInfoForm() {
       );
     }
   };
+
+  if (Platform.OS === 'web') {
+    return (
+      <input
+        type="date"
+        value={date.toISOString().split('T')[0]}
+        onChange={onChangeDate}
+        style={{
+          padding: '10px',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          width: '100%',
+          marginBottom: '15px'
+        }}
+      />
+    );
+  } else {
+    return (
+      <>
+        <TouchableOpacity 
+          style={styles.input} 
+          onPress={showDatepicker}
+        >
+          <Text>{formatDateForDisplay(date)}</Text>
+        </TouchableOpacity>
+        {showDatePicker && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={onChangeDate}
+          />
+        )}
+      </>
+    );
+  }
+};
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
