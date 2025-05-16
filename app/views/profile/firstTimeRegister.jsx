@@ -1,10 +1,12 @@
 import { React, useState, useEffect } from "react";
-import { View, TextInput, Text, Image, TouchableOpacity, ScrollView, Platform } from "react-native";
-import { formStyles, buttonStyles, imageStyles, textStyles, scrollStyles, tagStyles } from "./styles";
+import { View, Text, TextInput, TouchableOpacity, Image, Platform, KeyboardAvoidingView, ScrollView, SafeAreaView, StatusBar } from "react-native";
+
 import { checkUserSession, logOut } from "../../controllers/auths";
 import { useNavigation } from "@react-navigation/native";
 import { registrarUsuario } from "../../controllers/querys";
 import DateTimePicker from "@react-native-community/datetimepicker";
+
+import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
 
 const topics = ["Matemáticas", "Programación", "Juegos", "LoL"];
 
@@ -78,14 +80,7 @@ export default function UserInfoForm() {
             <Text>{date.toLocaleDateString()}</Text>
           </TouchableOpacity>
           {showDatePicker && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode="date"
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
+            <DateTimePicker testID="dateTimePicker" value={date} mode="date" is24Hour={true} display="default" onChange={onChange} />
           )}
         </>
       );
@@ -93,89 +88,60 @@ export default function UserInfoForm() {
   };
 
   return (
-  <ScrollView style={scrollStyles.container}>
-    <Image
-            source={require("../../assets/images/bitty.png")}
-            style={imageStyles.avatarLarge}
-          />
-    <Text style={textStyles.heading}>
-      Hola, queremos conocer un poco más de ti...
-    </Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <StatusBar translucent={false} backgroundColor="white" barStyle="dark-content" />
+      <ScrollView contentContainerStyle={scrollStyles.container} keyboardShouldPersistTaps="handled">
+        <View style={formStyles.container}>
+          <Image source={require("../../assets/images/bitty.png")} style={imageStyles.avatarLarge} />
+          <Text style={textStyles.heading}>Hola, queremos conocer un poco más de ti...</Text>
 
-    <TouchableOpacity onPress={logOut} style={buttonStyles.secondary}>
-      <Text style={textStyles.buttonText2}>Cerrar sesión</Text>
-    </TouchableOpacity>
+          <TouchableOpacity onPress={logOut} style={buttonStyles.danger}>
+            <Text style={textStyles.buttonPrimary}>Cerrar sesión</Text>
+          </TouchableOpacity>
 
-    <View style={formStyles.formContent}>
-      <Text style={textStyles.subtitle}>Información del Padre/Madre/Tutor</Text>
+          <View style={formStyles.formGroup}>
+            <Text style={textStyles.subtitle}>Información del Padre/Madre/Tutor</Text>
 
-      <TextInput
-        placeholder="Nombre"
-        value={fatherName}
-        onChangeText={setFatherName}
-        style={formStyles.input}
-      />
-      <TextInput
-        placeholder="Correo electrónico"
-        value={fatherEmail}
-        keyboardType="email-address"
-        onChangeText={setFatherEmail}
-        style={formStyles.input}
-      />
-    </View>
+            <TextInput placeholder="Nombre" value={fatherName} onChangeText={setFatherName} style={formStyles.input} />
+            <TextInput
+              placeholder="Correo electrónico"
+              value={fatherEmail}
+              keyboardType="email-address"
+              onChangeText={setFatherEmail}
+              style={formStyles.input}
+            />
+          </View>
 
-    <View style={formStyles.formContent}>
-      <Text style={textStyles.subtitle}>Información futur@ programador@</Text>
+          <View style={formStyles.formGroup}>
+            <Text style={textStyles.subtitle}>Información futur@ programador@</Text>
 
-      <TextInput
-        placeholder="Nombre"
-        value={childName}
-        onChangeText={setChildName}
-        style={formStyles.input}
-      />
+            <TextInput placeholder="Nombre" value={childName} onChangeText={setChildName} style={formStyles.input} />
 
-      {renderDatePicker()}
-    </View>
+            {renderDatePicker()}
+          </View>
 
-    <View style={formStyles.formContent}>
-      <Text style={textStyles.subtitle}>
-        Selecciona hasta 5 temas de interés para el niño/niña
-      </Text>
+          <View style={formStyles.formGroup}>
+            <Text style={textStyles.subtitle}>Selecciona hasta 5 temas de interés para el niño/niña</Text>
 
-      <View style={tagStyles.container}>
-        {topics.map((topic) => {
-          const isSelected = selectedTopics.includes(topic);
-          return (
-            <TouchableOpacity
-              key={topic}
-              onPress={() => toggleTopic(topic)}
-              style={[tagStyles.tag, isSelected && tagStyles.tagSelected]}
-            >
-              <Text
-                style={[
-                  tagStyles.tagText,
-                  isSelected && tagStyles.tagTextSelected,
-                ]}
-              >
-                {topic}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
+            <View style={tagStyles.container}>
+              {topics.map((topic) => {
+                const isSelected = selectedTopics.includes(topic);
+                return (
+                  <TouchableOpacity key={topic} onPress={() => toggleTopic(topic)} style={[tagStyles.tag, isSelected && tagStyles.tagSelected]}>
+                    <Text style={[tagStyles.tagText, isSelected && tagStyles.tagTextSelected]}>{topic}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
 
-      <Text style={textStyles.subtitle}>
-        Seleccionados: {selectedTopics.length}/5
-      </Text>
-    </View>
+            <Text style={textStyles.subtitle}>Seleccionados: {selectedTopics.length}/5</Text>
+          </View>
 
-    <TouchableOpacity
-      onPress={() => registrarUsuario(fatherEmail, fatherName)}
-      style={buttonStyles.primary}
-    >
-      <Text style={textStyles.buttonText}>Continuar</Text>
-    </TouchableOpacity>
-  </ScrollView>
-);
-
+          <TouchableOpacity onPress={() => registrarUsuario(fatherEmail, fatherName)} style={buttonStyles.primary}>
+            <Text style={textStyles.buttonPrimary}>Continuar</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }

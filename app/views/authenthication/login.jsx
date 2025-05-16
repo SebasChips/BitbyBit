@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, Platform, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Keyboard, SafeAreaView, StatusBar } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Image, Platform, KeyboardAvoidingView, ScrollView, SafeAreaView, StatusBar } from "react-native";
 
 import { auth, db } from "../../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
@@ -66,46 +66,49 @@ const Login = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar translucent={false} backgroundColor="white" barStyle="dark-content" />
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView contentContainerStyle={scrollStyles.container} keyboardShouldPersistTaps="handled">
-            <View style={formStyles.container}>
-              <Image source={require("../../assets/images/bitty.png")} style={imageStyles.avatarLarge} />
+        <ScrollView contentContainerStyle={scrollStyles.container} keyboardShouldPersistTaps="handled">
+          <View style={formStyles.container}>
+            <Image source={require("../../assets/images/bitty.png")} style={imageStyles.avatarLarge} />
 
-              <Text style={textStyles.heading}>¡Bienvenido de nuevo!</Text>
-              <Text style={textStyles.subtitle}>Inicia sesión en tu cuenta</Text>
+            <Text style={textStyles.heading}>¡Bienvenido de nuevo!</Text>
+            <Text style={textStyles.subtitle}>Inicia sesión en tu cuenta</Text>
 
-              <View style={formStyles.formGroup}>
-                <TextInput
-                  placeholder="Correo electrónico"
-                  value={email}
-                  onChangeText={setEmail}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  style={formStyles.input}
-                  placeholderTextColor={textStyles.muted.color}
-                />
-
-                <TextInput placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry style={formStyles.input} placeholderTextColor={textStyles.muted.color} />
-
-                <TouchableOpacity onPress={() => handleLogin(0)} style={buttonStyles.primary}>
-                  <Text style={textStyles.buttonPrimary}>INICIAR SESIÓN</Text>
-                </TouchableOpacity>
-              </View>
-
-              <Text style={formStyles.dividerText}>O conéctate usando</Text>
-
-              <View style={formStyles.socialLoginRow}>
-                <TouchableOpacity onPress={() => handleLogin(1)} disabled={!request}>
-                  <Image source={require("../../assets/images/logo_google.png")} style={imageStyles.avatarSmall} />
-                </TouchableOpacity>
-              </View>
-
-              <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-                <Text style={textStyles.link}>¿No tienes cuenta? Regístrate</Text>
+            <View style={formStyles.formGroup}>
+              <TextInput
+                placeholder="Correo electrónico"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                style={formStyles.input}
+                placeholderTextColor={textStyles.muted.color}
+              />
+              <TextInput
+                placeholder="Contraseña"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                style={formStyles.input}
+                placeholderTextColor={textStyles.muted.color}
+              />
+              <TouchableOpacity onPress={() => handleLogin(0)} style={buttonStyles.primary}>
+                <Text style={textStyles.buttonPrimary}>INICIAR SESIÓN</Text>
               </TouchableOpacity>
             </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
+
+            <Text style={formStyles.dividerText}>O conéctate usando</Text>
+
+            <View style={formStyles.socialLoginRow}>
+              <TouchableOpacity onPress={() => handleLogin(1)} disabled={!request}>
+                <Image source={require("../../assets/images/logo_google.png")} style={imageStyles.avatarSmall} />
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+              <Text style={textStyles.link}>¿No tienes cuenta? Regístrate</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

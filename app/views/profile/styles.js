@@ -72,7 +72,6 @@ export const textStyles = StyleSheet.create({
   error: {
     fontSize: fontSizes.sm,
     color: colors.error,
-    marginTop: spacing.xs,
   },
 });
 
