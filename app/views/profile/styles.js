@@ -73,6 +73,11 @@ export const textStyles = StyleSheet.create({
     fontSize: fontSizes.sm,
     color: colors.error,
   },
+  datePickerText: {
+    fontSize: fontSizes.md,
+    color: colors.textPrimary,
+  },
+
 });
 
 export const formStyles = StyleSheet.create({
@@ -122,6 +127,33 @@ export const formStyles = StyleSheet.create({
     color: colors.textSecondary,
     marginTop: spacing.md,
     fontSize: fontSizes.sm,
+  },
+  dateInputWeb: {
+    width: dimensions.inputWidth,
+    marginVertical: spacing.sm,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    backgroundColor: colors.surface,
+    fontSize: fontSizes.md,
+    color: colors.textPrimary,
+    fontFamily: 'inherit', // Evita que el input use un font raro en algunos navegadores
+    ...shadows.sm,
+  },
+  datePickerButton: {
+    width: dimensions.inputWidth,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderWidth: 1,
+    borderRadius: radii.md,
+    flexDirection: layout.row,
+    alignItems: layout.alignCenter,
+    justifyContent: layout.justifySpaceBetween,
+    ...shadows.sm,
   },
 });
 

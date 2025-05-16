@@ -59,25 +59,13 @@ export default function UserInfoForm() {
   // Componente DatePicker condicional
   const renderDatePicker = () => {
     if (Platform.OS === "web") {
-      return (
-        <input
-          type="date"
-          value={date.toISOString().split("T")[0]}
-          onChange={onChange}
-          style={{
-            padding: "10px",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            width: "100%",
-            marginBottom: "15px",
-          }}
-        />
-      );
+      return <input type="date" value={date.toISOString().split("T")[0]} onChange={onChange} style={formStyles.dateInputWeb} />;
     } else {
       return (
         <>
-          <TouchableOpacity style={styles.input} onPress={showDatepicker}>
-            <Text>{date.toLocaleDateString()}</Text>
+          <TouchableOpacity style={formStyles.datePickerButton} onPress={showDatepicker}>
+            <Text style={formStyles.datePickerText}>{date.toLocaleDateString()}</Text>
+            <Text style={textStyles.caption}> 📅 </Text> 
           </TouchableOpacity>
           {showDatePicker && (
             <DateTimePicker testID="dateTimePicker" value={date} mode="date" is24Hour={true} display="default" onChange={onChange} />
