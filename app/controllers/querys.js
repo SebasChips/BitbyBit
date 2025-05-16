@@ -23,7 +23,7 @@ export const registerUser = async (email, nameKid, nameTutor, bornDateKid, navig
       nameKid,
       nameTutor,
       streak: 0,
-      exp: 0,
+      xp: 0,
     });
 
     await setDoc(doc(db, "users", uid, "lessonsProgress", "lesson1"), {

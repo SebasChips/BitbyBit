@@ -1,15 +1,17 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const Main = () => {
   const lessons = Array.from({ length: 10 }, (_, i) => `Lección ${i + 1}`);
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>¡Hola, Isidro!</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         {lessons.map((lesson, index) => (
-          <TouchableOpacity key={index} style={styles.bubble}>
+          <TouchableOpacity onPress = {()=> navigation.navigate("firstgame")} key={index} style={styles.bubble}>
             <Text style={styles.bubbleText}>{lesson}</Text>
           </TouchableOpacity>
         ))}
