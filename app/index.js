@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignIn from './views/authenthication/SignIn';
 import login from './views/authenthication/login';
-import firstgame from './views/lessons/lesson1/firstgame';
+import firstgame from './views/lessons/lesson1/L1FirstGame';
 
 import main from './views/profile/main';
 import firstTimeRegister from './views/profile/firstTimeRegister';
