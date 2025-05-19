@@ -1,3 +1,14 @@
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, TouchableOpacity, Image, Platform, KeyboardAvoidingView, ScrollView, SafeAreaView, StatusBar } from "react-native";
+
+import { useNavigation } from "@react-navigation/native";
+import { checkUserSession, logOut } from "../../controllers/auths";
+import { registerUser } from "../../controllers/querys";
+
+import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
+
+const topics = ["Matemáticas", "Programación", "Juegos", "LoL"];
+
 export default function UserInfoForm() {
   const [fatherName, setFatherName] = useState("");
   const [fatherEmail, setFatherEmail] = useState("");
@@ -136,7 +147,7 @@ export default function UserInfoForm() {
             <Text style={textStyles.subtitle}>Seleccionados: {selectedTopics.length}/5</Text>
           </View>
 
-          <TouchableOpacity onPress={() => registrarUsuario(fatherEmail, fatherName)} style={buttonStyles.primary}>
+          <TouchableOpacity onPress={() => registerUser(fatherEmail, childName, fatherName, date.toISOString(), navigation)} style={buttonStyles.primary}>
             <Text style={textStyles.buttonPrimary}>Continuar</Text>
           </TouchableOpacity>
         </View>
