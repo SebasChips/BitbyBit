@@ -6,6 +6,7 @@ import { checkUserSession, logOut } from "../../controllers/auths";
 import { registerUser } from "../../controllers/querys";
 
 import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
+import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/theme";
 
 const topics = ["Matemáticas", "Programación", "Juegos", "LoL"];
 
@@ -16,19 +17,21 @@ export default function UserInfoForm() {
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  
+
   // reformatear fecha
   const formatDate = (date) => {
-    return date.toLocaleDateString('es-MX', {
-      day: '2-digit',
-      month: '2-digit',
-      year: '2-digit'
-    }).replace(/\//g, '/');
+    return date
+      .toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+      })
+      .replace(/\//g, "/");
   };
 
   // Función para manejar fechas
   const onChangeDate = (event, selectedDate) => {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       // Manejo para web
       setDate(new Date(event.target.value));
     } else {
@@ -67,87 +70,60 @@ export default function UserInfoForm() {
   // Componente DatePicker condicional
   const renderDatePicker = () => {
     if (Platform.OS === "web") {
-      return (
-        <input 
-          type="date" 
-          value={date.toISOString().split("T")[0]} 
-          onChange={(e) => onChangeDate(e, null)}
-          style={formStyles.dateInputWeb} 
-        />
-      );
+      return <input type="date" value={date.toISOString().split("T")[0]} onChange={(e) => onChangeDate(e, null)} style={formStyles.dateInputWeb} />;
     } else {
       return (
         <>
           <TouchableOpacity style={formStyles.datePickerButton} onPress={showDatepicker}>
             <Text style={formStyles.datePickerText}>{formatDate(date)}</Text>
-            <Text style={textStyles.caption}> 📅 </Text> 
           </TouchableOpacity>
-          {showDatePicker && (
-            <DateTimePicker 
-              testID="dateTimePicker" 
-              value={date} 
-              mode="date" 
-              is24Hour={true} 
-              display="default" 
-              onChange={onChangeDate} 
-            />
-          )}
+          {showDatePicker && <DateTimePicker testID="dateTimePicker" value={date} mode="date" is24Hour={true} display="default" onChange={onChangeDate} />}
         </>
       );
     }
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <StatusBar translucent={false} backgroundColor="white" barStyle="dark-content" />
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      <StatusBar translucent={false} backgroundColor={colors.background} barStyle="dark-content" />
       <ScrollView contentContainerStyle={scrollStyles.container} keyboardShouldPersistTaps="handled">
-        <View style={formStyles.container}>
+        <View style={[formStyles.container, { paddingHorizontal: spacing.md }]}>
           <Image source={require("../../assets/images/bitty.png")} style={imageStyles.avatarLarge} />
+
           <Text style={textStyles.heading}>Hola, queremos conocer un poco más de ti...</Text>
 
-          <TouchableOpacity onPress={logOut} style={buttonStyles.danger}>
+          <TouchableOpacity onPress={logOut} style={[buttonStyles.danger, { marginBottom: spacing.lg }]}>
             <Text style={textStyles.buttonPrimary}>Cerrar sesión</Text>
           </TouchableOpacity>
 
-          <View style={formStyles.formGroup}>
+          <View style={[formStyles.formGroup, { marginBottom: spacing.lg }]}>
             <Text style={textStyles.subtitle}>Información del Padre/Madre/Tutor</Text>
-
             <TextInput placeholder="Nombre" value={fatherName} onChangeText={setFatherName} style={formStyles.input} />
-            <TextInput
-              placeholder="Correo electrónico"
-              value={fatherEmail}
-              keyboardType="email-address"
-              onChangeText={setFatherEmail}
-              style={formStyles.input}
-            />
+            <TextInput placeholder="Correo electrónico" value={fatherEmail} keyboardType="email-address" onChangeText={setFatherEmail} style={formStyles.input} />
           </View>
 
-          <View style={formStyles.formGroup}>
+          <View style={[formStyles.formGroup, { marginBottom: spacing.lg }]}>
             <Text style={textStyles.subtitle}>Información futur@ programador@</Text>
-
             <TextInput placeholder="Nombre" value={childName} onChangeText={setChildName} style={formStyles.input} />
-
             {renderDatePicker()}
           </View>
 
-          <View style={formStyles.formGroup}>
+          <View style={[formStyles.formGroup, { marginBottom: spacing.lg }]}>
             <Text style={textStyles.subtitle}>Selecciona hasta 5 temas de interés para el niño/niña</Text>
-
             <View style={tagStyles.container}>
               {topics.map((topic) => {
                 const isSelected = selectedTopics.includes(topic);
                 return (
                   <TouchableOpacity key={topic} onPress={() => toggleTopic(topic)} style={[tagStyles.tag, isSelected && tagStyles.tagSelected]}>
-                    <Text style={[tagStyles.tagText, isSelected && tagStyles.tagTextSelected]}>{topic}</Text>
+                    <Text style={[textStyles.tagText, isSelected && textStyles.tagTextSelected]}>{topic}</Text>
                   </TouchableOpacity>
                 );
               })}
             </View>
-
-            <Text style={textStyles.subtitle}>Seleccionados: {selectedTopics.length}/5</Text>
+            <Text style={[textStyles.subtitle, { marginTop: spacing.md }]}>Seleccionados: {selectedTopics.length}/5</Text>
           </View>
 
-          <TouchableOpacity onPress={() => registerUser(fatherEmail, childName, fatherName, date.toISOString(), navigation)} style={buttonStyles.primary}>
+          <TouchableOpacity onPress={() => registerUser(fatherEmail, childName, fatherName, date.toISOString(), navigation)} style={[buttonStyles.primary, { marginVertical: spacing.lg }]}>
             <Text style={textStyles.buttonPrimary}>Continuar</Text>
           </TouchableOpacity>
         </View>

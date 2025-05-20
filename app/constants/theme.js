@@ -1,34 +1,18 @@
 export const colors = {
-  primary: '#4A90E2',
-  primaryDark: '#357ABD',
-  primaryLight: '#A1C9F1',
-  secondary: '#FFB347',
-  secondaryDark: '#E69A2D',
-  secondaryLight: '#FFE0B2',
-  background: '#FFF8F0',
-  backgroundAlt: '#FFEFD5',
+  primary: '#2563EB',        // Azul vibrante accesible (antes: #3B82F6)
+  primaryDark: '#1E40AF',    // Más profundidad
+  primaryLight: '#BFDBFE',   // Azul claro (buen para hover o fondos suaves)
+  background: '#FAFAFA',     // Gris casi blanco
   surface: '#FFFFFF',
-  surfaceDark: '#F5F5F5',
-  surfaceLight: '#FFFFFF',
-  textPrimary: '#333333',
-  textSecondary: '#666666',
-  textMuted: '#999999',
+  surfaceDark: '#F3F4F6',    // Fondo alternativo para inputs deshabilitados
+  textPrimary: '#1F2937',     // Gris oscuro (muy legible)
+  textSecondary: '#6B7280',   // Gris medio (para subtítulos)
+  textMuted: '#9CA3AF',       // Gris claro (para captions)
   textInverted: '#FFFFFF',
-  border: '#DDDDDD',
-  borderLight: '#EEEEEE',
-  error: '#FF6B6B',
-  errorDark: '#CC4C4C',
-  errorLight: '#FFE5E5',
-  success: '#4CD964',
-  successDark: '#2BAE52',
-  successLight: '#DFFFE2',
-  warning: '#FFD93D',
-  warningDark: '#CCB52E',
-  info: '#5AC8FA',
-  infoLight: '#D6F2FF',
-  accent1: '#FFD700',
-  accent2: '#FF69B4',
-  accent3: '#98FB98',
+  border: '#D1D5DB',
+  error: '#DC2626',           // Rojo accesible
+  success: '#16A34A',         // Verde accesible
+  info: '#2563EB',            // Igual que primary
 };
 
 export const spacing = {
@@ -48,10 +32,10 @@ export const fontSizes = {
   xs: 14,
   sm: 16,
   md: 18,
-  lg: 22,
-  xl: 28,
-  xxl: 36,
-  xxxl: 44,
+  lg: 20,
+  xl: 24,
+  xxl: 30,
+  xxxl: 36,
 };
 
 export const fontWeights = {
@@ -64,9 +48,9 @@ export const fontWeights = {
 };
 
 export const lineHeights = {
-  tight: 1.1,
-  normal: 1.4,
-  relaxed: 1.6,
+  tight: 1.2,
+  normal: 1.5,
+  relaxed: 1.75,
 };
 
 export const fontFamilies = {
@@ -85,23 +69,23 @@ export const shadows = {
   sm: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 1,
+    elevation: 2,
   },
   md: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 4,
   },
   lg: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 6,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.16,
+    shadowRadius: 10,
+    elevation: 8,
   },
 };
 
