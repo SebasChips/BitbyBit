@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Platform, Animated, Easing, StyleSheet } from 'react-native';
 import Tower from '../../../components/lesson1/tower';
 import HappyBackground from '../../../components/lesson1/HappyBackground';
+import { db } from '../../../firebase/firebaseConfig';
+import { doc, updateDoc } from 'firebase/firestore';
+
 
 const isWeb = Platform.OS === 'web';
 let ExpoAudio;
@@ -9,7 +12,7 @@ if (!isWeb) {
   ExpoAudio = require('expo-av').Audio;
 }
 
-const GameContainer = () => {
+const GameContainer = ({ navigation, route }) => {
   const [selectedTower, setSelectedTower] = useState(null);
   const [counter, setCounter] = useState(0);
   const [won, setWon] = useState(false);
@@ -141,6 +144,20 @@ const GameContainer = () => {
     await playSelectSound();
     setSelectedTower(towerIndex);
   };
+  const markLessonCompletedAndRedirect = async () => {
+    try {
+      const lessonId = route.params?.lessonId || 'lesson1'; // fallback
+      const lessonDocRef = doc(db, 'lessons', lessonId);
+      await updateDoc(lessonDocRef, { completed: true });
+
+      // Espera breve para UX
+      setTimeout(() => {
+        navigation.navigate('main');
+      }, 1500);
+    } catch (error) {
+      console.error("Error actualizando lección:", error);
+    }
+  };
 
   const handleMoveDisc = async (targetTowerIndex) => {
     if (won || selectedTower === null) return;
@@ -157,6 +174,7 @@ const GameContainer = () => {
       if (checkWinCondition(newTowers)) {
         setWon(true);
         startWinAnimation();
+        markLessonCompletedAndRedirect();
       }
     } else if (fromDisc === toDisc) {
       return;
