@@ -1,34 +1,25 @@
 export const colors = {
-  primary: '#4A90E2',
-  primaryDark: '#357ABD',
-  primaryLight: '#A1C9F1',
-  secondary: '#FFB347',
-  secondaryDark: '#E69A2D',
-  secondaryLight: '#FFE0B2',
-  background: '#FFF8F0',
-  backgroundAlt: '#FFEFD5',
-  surface: '#FFFFFF',
-  surfaceDark: '#F5F5F5',
-  surfaceLight: '#FFFFFF',
-  textPrimary: '#333333',
-  textSecondary: '#666666',
-  textMuted: '#999999',
-  textInverted: '#FFFFFF',
-  border: '#DDDDDD',
-  borderLight: '#EEEEEE',
-  error: '#FF6B6B',
-  errorDark: '#CC4C4C',
-  errorLight: '#FFE5E5',
-  success: '#4CD964',
-  successDark: '#2BAE52',
-  successLight: '#DFFFE2',
-  warning: '#FFD93D',
-  warningDark: '#CCB52E',
-  info: '#5AC8FA',
-  infoLight: '#D6F2FF',
-  accent1: '#FFD700',
-  accent2: '#FF69B4',
-  accent3: '#98FB98',
+  primary: '#3B82F6',             // Azul brillante (acción principal)
+  primaryDark: '#1E3A8A',         // Azul oscuro (hover o estados activos)
+  secondary: '#FACC15',           // Amarillo vibrante (elementos llamativos para niños)
+  secondaryDark: '#D97706',       // Ámbar oscuro
+  background: '#FFFBEA',          // Fondo claro cálido y amigable
+  surface: '#FFFFFF',             // Superficies limpias
+  border: '#E5E7EB',              // Bordes sutiles
+  text: '#1F2937',                // Texto principal
+  textSecondary: '#6B7280',       // Texto secundario
+  textMuted: '#9CA3AF',           // Texto deshabilitado o muy secundario
+  placeholder: '#9CA3AF',
+  error: '#EF4444',
+  errorLight: '#FEE2E2',
+  success: '#10B981',
+  successLight: '#DCFCE7',
+  info: '#0EA5E9',
+  infoLight: '#E0F2FE',
+  warning: '#F97316',
+  warningLight: '#FFEDD5',
+  overlay: 'rgba(0, 0, 0, 0.6)',
+  transparent: 'transparent',
 };
 
 export const spacing = {
@@ -48,10 +39,10 @@ export const fontSizes = {
   xs: 14,
   sm: 16,
   md: 18,
-  lg: 22,
-  xl: 28,
-  xxl: 36,
-  xxxl: 44,
+  lg: 20,
+  xl: 24,
+  xxl: 30,
+  xxxl: 36,
 };
 
 export const fontWeights = {
@@ -64,14 +55,15 @@ export const fontWeights = {
 };
 
 export const lineHeights = {
-  tight: 1.1,
-  normal: 1.4,
-  relaxed: 1.6,
+  tight: 1.2,
+  normal: 1.5,
+  relaxed: 1.75,
 };
 
 export const fontFamilies = {
   primary: 'System',
   heading: 'System',
+  body: 'System',
   monospace: 'Courier',
 };
 
@@ -85,40 +77,35 @@ export const shadows = {
   sm: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 1,
+    elevation: 2,
   },
   md: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 4,
   },
   lg: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 6,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.16,
+    shadowRadius: 10,
+    elevation: 8,
   },
 };
 
 export const layout = {
+  alignCenter: 'center',
+  alignStart: 'flex-start',
+  alignEnd: 'flex-end',
+  justifyCenter: 'center',
+  justifyStart: 'flex-start',
+  justifyEnd: 'flex-end',
   row: 'row',
   column: 'column',
-  alignStart: 'flex-start',
-  alignCenter: 'center',
-  alignEnd: 'flex-end',
-  justifyStart: 'flex-start',
-  justifyCenter: 'center',
-  justifyEnd: 'flex-end',
-  justifyBetween: 'space-between',
-  justifyAround: 'space-around',
-  justifyEvenly: 'space-evenly',
-  wrap: 'wrap',
-  nowrap: 'nowrap',
 };
 
 export const imageSizes = {

@@ -11,6 +11,7 @@ import { makeRedirectUri } from "expo-auth-session";
 import { doc, getDoc } from "firebase/firestore";
 
 import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
+import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/theme";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -68,8 +69,8 @@ const SignIn = () => {
           <View style={formStyles.container}>
             <Image source={require("../../assets/images/bitty.png")} style={imageStyles.avatarLarge} />
 
-            <Text style={textStyles.heading}>¡Bienvenido de nuevo!</Text>
-            <Text style={textStyles.subtitle}>Ingresa un correo y Contraseña</Text>
+            <Text style={textStyles.heading}>¡Bienvenido!</Text>
+            <Text style={textStyles.subheading}>               Crea una cuenta para comenzar               </Text>
 
             <View style={formStyles.formGroup}>
               <TextInput
@@ -78,16 +79,17 @@ const SignIn = () => {
                 autoCapitalize="none"
                 keyboardType="email-address"
                 style={formStyles.input}
-                placeholderTextColor={textStyles.muted.color}
+                placeholderTextColor={textStyles.body.color}
+                textContentType="emailAddress"
               />
-              <TextInput placeholder="Contraseña" onChangeText={setPassword} secureTextEntry style={formStyles.input} placeholderTextColor={textStyles.muted.color} />
+              <TextInput placeholder="Contraseña" onChangeText={setPassword} secureTextEntry style={formStyles.input} placeholderTextColor={textStyles.body.color} textContentType="password" />
 
-              <TouchableOpacity onPress={() => RegisterEmailAndPass(email, password)} style={[buttonStyles.primary]}>
-                <Text style={textStyles.buttonPrimary}>SignIn</Text>
+              <TouchableOpacity onPress={() => RegisterEmailAndPass(email, password)} style={buttonStyles.primary}>
+                <Text style={textStyles.buttonPrimary}>Registrarme</Text>
               </TouchableOpacity>
             </View>
 
-            <Text style={formStyles.dividerText}>O conéctate usando</Text>
+            <Text style={[textStyles.body, { marginVertical: spacing.md }]}>— o registrate con —</Text>
 
             <View style={formStyles.socialLoginRow}>
               <TouchableOpacity onPress={() => promptAsync({ useProxy: true })} disabled={!request}>
@@ -96,7 +98,7 @@ const SignIn = () => {
             </View>
 
             <TouchableOpacity onPress={() => navigation.navigate("login")}>
-              <Text style={textStyles.link}>¿Ya tienes cuenta? Inicia Sesión</Text>
+              <Text style={[textStyles.link, { marginTop: spacing.lg }]}>¿Ya tienes cuenta? Inicia sesión</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

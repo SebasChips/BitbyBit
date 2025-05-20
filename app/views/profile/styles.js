@@ -1,19 +1,56 @@
 import { StyleSheet } from 'react-native';
-import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices } from '../../constants/theme';
+import {
+  colors,
+  spacing,
+  fontSizes,
+  fontWeights,
+  radii,
+  opacities,
+  layout,
+  dimensions,
+  imageSizes,
+  shadows,
+  zIndices,
+  lineHeights,
+  fontFamilies,
+} from '../../constants/theme';
 
 export const baseStyles = StyleSheet.create({
-  centerText: {
-    textAlign: layout.alignCenter,
+  fullScreen: {
+    flex: 1,
+    width: dimensions.fullWidth,
+    backgroundColor: colors.background,
   },
-  centerItem: {
+  centerContent: {
     alignItems: layout.alignCenter,
-    justifyContent: layout.alignCenter,
+    justifyContent: layout.justifyCenter,
+  },
+  alignStart: {
+    alignItems: layout.alignStart,
+  },
+  alignEnd: {
+    alignItems: layout.alignEnd,
+  },
+  row: {
+    flexDirection: layout.row,
+  },
+  column: {
+    flexDirection: layout.column,
   },
   roundedPill: {
     borderRadius: radii.pill,
   },
-  paddedButton: {
-    paddingVertical: spacing.sm,
+  rounded: {
+    borderRadius: radii.md,
+  },
+  padded: {
+    padding: spacing.md,
+  },
+  marginBottom: {
+    marginBottom: spacing.md,
+  },
+  centerText: {
+    textAlign: layout.alignCenter,
   },
 });
 
@@ -21,70 +58,69 @@ export const textStyles = StyleSheet.create({
   heading: {
     fontSize: fontSizes.xxl,
     fontWeight: fontWeights.bold,
-    color: colors.textPrimary,
+    fontFamily: fontFamilies.heading,
+    lineHeight: fontSizes.xxl * lineHeights.normal,
+    color: colors.text,
     textAlign: layout.alignCenter,
     marginBottom: spacing.lg,
   },
   subheading: {
     fontSize: fontSizes.lg,
+    fontWeight: fontWeights.semibold,
+    fontFamily: fontFamilies.heading,
+    lineHeight: fontSizes.lg * lineHeights.normal,
     color: colors.textSecondary,
     marginBottom: spacing.md,
   },
-  subtitle: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.medium,
-    color: colors.textSecondary,
-  },
   body: {
     fontSize: fontSizes.md,
-    color: colors.textPrimary,
+    fontWeight: fontWeights.regular,
+    fontFamily: fontFamilies.body,
+    lineHeight: fontSizes.md * lineHeights.normal,
+    color: colors.text,
+  },
+  caption: {
+    fontSize: fontSizes.xs,
+    fontWeight: fontWeights.regular,
+    fontFamily: fontFamilies.body,
+    lineHeight: fontSizes.xs * lineHeights.relaxed,
+    color: colors.textMuted,
   },
   link: {
-    color: colors.primary,
+    color: colors.info,
     fontWeight: fontWeights.semibold,
+    fontFamily: fontFamilies.primary,
     textAlign: layout.alignCenter,
+    textDecorationLine: 'underline',
+  },
+  error: {
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.regular,
+    fontFamily: fontFamilies.primary,
+    color: colors.error,
   },
   buttonPrimary: {
     fontSize: fontSizes.md,
-    color: colors.background,
+    color: colors.surface,
     fontWeight: fontWeights.semibold,
+    fontFamily: fontFamilies.primary,
     textAlign: layout.alignCenter,
   },
   buttonSecondary: {
     fontSize: fontSizes.md,
     color: colors.primary,
     fontWeight: fontWeights.semibold,
+    fontFamily: fontFamilies.primary,
     textAlign: layout.alignCenter,
   },
-  buttonText: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.semibold,
-    textAlign: layout.alignCenter,
-  },
-  caption: {
-    fontSize: fontSizes.xs,
-    color: colors.textMuted,
-  },
-  muted: {
-    fontSize: fontSizes.sm,
-    color: colors.textMuted,
-  },
-  error: {
-    fontSize: fontSizes.sm,
-    color: colors.error,
-  },
-  datePickerText: {
-    fontSize: fontSizes.md,
-    color: colors.textPrimary,
-  },
-
 });
 
 export const formStyles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: layout.alignCenter,
     alignItems: layout.alignCenter,
+    justifyContent: layout.justifyCenter,
+    backgroundColor: colors.background,
   },
   input: {
     width: dimensions.inputWidth,
@@ -94,6 +130,9 @@ export const formStyles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radii.md,
     backgroundColor: colors.surface,
+    fontFamily: fontFamilies.primary,
+    fontSize: fontSizes.md,
+    color: colors.text,
     ...shadows.sm,
   },
   inputFocused: {
@@ -103,57 +142,20 @@ export const formStyles = StyleSheet.create({
     borderColor: colors.error,
   },
   inputDisabled: {
-    backgroundColor: colors.surfaceDark,
+    backgroundColor: colors.surface,
     opacity: opacities.disabled,
   },
   label: {
     fontSize: fontSizes.sm,
     fontWeight: fontWeights.medium,
+    fontFamily: fontFamilies.primary,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
   },
   formGroup: {
     width: dimensions.inputWidth,
     alignItems: layout.alignCenter,
-    justifyContent: layout.alignCenter,
-  },
-  socialLoginRow: {
-    flexDirection: layout.row,
-    justifyContent: layout.alignCenter,
-    marginTop: spacing.md,
-  },
-  dividerText: {
-    textAlign: layout.alignCenter,
-    color: colors.textSecondary,
-    marginTop: spacing.md,
-    fontSize: fontSizes.sm,
-  },
-  dateInputWeb: {
-    width: dimensions.inputWidth,
-    marginVertical: spacing.sm,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radii.md,
-    backgroundColor: colors.surface,
-    fontSize: fontSizes.md,
-    color: colors.textPrimary,
-    fontFamily: 'inherit', // Evita que el input use un font raro en algunos navegadores
-    ...shadows.sm,
-  },
-  datePickerButton: {
-    width: dimensions.inputWidth,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.md,
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderWidth: 1,
-    borderRadius: radii.md,
-    flexDirection: layout.row,
-    alignItems: layout.alignCenter,
-    justifyContent: layout.justifySpaceBetween,
-    ...shadows.sm,
+    marginBottom: spacing.md,
   },
 });
 
@@ -171,8 +173,8 @@ export const buttonStyles = StyleSheet.create({
     paddingVertical: spacing.sm,
     borderWidth: 1,
     borderColor: colors.primary,
+    backgroundColor: colors.transparent,
     borderRadius: radii.pill,
-    backgroundColor: 'transparent',
     alignItems: layout.alignCenter,
     ...shadows.sm,
   },
@@ -187,8 +189,8 @@ export const buttonStyles = StyleSheet.create({
   ghost: {
     width: dimensions.buttonWidth,
     paddingVertical: spacing.sm,
-    backgroundColor: 'transparent',
-    borderColor: 'transparent',
+    backgroundColor: colors.transparent,
+    borderColor: colors.transparent,
     alignItems: layout.alignCenter,
   },
   small: {
@@ -252,7 +254,7 @@ export const scrollStyles = StyleSheet.create({
 export const tagStyles = StyleSheet.create({
   container: {
     flexDirection: layout.row,
-    flexWrap: layout.wrap,
+    flexWrap: 'wrap',
     gap: spacing.sm,
     marginBottom: spacing.md,
   },
@@ -280,9 +282,10 @@ export const tagStyles = StyleSheet.create({
     fontSize: fontSizes.sm,
     color: colors.primary,
     fontWeight: fontWeights.medium,
+    fontFamily: fontFamilies.body,
   },
   textSelected: {
-    color: colors.background,
+    color: colors.surface,
   },
 });
 
@@ -304,7 +307,7 @@ export const modalStyles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: colors.textPrimary,
+    backgroundColor: colors.overlay,
     opacity: 0.5,
     zIndex: zIndices.overlay,
   },
@@ -319,12 +322,19 @@ export const modalStyles = StyleSheet.create({
   header: {
     fontSize: fontSizes.lg,
     fontWeight: fontWeights.bold,
-    color: colors.textPrimary,
+    fontFamily: fontFamilies.heading,
+    lineHeight: fontSizes.lg * lineHeights.normal,
+    color: colors.text,
     marginBottom: spacing.md,
+    textAlign: layout.alignCenter,
   },
   body: {
     fontSize: fontSizes.md,
+    fontWeight: fontWeights.regular,
+    fontFamily: fontFamilies.body,
+    lineHeight: fontSizes.md * lineHeights.normal,
     color: colors.textSecondary,
+    textAlign: 'left',
   },
   footer: {
     flexDirection: layout.row,

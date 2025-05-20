@@ -4,6 +4,10 @@ import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { db, auth } from '../../firebase/firebaseConfig';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
+import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/theme";
+
+
 const Main = ({ navigation }) => {
   const bittyAvatar = require('../../assets/images/bitty.png');
   const [user, setUser] = useState(null);

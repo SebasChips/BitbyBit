@@ -11,6 +11,7 @@ import { makeRedirectUri } from "expo-auth-session";
 import { doc, getDoc } from "firebase/firestore";
 
 import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
+import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/theme";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -64,14 +65,14 @@ const Login = () => {
 
   return (
     <SafeAreaView style={formStyles.container}>
-      <StatusBar translucent={false} backgroundColor="white" barStyle="dark-content" />
+      <StatusBar translucent={false} backgroundColor={colors.background} barStyle="dark-content" />
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={scrollStyles.container} keyboardShouldPersistTaps="handled">
           <View style={formStyles.container}>
             <Image source={require("../../assets/images/bitty.png")} style={imageStyles.avatarLarge} />
 
-            <Text style={textStyles.heading}>¡Bienvenido de nuevo!</Text>
-            <Text style={textStyles.subtitle}>Inicia sesión en tu cuenta</Text>
+            <Text style={textStyles.heading}>¡Hola de nuevo!</Text>
+            <Text style={textStyles.subheading}>Nos alegra verte. Inicia sesión para continuar donde te quedaste.</Text>
 
             <View style={formStyles.formGroup}>
               <TextInput
@@ -81,22 +82,16 @@ const Login = () => {
                 autoCapitalize="none"
                 keyboardType="email-address"
                 style={formStyles.input}
-                placeholderTextColor={textStyles.muted.color}
+                placeholderTextColor={textStyles.body.color}
               />
-              <TextInput
-                placeholder="Contraseña"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                style={formStyles.input}
-                placeholderTextColor={textStyles.muted.color}
-              />
+              <TextInput placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry style={formStyles.input} placeholderTextColor={textStyles.body.color} />
+              
               <TouchableOpacity onPress={() => handleLogin(0)} style={buttonStyles.primary}>
-                <Text style={textStyles.buttonPrimary}>Login</Text>
+                <Text style={textStyles.buttonPrimary}>Entrar</Text>
               </TouchableOpacity>
             </View>
 
-            <Text style={formStyles.dividerText}>O conéctate usando</Text>
+            <Text style={[textStyles.body, { marginVertical: spacing.md }]}>— o accede con —</Text>
 
             <View style={formStyles.socialLoginRow}>
               <TouchableOpacity onPress={() => handleLogin(1)} disabled={!request}>
@@ -105,7 +100,7 @@ const Login = () => {
             </View>
 
             <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-              <Text style={textStyles.link}>¿No tienes cuenta? Regístrate</Text>
+              <Text style={[textStyles.link, { marginTop: spacing.lg }]}>¿Primera vez aquí? Crea una cuenta gratis</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
