@@ -70,6 +70,7 @@ export const textStyles = StyleSheet.create({
     fontFamily: fontFamilies.heading,
     lineHeight: fontSizes.lg * lineHeights.normal,
     color: colors.textSecondary,
+    textAlign: layout.alignCenter,
     marginBottom: spacing.md,
   },
   body: {

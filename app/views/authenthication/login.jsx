@@ -72,7 +72,7 @@ const Login = () => {
             <Image source={require("../../assets/images/bitty.png")} style={imageStyles.avatarLarge} />
 
             <Text style={textStyles.heading}>¡Hola de nuevo!</Text>
-            <Text style={textStyles.subheading}>Nos alegra verte. Inicia sesión para continuar donde te quedaste.</Text>
+            <Text style={textStyles.subheading}>Inicia sesión para continuar donde te quedaste</Text>
 
             <View style={formStyles.formGroup}>
               <TextInput

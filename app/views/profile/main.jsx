@@ -105,7 +105,7 @@ const Main = ({ navigation }) => {
           disabled={!isUnlocked}
         >
           <LinearGradient
-            colors={isCompleted ? ['#4CAF50', '#8BC34A'] : isUnlocked ? ['#2196F3', '#03A9F4'] : ['#aaa', '#ccc']}
+            colors={isCompleted ? [colors.info] : isUnlocked ? [colors.success] : ['#aaa', '#ccc']}
             style={styles.nodeGradient}
           >
             <Ionicons
@@ -133,7 +133,7 @@ const Main = ({ navigation }) => {
   );
 
   return (
-    <LinearGradient colors={['#E1F5FE', '#B3E5FC']} style={styles.gradientContainer}>
+    <LinearGradient colors={['#FFFBEA', '#FFFBEA']} style={styles.gradientContainer}>
       <ScrollView contentContainerStyle={styles.container}>
         {user && (
           <View style={styles.profileContainer}>
@@ -161,9 +161,7 @@ const Main = ({ navigation }) => {
         )}
 
         <View style={styles.titleContainer}>
-          <Ionicons name="flag" size={24} color="#FF5722" />
           <Text style={styles.title}>Tu Camino de Aprendizaje</Text>
-          <Ionicons name="flag" size={24} color="#FF5722" />
         </View>
 
         <View style={styles.path}>
@@ -180,7 +178,7 @@ const Main = ({ navigation }) => {
           onPress={() => navigation.navigate('Rewards')}
         >
           <LinearGradient 
-            colors={['#FFC107', '#FF9800']} 
+            colors={['#0EA5E9', '#0EA5E9']} 
             style={styles.rewardsButtonGradient}
           >
             <Ionicons name="trophy" size={24} color="white" />
@@ -205,11 +203,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E1F5FE',
+    backgroundColor: colors.background,
   },
   loadingText: {
     fontSize: 18,
-    color: '#0288D1',
+    color: colors.text,
     marginTop: 20,
     fontFamily: 'KidsFont',
   },
@@ -217,7 +215,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-    backgroundColor: 'white',
+    backgroundColor: colors.surface,
     padding: 15,
     borderRadius: 20,
     width: '100%',
@@ -243,7 +241,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#01579B',
+    color: colors.text,
     marginBottom: 5,
     fontFamily: 'KidsFont',
   },
@@ -274,7 +272,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -5,
     right: -5,
-    backgroundColor: '#FF5722',
+    backgroundColor: colors.info,
     borderRadius: 15,
     paddingHorizontal: 8,
     paddingVertical: 3,
@@ -296,7 +294,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#01579B',
+    color: colors.text,
     textAlign: 'center',
     marginHorizontal: 10,
     fontFamily: 'KidsFont',
@@ -333,20 +331,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   nodeCompleted: {
-    borderColor: '#4CAF50',
+    borderColor: colors.success,
   },
   nodeLocked: {
     opacity: 0.7,
   },
   nodeCurrent: {
-    borderColor: '#FFC107',
+    borderColor: colors.info,
   },
   nodeText: {
     marginTop: 5,
     fontSize: 16,
     fontWeight: '600',
     textAlign: 'center',
-    color: '#01579B',
+    color: colors.text,
     fontFamily: 'KidsFont',
   },
   currentLabel: {
@@ -356,7 +354,7 @@ const styles = StyleSheet.create({
   },
   currentLabelText: {
     fontSize: 12,
-    color: '#FF9800',
+    color: colors.secondary,
     fontWeight: 'bold',
     marginLeft: 5,
     fontFamily: 'KidsFont',
