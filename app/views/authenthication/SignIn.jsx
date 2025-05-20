@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, Platform, KeyboardAvoidingView, ScrollView, SafeAreaView, StatusBar } from "react-native";
-import { auth } from "../../firebase/firebaseConfig";
+
+import { auth, db } from "../../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import * as Google from "expo-auth-session/providers/google";
-import { makeRedirectUri } from "expo-auth-session";
+import * as WebBrowser from "expo-web-browser";
 import { useNavigation } from "@react-navigation/native";
 import { RegisterEmailAndPass } from "../../controllers/auths";
+import * as Google from "expo-auth-session/providers/google";
+import { makeRedirectUri } from "expo-auth-session";
 import { doc, getDoc } from "firebase/firestore";
-import * as WebBrowser from "expo-web-browser";
-
-WebBrowser.maybeCompleteAuthSession();
 
 import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
+
+WebBrowser.maybeCompleteAuthSession();
 
 const SignIn = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const redirectUri = makeRedirectUri({ useProxy: true });
-
   const [request, response, promptAsync] = Google.useAuthRequest({
     webClientId: "61966159852-30er87tn5uojd5l0p8ndhriu144tpuj0.apps.googleusercontent.com",
     expoClientId: "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
@@ -62,33 +61,29 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+    <SafeAreaView style={formStyles.container}>
       <StatusBar translucent={false} backgroundColor="white" barStyle="dark-content" />
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={scrollStyles.container} keyboardShouldPersistTaps="handled">
           <View style={formStyles.container}>
             <Image source={require("../../assets/images/bitty.png")} style={imageStyles.avatarLarge} />
 
-            <Text style={textStyles.heading}>¡Bienvenido!</Text>
-            <Text style={textStyles.subtitle}>Ingresa un correo y contraseña</Text>
+            <Text style={textStyles.heading}>¡Bienvenido de nuevo!</Text>
+            <Text style={textStyles.subtitle}>Ingresa un correo y Contraseña</Text>
 
             <View style={formStyles.formGroup}>
               <TextInput
                 placeholder="Correo electrónico"
                 onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
                 style={formStyles.input}
                 placeholderTextColor={textStyles.muted.color}
               />
-              <TextInput
-                placeholder="Contraseña"
-                onChangeText={setPassword}
-                secureTextEntry={true}
-                style={formStyles.input}
-                placeholderTextColor={textStyles.muted.color}
-              />
+              <TextInput placeholder="Contraseña" onChangeText={setPassword} secureTextEntry style={formStyles.input} placeholderTextColor={textStyles.muted.color} />
 
               <TouchableOpacity onPress={() => RegisterEmailAndPass(email, password)} style={[buttonStyles.primary]}>
-                <Text style={textStyles.buttonPrimary}>REGISTRARSE</Text>
+                <Text style={textStyles.buttonPrimary}>SignIn</Text>
               </TouchableOpacity>
             </View>
 
@@ -107,7 +102,6 @@ const SignIn = () => {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
-
   );
 };
 
