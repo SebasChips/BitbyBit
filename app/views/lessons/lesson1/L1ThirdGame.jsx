@@ -48,6 +48,8 @@ const GameContainer = ({ navigation, route }) => {
           selectSoundRef.current = selectSound;
           dropSoundRef.current = dropSound;
           wrongSoundRef.current = wrongSound;
+          winSoundRef.current = winSound;
+
         }
       } catch (error) {
         console.error('Error al cargar sonidos:', error);
