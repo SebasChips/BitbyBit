@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Platform, Animated, Easing, StyleSheet } from 'react-native';
 import Tower from '../../../components/lesson1/tower';
 import HappyBackground from '../../../components/lesson1/HappyBackground';
-import { db } from '../../../firebase/firebaseConfig';
-import { doc, updateDoc } from 'firebase/firestore';
+import { db, auth } from '../../../firebase/firebaseConfig';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 
 
 const isWeb = Platform.OS === 'web';
@@ -145,19 +145,63 @@ const GameContainer = ({ navigation, route }) => {
     setSelectedTower(towerIndex);
   };
   const markLessonCompletedAndRedirect = async () => {
-    try {
-      const lessonId = route.params?.lessonId || 'lesson1'; // fallback
-      const lessonDocRef = doc(db, 'lessons', lessonId);
+  try {
+    const lessonId = route.params?.lessonId || 'lesson1';
+    const lessonDocRef = doc(db, 'lessons', lessonId);
+    const lessonSnap = await getDoc(lessonDocRef);
+    const alreadyCompleted = lessonSnap.exists() ? lessonSnap.data().completed : false;
+
+    const userId = auth.currentUser?.uid;
+    if (!userId) return;
+
+    const userRef = doc(db, 'users', userId);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) return;
+    const userData = userSnap.data();
+
+    const currentXp = userData.xp || 0;
+    let xpEarned = alreadyCompleted ? 500 : 1000;
+
+    const updates = {
+      xp: currentXp + xpEarned
+    };
+
+    if (!alreadyCompleted) {
+      updates.completed = true;
       await updateDoc(lessonDocRef, { completed: true });
 
-      // Espera breve para UX
-      setTimeout(() => {
-        navigation.navigate('main');
-      }, 1500);
-    } catch (error) {
-      console.error("Error actualizando lección:", error);
+      // Cálculo de streak si es PRIMERA VEZ que la completa
+      const today = new Date();
+      const todayStr = today.toISOString().split('T')[0];
+      const lastActivity = userData.lastActivity || null;
+      const currentStreak = userData.streak || 0;
+
+      let newStreak = 1;
+      if (lastActivity) {
+        const lastDate = new Date(lastActivity);
+        const diffTime = today.getTime() - lastDate.getTime();
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays === 1) newStreak = currentStreak + 1;
+        else if (diffDays === 0) newStreak = currentStreak;
+      }
+
+      updates.streak = newStreak;
+      updates.lastActivity = todayStr;
     }
-  };
+
+    await updateDoc(userRef, updates);
+
+    setTimeout(() => {
+      navigation.navigate('main');
+    }, 1500);
+
+  } catch (error) {
+    console.error("Error al actualizar progreso o XP:", error);
+  }
+};
+
 
   const handleMoveDisc = async (targetTowerIndex) => {
     if (won || selectedTower === null) return;
