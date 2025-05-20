@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Animated, Easing } from 'react-native';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { db, auth } from '../../firebase/firebaseConfig';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-const avatars = [
-  require('../../assets/images/avatars/tigres.png'),
-  /*require('../../assets/avatars/avatar2.png'),
-  require('../../assets/avatars/avatar3.png'),
-  require('../../assets/avatars/avatar4.png'),*/
-];
-
-
+import { LinearGradient } from 'expo-linear-gradient';
 const Main = ({ navigation }) => {
+  const bittyAvatar = require('../../assets/images/bitty.png');
   const [user, setUser] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [currentLesson, setCurrentLesson] = useState('');
   const [loading, setLoading] = useState(true);
+  const [pulseAnim] = useState(new Animated.Value(1));
 
   useEffect(() => {
     const loadData = async () => {
@@ -51,8 +45,32 @@ const Main = ({ navigation }) => {
     loadData();
   }, []);
 
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1.1,
+          duration: 800,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 800,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true
+        })
+      ])
+    ).start();
+  }, []);
+
   if (loading) {
-    return <Text style={{ padding: 20 }}>Cargando...</Text>;
+    return (
+      <View style={styles.loadingContainer}>
+        <Ionicons name="book" size={60} color="#4FC3F7" />
+        <Text style={styles.loadingText}>Cargando aventuras...</Text>
+      </View>
+    );
   }
 
   const renderLessonNode = (lesson, index) => {
@@ -60,125 +78,309 @@ const Main = ({ navigation }) => {
     const isFirst = index === 0;
     const isUnlocked = isFirst || prevLesson?.completed;
     const isCompleted = lesson.completed;
+    const isCurrent = lesson.id === currentLesson;
 
     let iconName = 'lock-closed';
     if (isCompleted) iconName = 'checkmark-circle';
     else if (isUnlocked) iconName = 'play';
 
+    const animatedStyle = isCurrent && isUnlocked ? {
+      transform: [{ scale: pulseAnim }]
+    } : {};
+
     return (
-      <TouchableOpacity
-        key={lesson.id}
-        style={[
-          styles.node,
-          isCompleted && styles.nodeCompleted,
-          !isUnlocked && styles.nodeLocked
-        ]}
-        onPress={() => isUnlocked && navigation.navigate(lesson.rute)}
-        disabled={!isUnlocked}
-      >
-        <Ionicons
-          name={iconName}
-          size={30}
-          color={isCompleted ? '#4CAF50' : isUnlocked ? '#2196F3' : '#aaa'}
-        />
-        <Text style={styles.nodeText}>{lesson.title}</Text>
-      </TouchableOpacity>
+      <Animated.View key={lesson.id} style={[animatedStyle]}>
+        <TouchableOpacity
+          style={[
+            styles.node,
+            isCompleted && styles.nodeCompleted,
+            !isUnlocked && styles.nodeLocked,
+            isCurrent && styles.nodeCurrent
+          ]}
+          onPress={() => isUnlocked && navigation.navigate(lesson.rute)}
+          disabled={!isUnlocked}
+        >
+          <LinearGradient
+            colors={isCompleted ? ['#4CAF50', '#8BC34A'] : isUnlocked ? ['#2196F3', '#03A9F4'] : ['#aaa', '#ccc']}
+            style={styles.nodeGradient}
+          >
+            <Ionicons
+              name={iconName}
+              size={30}
+              color="white"
+            />
+          </LinearGradient>
+          <Text style={styles.nodeText}>{lesson.title}</Text>
+          {isCurrent && (
+            <View style={styles.currentLabel}>
+              <Ionicons name="star" size={16} color="#FFC107" />
+              <Text style={styles.currentLabelText}>¡Tu misión!</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+      </Animated.View>
     );
   };
 
+  const renderConnector = () => (
+    <View style={styles.connectorContainer}>
+      <Ionicons name="chevron-down" size={30} color="#4FC3F7" />
+    </View>
+  );
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-              {user && (
+    <LinearGradient colors={['#E1F5FE', '#B3E5FC']} style={styles.gradientContainer}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {user && (
           <View style={styles.profileContainer}>
             <Image
-              source={avatars[user.avatarIndex || 0]}
+              source={bittyAvatar}
               style={styles.avatar}
             />
             <View style={styles.userInfo}>
-              <Text style={styles.userName}>{user.nameKid}</Text>
-              <Text style={styles.userData}>Racha: {user.streak} días</Text>
-              <Text style={styles.userData}>XP: {user.xp}</Text>
+              <Text style={styles.userName}>¡Hola, {user.nameKid}!</Text>
+              <View style={styles.statsContainer}>
+                <View style={styles.statItem}>
+                  <Ionicons name="flame" size={20} color="#FF5722" />
+                  <Text style={styles.statText}>{user.streak} días</Text>
+                </View>
+                <View style={styles.statItem}>
+                  <Ionicons name="star" size={20} color="#FFC107" />
+                  <Text style={styles.statText}>{user.xp} XP</Text>
+                </View>
+                <View style={styles.levelBadge}>
+                  <Text style={styles.levelText}>Nv. {Math.floor(user.xp / 100) + 1}</Text>
+                </View>
+              </View>
             </View>
           </View>
         )}
 
-      <Text style={styles.title}>Tu Camino de Aprendizaje</Text>
+        <View style={styles.titleContainer}>
+          <Ionicons name="flag" size={24} color="#FF5722" />
+          <Text style={styles.title}>Tu Camino de Aprendizaje</Text>
+          <Ionicons name="flag" size={24} color="#FF5722" />
+        </View>
 
-      <View style={styles.path}>
-        {lessons.slice(0, 3).map((lesson, index) => (
-          <React.Fragment key={lesson.id}>
-            {renderLessonNode(lesson, index)}
-            {index < 2 && <View style={styles.connector} />}
-          </React.Fragment>
-        ))}
-      </View>
-    </ScrollView>
+        <View style={styles.path}>
+          {lessons.slice(0, 3).map((lesson, index) => (
+            <React.Fragment key={lesson.id}>
+              {renderLessonNode(lesson, index)}
+              {index < 2 && renderConnector()}
+            </React.Fragment>
+          ))}
+        </View>
+
+        <TouchableOpacity 
+          style={styles.rewardsButton}
+          onPress={() => navigation.navigate('Rewards')}
+        >
+          <LinearGradient 
+            colors={['#FFC107', '#FF9800']} 
+            style={styles.rewardsButtonGradient}
+          >
+            <Ionicons name="trophy" size={24} color="white" />
+            <Text style={styles.rewardsButtonText}>Ver mis recompensas</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </ScrollView>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
+  gradientContainer: {
+    flex: 1,
+  },
   container: {
     padding: 20,
     alignItems: 'center',
+    paddingBottom: 40,
   },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 30,
-  },
-  path: {
-    flexDirection: 'column',
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#E1F5FE',
+  },
+  loadingText: {
+    fontSize: 18,
+    color: '#0288D1',
+    marginTop: 20,
+    fontFamily: 'KidsFont',
   },
   profileContainer: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 20,
+    width: '100%',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  avatar: {
+  avatarPlaceholder: {
     width: 80,
     height: 80,
     borderRadius: 40,
     marginRight: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 3,
+    borderColor: 'white',
   },
   userInfo: {
     flex: 1,
   },
   userName: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
+    color: '#01579B',
+    marginBottom: 5,
+    fontFamily: 'KidsFont',
   },
-  userData: {
+  statsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  statItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  statText: {
     fontSize: 16,
-    color: '#666',
+    color: '#424242',
+    marginLeft: 5,
+    fontFamily: 'KidsFont',
+  },avatarContainer: {
+    position: 'relative',
+    marginRight: 16,
   },
-
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40 },
+  levelBadge: {
+    position: 'absolute',
+    bottom: -5,
+    right: -5,
+    backgroundColor: '#FF5722',
+    borderRadius: 15,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'white',
+  },
+  levelText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#01579B',
+    textAlign: 'center',
+    marginHorizontal: 10,
+    fontFamily: 'KidsFont',
+    textShadowColor: 'rgba(255, 255, 255, 0.8)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
+  },
+  path: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
   node: {
     alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    elevation: 4,
-    width: 180,
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 15,
+    elevation: 5,
+    width: 200,
+    marginHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    borderWidth: 3,
+    borderColor: 'transparent',
+  },
+  nodeGradient: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   nodeCompleted: {
     borderColor: '#4CAF50',
-    borderWidth: 2,
   },
   nodeLocked: {
-    opacity: 0.5,
+    opacity: 0.7,
+  },
+  nodeCurrent: {
+    borderColor: '#FFC107',
   },
   nodeText: {
-    marginTop: 10,
+    marginTop: 5,
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '600',
     textAlign: 'center',
+    color: '#01579B',
+    fontFamily: 'KidsFont',
   },
-  connector: {
-    height: 30,
-    width: 4,
-    backgroundColor: '#ccc',
-    marginVertical: 10,
+  currentLabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  currentLabelText: {
+    fontSize: 12,
+    color: '#FF9800',
+    fontWeight: 'bold',
+    marginLeft: 5,
+    fontFamily: 'KidsFont',
+  },
+  connectorContainer: {
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rewardsButton: {
+    width: '90%',
+    borderRadius: 25,
+    overflow: 'hidden',
+    elevation: 5,
+  },
+  rewardsButtonGradient: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rewardsButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 10,
+    fontFamily: 'KidsFont',
   },
 });
 
