@@ -19,6 +19,8 @@ const GameContainer = ({ navigation, route }) => {
   const selectSoundRef = useRef(null);
   const dropSoundRef = useRef(null);
   const wrongSoundRef = useRef(null);
+    const winSoundRef = useRef(null);
+  
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
@@ -43,6 +45,9 @@ const GameContainer = ({ navigation, route }) => {
         const { sound: wrongSound } = await ExpoAudio.Sound.createAsync(
           require('../../../assets/audio/wrong.mp3')
         );
+        const { sound: winSound } = await ExpoAudio.Sound.createAsync(
+          require('../../../assets/audio/win.mp3')
+        );
 
         if (isMounted) {
           selectSoundRef.current = selectSound;
@@ -62,6 +67,7 @@ const GameContainer = ({ navigation, route }) => {
         selectSoundRef.current?.unloadAsync().catch(e => console.warn("Error al descargar select:", e));
         dropSoundRef.current?.unloadAsync().catch(e => console.warn("Error al descargar drop:", e));
         wrongSoundRef.current?.unloadAsync().catch(e => console.warn("Error al descargar wrong:", e));
+        winSoundRef.current?.unloadAsync().catch(e => console.warn("Error al descargar wrong:", e));
       }
     };
   }, []);
@@ -96,6 +102,18 @@ const GameContainer = ({ navigation, route }) => {
     try {
       if (isWeb) {
         const audio = new window.Audio(require('../../../assets/audio/wrong.mp3'));
+        await audio.play();
+      } else if (wrongSoundRef.current) {
+        await wrongSoundRef.current.replayAsync();
+      }
+    } catch (error) {
+      console.error("Error al reproducir sonido:", error);
+    }
+  };
+  const playWinSound = async () => {
+    try {
+      if (isWeb) {
+        const audio = new window.Audio(require('../../../assets/audio/win.mp3'));
         await audio.play();
       } else if (wrongSoundRef.current) {
         await wrongSoundRef.current.replayAsync();
@@ -216,6 +234,7 @@ const GameContainer = ({ navigation, route }) => {
       setTowers(newTowers);
       
       if (checkWinCondition(newTowers)) {
+        await playWinSound();
         setWon(true);
         startWinAnimation();
         markLessonCompletedAndRedirect();
