@@ -63,7 +63,7 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+    <SafeAreaView style={formStyles.container}>
       <StatusBar translucent={false} backgroundColor="white" barStyle="dark-content" />
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={scrollStyles.container} keyboardShouldPersistTaps="handled">
