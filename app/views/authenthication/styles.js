@@ -16,18 +16,41 @@ import {
 } from '../../constants/theme';
 
 export const baseStyles = StyleSheet.create({
-  centerText: {
-    textAlign: layout.alignCenter,
+  fullScreen: {
+    flex: 1,
+    width: dimensions.fullWidth,
+    backgroundColor: colors.background,
   },
-  centerItem: {
+  centerContent: {
     alignItems: layout.alignCenter,
-    justifyContent: layout.alignCenter,
+    justifyContent: layout.justifyCenter,
+  },
+  alignStart: {
+    alignItems: layout.alignStart,
+  },
+  alignEnd: {
+    alignItems: layout.alignEnd,
+  },
+  row: {
+    flexDirection: layout.row,
+  },
+  column: {
+    flexDirection: layout.column,
   },
   roundedPill: {
     borderRadius: radii.pill,
   },
-  paddedButton: {
-    paddingVertical: spacing.sm,
+  rounded: {
+    borderRadius: radii.md,
+  },
+  padded: {
+    padding: spacing.md,
+  },
+  marginBottom: {
+    marginBottom: spacing.md,
+  },
+  centerText: {
+    textAlign: layout.alignCenter,
   },
 });
 
@@ -37,7 +60,7 @@ export const textStyles = StyleSheet.create({
     fontWeight: fontWeights.bold,
     fontFamily: fontFamilies.heading,
     lineHeight: fontSizes.xxl * lineHeights.normal,
-    color: colors.textPrimary,
+    color: colors.text,
     textAlign: layout.alignCenter,
     marginBottom: spacing.lg,
   },
@@ -46,40 +69,20 @@ export const textStyles = StyleSheet.create({
     fontWeight: fontWeights.semibold,
     fontFamily: fontFamilies.heading,
     lineHeight: fontSizes.lg * lineHeights.normal,
-    textAlign: layout.alignCenter,
     color: colors.textSecondary,
     marginBottom: spacing.md,
   },
   body: {
     fontSize: fontSizes.md,
     fontWeight: fontWeights.regular,
-    fontFamily: fontFamilies.primary,
+    fontFamily: fontFamilies.body,
     lineHeight: fontSizes.md * lineHeights.normal,
-    color: colors.textPrimary,
-  },
-  subtitle: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.medium,
-    fontFamily: fontFamilies.heading,
-    lineHeight: fontSizes.md * lineHeights.normal,
-    color: colors.textSecondary,
-    marginBottom: spacing.sm,
-    textAlign: layout.alignCenter,
-  },
-  tagText: {
-    fontSize: fontSizes.sm,
-    color: colors.primary,
-    fontWeight: fontWeights.medium,
-    fontFamily: fontFamilies.primary,
-    lineHeight: fontSizes.sm * lineHeights.normal,
-  },
-  tagTextSelected: {
-    color: colors.textInverted,
+    color: colors.text,
   },
   caption: {
     fontSize: fontSizes.xs,
     fontWeight: fontWeights.regular,
-    fontFamily: fontFamilies.primary,
+    fontFamily: fontFamilies.body,
     lineHeight: fontSizes.xs * lineHeights.relaxed,
     color: colors.textMuted,
   },
@@ -98,7 +101,7 @@ export const textStyles = StyleSheet.create({
   },
   buttonPrimary: {
     fontSize: fontSizes.md,
-    color: colors.textInverted,
+    color: colors.surface,
     fontWeight: fontWeights.semibold,
     fontFamily: fontFamilies.primary,
     textAlign: layout.alignCenter,
@@ -115,8 +118,8 @@ export const textStyles = StyleSheet.create({
 export const formStyles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: layout.alignCenter,
     alignItems: layout.alignCenter,
+    justifyContent: layout.justifyCenter,
     backgroundColor: colors.background,
   },
   input: {
@@ -129,7 +132,7 @@ export const formStyles = StyleSheet.create({
     backgroundColor: colors.surface,
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.md,
-    color: colors.textPrimary,
+    color: colors.text,
     ...shadows.sm,
   },
   inputFocused: {
@@ -139,7 +142,7 @@ export const formStyles = StyleSheet.create({
     borderColor: colors.error,
   },
   inputDisabled: {
-    backgroundColor: colors.surfaceDark,
+    backgroundColor: colors.surface,
     opacity: opacities.disabled,
   },
   label: {
@@ -152,7 +155,7 @@ export const formStyles = StyleSheet.create({
   formGroup: {
     width: dimensions.inputWidth,
     alignItems: layout.alignCenter,
-    justifyContent: layout.alignCenter,
+    marginBottom: spacing.md,
   },
 });
 
@@ -170,8 +173,8 @@ export const buttonStyles = StyleSheet.create({
     paddingVertical: spacing.sm,
     borderWidth: 1,
     borderColor: colors.primary,
-    borderRadius: radii.pill,
     backgroundColor: colors.transparent,
+    borderRadius: radii.pill,
     alignItems: layout.alignCenter,
     ...shadows.sm,
   },
@@ -202,7 +205,6 @@ export const buttonStyles = StyleSheet.create({
     opacity: opacities.disabled,
   },
 });
-
 
 export const imageStyles = StyleSheet.create({
   avatarSmall: {
@@ -252,7 +254,7 @@ export const scrollStyles = StyleSheet.create({
 export const tagStyles = StyleSheet.create({
   container: {
     flexDirection: layout.row,
-    flexWrap: layout.wrap,
+    flexWrap: 'wrap',
     gap: spacing.sm,
     marginBottom: spacing.md,
   },
@@ -281,10 +283,9 @@ export const tagStyles = StyleSheet.create({
     color: colors.primary,
     fontWeight: fontWeights.medium,
     fontFamily: fontFamilies.body,
-    lineHeight: lineHeights.tagText,
   },
   textSelected: {
-    color: colors.textInverted,
+    color: colors.surface,
   },
 });
 
@@ -322,8 +323,8 @@ export const modalStyles = StyleSheet.create({
     fontSize: fontSizes.lg,
     fontWeight: fontWeights.bold,
     fontFamily: fontFamilies.heading,
-    lineHeight: lineHeights.heading,
-    color: colors.textPrimary,
+    lineHeight: fontSizes.lg * lineHeights.normal,
+    color: colors.text,
     marginBottom: spacing.md,
     textAlign: layout.alignCenter,
   },
@@ -331,9 +332,9 @@ export const modalStyles = StyleSheet.create({
     fontSize: fontSizes.md,
     fontWeight: fontWeights.regular,
     fontFamily: fontFamilies.body,
-    lineHeight: lineHeights.body,
+    lineHeight: fontSizes.md * lineHeights.normal,
     color: colors.textSecondary,
-    textAlign: layout.alignLeft,
+    textAlign: 'left',
   },
   footer: {
     flexDirection: layout.row,

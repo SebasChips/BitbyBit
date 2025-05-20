@@ -1,18 +1,25 @@
 export const colors = {
-  primary: '#2563EB',        // Azul vibrante accesible (antes: #3B82F6)
-  primaryDark: '#1E40AF',    // Más profundidad
-  primaryLight: '#BFDBFE',   // Azul claro (buen para hover o fondos suaves)
-  background: '#FAFAFA',     // Gris casi blanco
-  surface: '#FFFFFF',
-  surfaceDark: '#F3F4F6',    // Fondo alternativo para inputs deshabilitados
-  textPrimary: '#1F2937',     // Gris oscuro (muy legible)
-  textSecondary: '#6B7280',   // Gris medio (para subtítulos)
-  textMuted: '#9CA3AF',       // Gris claro (para captions)
-  textInverted: '#FFFFFF',
-  border: '#D1D5DB',
-  error: '#DC2626',           // Rojo accesible
-  success: '#16A34A',         // Verde accesible
-  info: '#2563EB',            // Igual que primary
+  primary: '#3B82F6',             // Azul brillante (acción principal)
+  primaryDark: '#1E3A8A',         // Azul oscuro (hover o estados activos)
+  secondary: '#FACC15',           // Amarillo vibrante (elementos llamativos para niños)
+  secondaryDark: '#D97706',       // Ámbar oscuro
+  background: '#FFFBEA',          // Fondo claro cálido y amigable
+  surface: '#FFFFFF',             // Superficies limpias
+  border: '#E5E7EB',              // Bordes sutiles
+  text: '#1F2937',                // Texto principal
+  textSecondary: '#6B7280',       // Texto secundario
+  textMuted: '#9CA3AF',           // Texto deshabilitado o muy secundario
+  placeholder: '#9CA3AF',
+  error: '#EF4444',
+  errorLight: '#FEE2E2',
+  success: '#10B981',
+  successLight: '#DCFCE7',
+  info: '#0EA5E9',
+  infoLight: '#E0F2FE',
+  warning: '#F97316',
+  warningLight: '#FFEDD5',
+  overlay: 'rgba(0, 0, 0, 0.6)',
+  transparent: 'transparent',
 };
 
 export const spacing = {
@@ -56,6 +63,7 @@ export const lineHeights = {
 export const fontFamilies = {
   primary: 'System',
   heading: 'System',
+  body: 'System',
   monospace: 'Courier',
 };
 
@@ -90,19 +98,14 @@ export const shadows = {
 };
 
 export const layout = {
+  alignCenter: 'center',
+  alignStart: 'flex-start',
+  alignEnd: 'flex-end',
+  justifyCenter: 'center',
+  justifyStart: 'flex-start',
+  justifyEnd: 'flex-end',
   row: 'row',
   column: 'column',
-  alignStart: 'flex-start',
-  alignCenter: 'center',
-  alignEnd: 'flex-end',
-  justifyStart: 'flex-start',
-  justifyCenter: 'center',
-  justifyEnd: 'flex-end',
-  justifyBetween: 'space-between',
-  justifyAround: 'space-around',
-  justifyEvenly: 'space-evenly',
-  wrap: 'wrap',
-  nowrap: 'nowrap',
 };
 
 export const imageSizes = {

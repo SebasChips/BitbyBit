@@ -70,7 +70,7 @@ const SignIn = () => {
             <Image source={require("../../assets/images/bitty.png")} style={imageStyles.avatarLarge} />
 
             <Text style={textStyles.heading}>¡Bienvenido!</Text>
-            <Text style={textStyles.subheading}>Crea una cuenta para comenzar</Text>
+            <Text style={textStyles.subheading}>               Crea una cuenta para comenzar               </Text>
 
             <View style={formStyles.formGroup}>
               <TextInput
