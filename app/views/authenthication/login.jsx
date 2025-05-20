@@ -92,7 +92,7 @@ const Login = () => {
                 placeholderTextColor={textStyles.muted.color}
               />
               <TouchableOpacity onPress={() => handleLogin(0)} style={buttonStyles.primary}>
-                <Text style={textStyles.buttonPrimary}>INICIAR SESIÓN</Text>
+                <Text style={textStyles.buttonPrimary}>Login</Text>
               </TouchableOpacity>
             </View>
 
