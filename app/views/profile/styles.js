@@ -13,7 +13,7 @@ import {
   zIndices,
   lineHeights,
   fontFamilies,
-} from '../../constants/theme';
+} from '../../constants/Theme';
 
 export const baseStyles = StyleSheet.create({
   fullScreen: {

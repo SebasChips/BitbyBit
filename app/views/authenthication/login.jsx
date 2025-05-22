@@ -10,8 +10,8 @@ import * as Google from "expo-auth-session/providers/google";
 import { makeRedirectUri } from "expo-auth-session";
 import { doc, getDoc } from "firebase/firestore";
 
-import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
-import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/theme";
+import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "../../constants/Styles";
+import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/Theme";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -86,7 +86,7 @@ const Login = () => {
               />
               <TextInput placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry style={formStyles.input} placeholderTextColor={textStyles.body.color} />
               
-              <TouchableOpacity onPress={() => handleLogin(0)} style={buttonStyles.primary}>
+              <TouchableOpacity onPress={() => handleLogin(0)} style={buttonStyles.iconButton}>
                 <Text style={textStyles.buttonPrimary}>Entrar</Text>
               </TouchableOpacity>
             </View>
