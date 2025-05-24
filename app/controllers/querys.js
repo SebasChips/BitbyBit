@@ -33,7 +33,7 @@ export const registerUser = async (email, nameKid, nameTutor, bornDateKid, navig
       score: 0,
     });
 
-    navigation.navigate("main");
+    navigation.navigate("Main");
   } catch (e) {
     console.log("Error al agregar documento: ", e);
     Toast.show({

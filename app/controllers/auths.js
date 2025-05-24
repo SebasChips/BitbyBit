@@ -39,9 +39,9 @@ export const LogInEmailAndPass = async (email, password, navigation) => {
           const docRef = doc(db, "users", uid);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
-          navigation.navigate('main', { user: userCredential.user });
+          navigation.navigate('Main', { user: userCredential.user });
           } else {
-            navigation.navigate("firstTimeRegister", { user: userCredential.user });
+            navigation.navigate("FirstTimeRegister", { user: userCredential.user });
           }
   } catch (error) {
     if (error.code === 'auth/invalid-credential') {

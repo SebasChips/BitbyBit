@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, Platform, KeyboardAvoidingView, ScrollView, SafeAreaView, StatusBar } from "react-native";
+import { SafeAreaView, StatusBar, ScrollView, View, Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, TextInput } from "react-native";
 
 import { auth, db } from "../../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
@@ -9,9 +9,6 @@ import { RegisterEmailAndPass } from "../../controllers/auths";
 import * as Google from "expo-auth-session/providers/google";
 import { makeRedirectUri } from "expo-auth-session";
 import { doc, getDoc } from "firebase/firestore";
-
-import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
-import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/Theme";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -42,9 +39,9 @@ const SignIn = () => {
           const docSnap = await getDoc(docRef);
 
           if (docSnap.exists()) {
-            navigation.navigate("main");
+            navigation.navigate("Main");
           } else {
-            navigation.navigate("firstTimeRegister");
+            navigation.navigate("FirstTimeRegister");
           }
         })
         .catch((error) => {
@@ -62,43 +59,41 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView style={formStyles.container}>
+    <SafeAreaView style={{ flex: 1 }}>
       <StatusBar translucent={false} backgroundColor="white" barStyle="dark-content" />
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={scrollStyles.container} keyboardShouldPersistTaps="handled">
-          <View style={formStyles.container}>
-            <Image source={require("../../assets/images/bitty.png")} style={imageStyles.avatarLarge} />
+        <ScrollView keyboardShouldPersistTaps="handled">
+          <View>
+            <Image source={require("../../assets/images/bitty.png")} />
 
-            <Text style={textStyles.heading}>¡Bienvenido!</Text>
-            <Text style={textStyles.subheading}>Crea una cuenta para comenzar</Text>
+            <Text>¡Bienvenido!</Text>
+            <Text>Crea una cuenta para comenzar</Text>
 
-            <View style={formStyles.formGroup}>
+            <View>
               <TextInput
                 placeholder="Correo electrónico"
                 onChangeText={setEmail}
                 autoCapitalize="none"
                 keyboardType="email-address"
-                style={formStyles.input}
-                placeholderTextColor={textStyles.body.color}
                 textContentType="emailAddress"
               />
-              <TextInput placeholder="Contraseña" onChangeText={setPassword} secureTextEntry style={formStyles.input} placeholderTextColor={textStyles.body.color} textContentType="password" />
+              <TextInput placeholder="Contraseña" onChangeText={setPassword} secureTextEntry textContentType="password" />
 
-              <TouchableOpacity onPress={() => RegisterEmailAndPass(email, password)} style={buttonStyles.primary}>
-                <Text style={textStyles.buttonPrimary}>Registrarme</Text>
+              <TouchableOpacity onPress={() => RegisterEmailAndPass(email, password)}>
+                <Text>Registrarme</Text>
               </TouchableOpacity>
             </View>
 
-            <Text style={[textStyles.body, { marginVertical: spacing.md }]}>— o registrate con —</Text>
+            <Text>— o registrate con —</Text>
 
-            <View style={formStyles.socialLoginRow}>
+            <View>
               <TouchableOpacity onPress={() => promptAsync({ useProxy: true })} disabled={!request}>
-                <Image source={require("../../assets/images/logo_google.png")} style={imageStyles.avatarSmall} />
+                <Image source={require("../../assets/images/logo_google.png")} />
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress={() => navigation.navigate("login")}>
-              <Text style={[textStyles.link, { marginTop: spacing.lg }]}>¿Ya tienes cuenta? Inicia sesión</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text>¿Ya tienes cuenta? Inicia sesión</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

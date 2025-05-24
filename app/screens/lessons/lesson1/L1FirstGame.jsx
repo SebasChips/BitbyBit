@@ -214,7 +214,7 @@ const GameContainer = ({ navigation, route }) => {
     await updateDoc(userRef, updates);
 
     setTimeout(() => {
-      navigation.navigate('main');
+      navigation.navigate('Main');
     }, 1500);
 
   } catch (error) {
