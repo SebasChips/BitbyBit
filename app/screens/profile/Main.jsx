@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Image, Animated, Easing } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { db, auth } from '../../firebase/firebaseConfig.jsx';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,7 +10,6 @@ const Main = ({ navigation }) => {
   const [lessons, setLessons] = useState([]);
   const [currentLesson, setCurrentLesson] = useState('');
   const [loading, setLoading] = useState(true);
-  const [pulseAnim] = useState(new Animated.Value(1));
 
   useEffect(() => {
     const loadData = async () => {
@@ -45,25 +44,6 @@ const Main = ({ navigation }) => {
     loadData();
   }, []);
 
-  useEffect(() => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.1,
-          duration: 800,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 800,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true
-        })
-      ])
-    ).start();
-  }, []);
-
   if (loading) {
     return (
       <View>
@@ -84,12 +64,8 @@ const Main = ({ navigation }) => {
     if (isCompleted) iconName = 'checkmark-circle';
     else if (isUnlocked) iconName = 'play';
 
-    const animatedStyle = isCurrent && isUnlocked ? {
-      transform: [{ scale: pulseAnim }]
-    } : {};
-
     return (
-      <Animated.View key={lesson.id} style={animatedStyle}>
+      <View key={lesson.id}>
         <TouchableOpacity
           onPress={() => isUnlocked && navigation.navigate(lesson.rute)}
           disabled={!isUnlocked}
@@ -103,7 +79,7 @@ const Main = ({ navigation }) => {
             </View>
           )}
         </TouchableOpacity>
-      </Animated.View>
+      </View>
     );
   };
 
