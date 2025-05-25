@@ -1,4 +1,4 @@
-// Breakpoints
+// Breakpoints (sin cambios)
 export const breakpoints = {
   xsmall: 0,
   small: 320,
@@ -14,52 +14,61 @@ export const colors = {
   white: '#FFFFFF',
   black: '#000000',
   transparent: 'transparent',
+
   gray: {
-    50: '#FAFAFA',
-    100: '#F7F7F7',
+    50: '#FDFDFD',
+    100: '#F3F3F3',
     200: '#E0E0E0',
-    300: '#BDBDBD',
-    400: '#9E9E9E',
-    500: '#757575',
-    600: '#616161',
-    700: '#424242',
-    800: '#212121',
-    900: '#121212',
+    300: '#C2C2C2',
+    400: '#A3A3A3',
+    500: '#858585',
+    600: '#666666',
+    700: '#4D4D4D',
+    800: '#333333',
+    900: '#1A1A1A',
   },
-  primary: {
-    lightest: '#E1F5FE',
-    lighter: '#B3E5FC',
-    light: '#81D4FA',
-    main: '#29B6F6',
-    dark: '#0288D1',
-    darkest: '#01579B',
+
+    primary: {
+    100: '#D6E4FF',
+    200: '#84A9FF',
+    300: '#3366FF', // Vivid strong blue
+    400: '#254EDB',
+    500: '#1939B7',
+    600: '#102693', // Deep royal blue
   },
+
   secondary: {
-    lightest: '#FFEBEE',
-    lighter: '#FFCDD2',
-    light: '#EF9A9A',
-    main: '#E57373',
-    dark: '#D32F2F',
-    darkest: '#B71C1C',
+    100: '#FFE2E0',
+    200: '#FFB3A7',
+    300: '#FF7B66', // Coral/orange pink
+    400: '#FF5C3E',
+    500: '#E84828',
+    600: '#C13720', // Stronger for hover/focus states
   },
+
   status: {
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+  success: '#59ff00',  // Verde lima fresco – "tarea completada"
+  warning: '#fff300',  // Amarillo brillante – "advertencia divertida"
+  error:   '#ff1700',  // Rojo rosado – "error amigable pero claro"
+  info:    '#6e2c00',  // Azul cielo – "dato importante / tips"
+},
+
+  background: {
+    light: '#FFFDF9',    // Slightly warm white
+    dark: '#1E1E1E',
+    overlay: 'rgba(0, 0, 0, 0.3)',
   },
-  background: '#FAFAFA',
-  overlay: 'rgba(0, 0, 0, 0.4)',
 };
+
 
 // Botones
 export const buttonVariants = {
   primary: {
-    backgroundColor: colors.primary.main,
+    backgroundColor: colors.primary[400],
     textColor: colors.white,
   },
   secondary: {
-    backgroundColor: colors.secondary.light,
+    backgroundColor: colors.secondary[300],
     textColor: colors.black,
   },
   danger: {
@@ -80,33 +89,25 @@ export const buttonVariants = {
   },
   outline: {
     backgroundColor: colors.transparent,
-    textColor: colors.primary.main,
-    borderColor: colors.primary.main,
+    textColor: colors.primary[400],
+    borderColor: colors.primary[400],
   },
 };
 
 // Radio de bordes
 export const radius = {
   none: 0,
-  xs: 2,
   sm: 4,
   md: 8,
   lg: 16,
   xl: 24,
-  pill: 999,
+  pill: 50,
   circular: 9999,
 };
 
 // Sombras
 export const shadows = {
   none: {},
-  xs: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.05,
-    shadowRadius: 1,
-    elevation: 0,
-  },
   sm: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -140,7 +141,6 @@ export const shadows = {
 // Espaciado
 export const spacing = {
   none: 0,
-  xxs: 2,
   xs: 4,
   sm: 8,
   md: 16,
@@ -153,13 +153,12 @@ export const spacing = {
 // Tipografía
 export const typography = {
   fontFamily: {
-    regular: 'Poppins-Regular',
-    medium: 'Poppins-Medium',
-    semiBold: 'Poppins-SemiBold',
-    bold: 'Poppins-Bold',
+    regular: 'system',
+    medium: 'system',
+    semiBold: 'system',
+    bold: 'system',
   },
   fontSize: {
-    xxs: 10,
     xs: 12,
     sm: 14,
     md: 16,
@@ -169,7 +168,6 @@ export const typography = {
     huge: 40,
   },
   lineHeight: {
-    xs: 16,
     sm: 18,
     md: 22,
     lg: 26,
@@ -184,6 +182,7 @@ export const typography = {
   },
 };
 
+// Opacidad
 export const opacity = {
   disabled: 0.4,
   hover: 0.8,
@@ -191,6 +190,7 @@ export const opacity = {
   full: 1,
 };
 
+// Bordes
 export const borders = {
   none: 0,
   thin: 1,
@@ -198,17 +198,15 @@ export const borders = {
   heavy: 4,
 };
 
+// Tamaños
 export const iconSizes = {
-  xs: 12,
   sm: 16,
   md: 24,
   lg: 32,
   xl: 40,
-  xxl: 48,
 };
 
 export const elementSizes = {
-  xs: 16,
   sm: 24,
   md: 32,
   lg: 48,

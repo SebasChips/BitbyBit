@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, StatusBar, ScrollView, View, Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, TextInput } from "react-native";
+import { SafeAreaView, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform, Image, StatusBar } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
 import { auth, db } from "../../firebase/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import * as WebBrowser from "expo-web-browser";
-import { useNavigation } from "@react-navigation/native";
-import { RegisterEmailAndPass } from "../../controllers/auths";
 import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from "expo-web-browser";
 import { makeRedirectUri } from "expo-auth-session";
 import { doc, getDoc } from "firebase/firestore";
+import { RegisterEmailAndPass } from "../../controllers/auths";
+import useBreakpoint from "../../hooks/useBreakpoint";
+import getStyles from "../../constants/styles";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -16,6 +18,13 @@ const SignIn = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const breakpointData = useBreakpoint();
+  if (!breakpointData.breakpoint) return null;
+
+  const styles = getStyles(breakpointData);
+  console.log("Breakpoint actual:", breakpointData.breakpoint);
+
   const redirectUri = makeRedirectUri({ useProxy: true });
   const [request, response, promptAsync] = Google.useAuthRequest({
     webClientId: "61966159852-30er87tn5uojd5l0p8ndhriu144tpuj0.apps.googleusercontent.com",
