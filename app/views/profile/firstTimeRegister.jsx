@@ -5,8 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 import { checkUserSession, logOut } from "../../controllers/auths";
 import { registerUser } from "../../controllers/querys";
 
-import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
-import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/Theme";
+import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles";
+import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/theme";
 
 const topics = ["Matemáticas", "Programación", "Juegos", "LoL"];
 

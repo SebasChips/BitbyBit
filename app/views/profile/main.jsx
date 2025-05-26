@@ -4,8 +4,7 @@ import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { db, auth } from '../../firebase/firebaseConfig';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "./styles.js";
-import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/Theme";
+import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/theme";
 
 
 const Main = ({ navigation }) => {
@@ -104,8 +103,14 @@ const Main = ({ navigation }) => {
           onPress={() => isUnlocked && navigation.navigate(lesson.rute)}
           disabled={!isUnlocked}
         >
-          <LinearGradient
-            colors={isCompleted ? [colors.info] : isUnlocked ? [colors.success] : ['#aaa', '#ccc']}
+        <LinearGradient
+            colors={
+              isCompleted
+                ? [colors.info, colors.info] 
+                : isUnlocked
+                  ? [colors.success, colors.success] 
+                  : ['#aaa', '#ccc'] 
+            }
             style={styles.nodeGradient}
           >
             <Ionicons
@@ -114,6 +119,7 @@ const Main = ({ navigation }) => {
               color="white"
             />
           </LinearGradient>
+
           <Text style={styles.nodeText}>{lesson.title}</Text>
           {isCurrent && (
             <View style={styles.currentLabel}>
@@ -175,7 +181,6 @@ const Main = ({ navigation }) => {
 
         <TouchableOpacity 
           style={styles.rewardsButton}
-          onPress={() => navigation.navigate('Rewards')}
         >
           <LinearGradient 
             colors={['#0EA5E9', '#0EA5E9']} 
