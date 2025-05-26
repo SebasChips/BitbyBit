@@ -12,6 +12,7 @@ import { LogInEmailAndPass } from "../../controllers/auths";
 import useBreakpoint from "../../hooks/useBreakpoint";
 import getStyles from "../../constants/styles";
 import Icon from "react-native-vector-icons/Feather";
+import theme from "@/app/constants/theme";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -19,14 +20,13 @@ const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [selectedTab, setSelectedTab] = useState("login");
 
   const breakpointData = useBreakpoint();
   if (!breakpointData.breakpoint) return null;
 
   const styles = getStyles(breakpointData);
   //console.log("Breakpoint actual:", breakpointData.breakpoint);
-  const [selectedTab, setSelectedTab] = useState("login");
-  const [showPassword, setShowPassword] = useState(false);
 
   const redirectUri = makeRedirectUri({ useProxy: true });
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -74,24 +74,21 @@ const Login = () => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <StatusBar translucent={false} barStyle="dark-content" />
+      <StatusBar backgroundColor={theme.colors.background.dark} barStyle="light-content" />
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.container}>
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scrollContent}>
-          {/* Parte superior */}
           <View style={[styles.card, styles.mbLg]}>
             <Image source={require("../../assets/images/bitty.png")} style={styles.loginImage} />
-            <Text style={styles.title}>¡Hola de nuevo!</Text>
-            <Text style={[styles.text, styles.mbMd]}>Inicia sesión para continuar donde te quedaste</Text>
+            <Text style={[styles.title, { color: "#fff" }]}>¡Hola de nuevo!</Text>
+            <Text style={[styles.caption, styles.mbMd, { color: "#fff" }]}>Inicia sesión para continuar donde te quedaste</Text>
           </View>
-
-          {/* Contenedor blanco */}
           <View style={styles.sectionContainer}>
             <View style={styles.tabContainer}>
               <TouchableOpacity
                 style={[styles.tab, selectedTab === "login" && styles.tabActive]}
                 onPress={() => {
                   setSelectedTab("login");
-                  navigation.navigate("SignIn");
+                  navigation.navigate("Login");
                 }}
               >
                 <Text style={[styles.tabText, selectedTab === "login" && styles.tabTextActive]}>Login</Text>
@@ -101,7 +98,7 @@ const Login = () => {
                 style={[styles.tab, selectedTab === "register" && styles.tabActive]}
                 onPress={() => {
                   setSelectedTab("register");
-                  navigation.navigate("Register");
+                  navigation.navigate("SignIn");
                 }}
               >
                 <Text style={[styles.tabText, selectedTab === "register" && styles.tabTextActive]}>Register</Text>
@@ -109,37 +106,25 @@ const Login = () => {
             </View>
 
             <View style={[styles.formContainer, styles.mbLg]}>
-              {/* Input de correo */}
-              <View style={styles.inputWrapper}>
-                <Icon name="mail" size={20} color="#666" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Correo electrónico"
-                  value={email}
-                  onChangeText={setEmail}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  placeholderTextColor="#999"
-                />
-              </View>
+              <TextInput
+                style={styles.input}
+                placeholder="Correo electrónico"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                placeholderTextColor="#999"
+              />
 
-              {/* Input de contraseña */}
-              <View style={styles.inputWrapper}>
-                <Icon name="lock" size={20} color="#666" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Contraseña"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={!showPassword}
-                  placeholderTextColor="#999"
-                />
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.inputIconRight}>
-                  <Icon name={showPassword ? "eye-off" : "eye"} size={20} color="#666" />
-                </TouchableOpacity>
-              </View>
+              <TextInput
+                style={styles.input}
+                placeholder="Contraseña"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                placeholderTextColor="#999"
+              />
 
-              {/* Botón */}
               <TouchableOpacity onPress={() => handleLogin(0)} style={[styles.button, styles.buttonPrimary]}>
                 <Text style={styles.buttonText}>Entrar</Text>
               </TouchableOpacity>

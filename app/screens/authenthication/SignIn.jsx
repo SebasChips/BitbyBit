@@ -11,6 +11,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { RegisterEmailAndPass } from "../../controllers/auths";
 import useBreakpoint from "../../hooks/useBreakpoint";
 import getStyles from "../../constants/styles";
+import theme from "@/app/constants/theme";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -18,12 +19,13 @@ const SignIn = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [selectedTab, setSelectedTab] = useState("register");
 
   const breakpointData = useBreakpoint();
   if (!breakpointData.breakpoint) return null;
 
   const styles = getStyles(breakpointData);
-  console.log("Breakpoint actual:", breakpointData.breakpoint);
+  //console.log("Breakpoint actual:", breakpointData.breakpoint);
 
   const redirectUri = makeRedirectUri({ useProxy: true });
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -68,42 +70,71 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar translucent={false} backgroundColor="white" barStyle="dark-content" />
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <View>
-            <Image source={require("../../assets/images/bitty.png")} />
+    <SafeAreaView style={styles.screen}>
+      <StatusBar backgroundColor={theme.colors.background.dark} barStyle="light-content" />
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.container}>
+        <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scrollContent}>
+          <View style={[styles.card, styles.mbLg]}>
+            <Image source={require("../../assets/images/bitty.png")} style={styles.loginImage} />
+            <Text style={[styles.title, { color: "#fff" }]}>¡Bienvenido!</Text>
+            <Text style={[styles.caption, styles.mbMd, { color: "#fff" }]}>Crea una cuenta para comenzar</Text>
+          </View>
 
-            <Text>¡Bienvenido!</Text>
-            <Text>Crea una cuenta para comenzar</Text>
+          <View style={styles.sectionContainer}>
+            <View style={styles.tabContainer}>
+              {/* Botón Login */}
+              <TouchableOpacity
+                style={[styles.tab, selectedTab === "login" && styles.tabActive]}
+                onPress={() => {
+                  setSelectedTab("login");
+                  navigation.navigate("Login");
+                }}
+              >
+                <Text style={[styles.tabText, selectedTab === "login" && styles.tabTextActive]}>Login</Text>
+              </TouchableOpacity>
 
-            <View>
+              <TouchableOpacity
+                style={[styles.tab, selectedTab === "register" && styles.tabActive]}
+                onPress={() => {
+                  setSelectedTab("register");
+                  navigation.navigate("SignIn");
+                }}
+              >
+                <Text style={[styles.tabText, selectedTab === "register" && styles.tabTextActive]}>Register</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={[styles.formContainer, styles.mbLg]}>
               <TextInput
+                style={styles.input}
                 placeholder="Correo electrónico"
+                value={email}
                 onChangeText={setEmail}
-                autoCapitalize="none"
                 keyboardType="email-address"
-                textContentType="emailAddress"
+                autoCapitalize="none"
+                placeholderTextColor="#999"
               />
-              <TextInput placeholder="Contraseña" onChangeText={setPassword} secureTextEntry textContentType="password" />
 
-              <TouchableOpacity onPress={() => RegisterEmailAndPass(email, password)}>
-                <Text>Registrarme</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Contraseña"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                placeholderTextColor="#999"
+              />
+
+              <TouchableOpacity onPress={() => RegisterEmailAndPass(email, password)} style={[styles.button, styles.buttonPrimary]}>
+                <Text style={styles.buttonText}>Registrarme</Text>
               </TouchableOpacity>
             </View>
 
-            <Text>— o registrate con —</Text>
-
-            <View>
-              <TouchableOpacity onPress={() => promptAsync({ useProxy: true })} disabled={!request}>
-                <Image source={require("../../assets/images/logo_google.png")} />
+            <View style={[styles.formContainer, styles.mbMd]}>
+              <Text style={styles.caption}>— o registrate con —</Text>
+              <TouchableOpacity onPress={() => promptAsync({ useProxy: true })} disabled={!request} style={styles.button}>
+                <Image source={require("../../assets/images/logo_google.png")} style={styles.googleIcon} />
               </TouchableOpacity>
             </View>
-
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-              <Text>¿Ya tienes cuenta? Inicia sesión</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

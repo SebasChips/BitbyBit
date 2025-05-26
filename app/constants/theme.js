@@ -1,4 +1,3 @@
-// Breakpoints (sin cambios)
 export const breakpoints = {
   xsmall: 0,
   small: 320,
@@ -9,12 +8,10 @@ export const breakpoints = {
   xxlarge: 1280,
 };
 
-// Colores
 export const colors = {
   white: '#FFFFFF',
   black: '#000000',
   transparent: 'transparent',
-
   gray: {
     50: '#FDFDFD',
     100: '#F3F3F3',
@@ -27,41 +24,35 @@ export const colors = {
     800: '#333333',
     900: '#1A1A1A',
   },
-
     primary: {
     100: '#D6E4FF',
     200: '#84A9FF',
-    300: '#3366FF', // Vivid strong blue
+    300: '#3366FF', 
     400: '#254EDB',
     500: '#1939B7',
-    600: '#102693', // Deep royal blue
+    600: '#102693', 
   },
-
   secondary: {
     100: '#FFE2E0',
     200: '#FFB3A7',
-    300: '#FF7B66', // Coral/orange pink
+    300: '#FF7B66', 
     400: '#FF5C3E',
     500: '#E84828',
-    600: '#C13720', // Stronger for hover/focus states
+    600: '#C13720', 
   },
-
   status: {
-  success: '#59ff00',  // Verde lima fresco – "tarea completada"
-  warning: '#fff300',  // Amarillo brillante – "advertencia divertida"
-  error:   '#ff1700',  // Rojo rosado – "error amigable pero claro"
-  info:    '#6e2c00',  // Azul cielo – "dato importante / tips"
+  success: '#6DFF88',  //59ff00
+  warning: '#FFE066',  //fff300
+  error:   '#FF6B6B',  //ff1700
+  info:    '#4DABF7',  //6e2c00
 },
-
   background: {
-    light: '#FFFDF9',    // Slightly warm white
+    light: '#FFFDF9',    
     dark: '#1E1E1E',
     overlay: 'rgba(0, 0, 0, 0.3)',
   },
 };
 
-
-// Botones
 export const buttonVariants = {
   primary: {
     backgroundColor: colors.primary[400],
@@ -94,7 +85,6 @@ export const buttonVariants = {
   },
 };
 
-// Radio de bordes
 export const radius = {
   none: 0,
   sm: 4,
@@ -105,7 +95,6 @@ export const radius = {
   circular: 9999,
 };
 
-// Sombras
 export const shadows = {
   none: {},
   sm: {
@@ -138,7 +127,6 @@ export const shadows = {
   },
 };
 
-// Espaciado
 export const spacing = {
   none: 0,
   xs: 4,
@@ -150,7 +138,6 @@ export const spacing = {
   xxxl: 64,
 };
 
-// Tipografía
 export const typography = {
   fontFamily: {
     regular: 'system',
@@ -182,7 +169,6 @@ export const typography = {
   },
 };
 
-// Opacidad
 export const opacity = {
   disabled: 0.4,
   hover: 0.8,
@@ -190,7 +176,6 @@ export const opacity = {
   full: 1,
 };
 
-// Bordes
 export const borders = {
   none: 0,
   thin: 1,
@@ -198,7 +183,6 @@ export const borders = {
   heavy: 4,
 };
 
-// Tamaños
 export const iconSizes = {
   sm: 16,
   md: 24,
@@ -214,7 +198,6 @@ export const elementSizes = {
   xxl: 96,
 };
 
-// Tema unificado
 const theme = {
   colors,
   spacing,

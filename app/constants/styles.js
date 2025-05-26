@@ -3,7 +3,6 @@ import theme from './theme';
 
 const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
   return StyleSheet.create({
-    // ===== Layout =====
     screen: {
       flex: 1,
     },
@@ -23,21 +22,81 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       flexDirection: 'column',
       alignItems: 'center',
       alignSelf: 'center',
-      padding: isMobile ? theme.spacing.md : theme.spacing.sm,
+      paddingTop: isMobile ? theme.spacing.xl : theme.spacing.xl,
       width: isDesktop ? '100%' : isTablet ? '90%' : '90%',
-      backgroundColor: theme.colors.status.error,
       maxWidth: 700,
     },
     formContainer: {
       alignSelf: 'center',
       width: isDesktop ? '90%' : isTablet ? '90%' : '90%',
       padding: isMobile ? theme.spacing.sm : theme.spacing.ms,
-      backgroundColor: theme.colors.status.warning,
     },
+    formRow: {
+      flexDirection: isDesktop ? "row" : "column",
+      justifyContent: "space-between",
+      gap: theme.spacing.lg,
+      flexWrap: "wrap",
+    },
+    formSection: {
+      flex: 1,
+      padding: theme.spacing.sm,
+      minWidth: isDesktop ? "45%" : "100%",
+      backgroundColor: theme.colors.surface,
+      borderRadius: theme.radius.md,
+    },
+
+    sectionTitle: {
+      fontFamily: theme.typography.fontFamily.bold,
+      fontSize: isMobile ? theme.typography.fontSize.xl : theme.typography.fontSize.xxl,
+      color: theme.colors.black,
+      marginBottom: theme.spacing.md,
+      textAlign: 'center',
+    },
+
+    topicContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      gap: theme.spacing.sm,
+      marginTop: theme.spacing.sm,
+    },
+    topicButton: {
+      backgroundColor: theme.colors.gray[200],
+      paddingVertical: theme.spacing.xs,
+      paddingHorizontal: theme.spacing.md,
+      borderRadius: theme.radius.xl,
+      margin: theme.spacing.xs,
+    },
+    topicButtonSelected: {
+      backgroundColor: theme.colors.primary[500],
+    },
+    topicText: {
+      fontFamily: theme.typography.fontFamily.medium,
+      fontSize: theme.typography.fontSize.sm,
+      color: theme.colors.black,
+    },
+    topicTextSelected: {
+      color: theme.colors.white,
+    },
+    datePickerText: {
+      fontSize: theme.typography.fontSize.md,
+      fontFamily: theme.typography.fontFamily.regular,
+      color: theme.colors.gray[700],
+      textAlign: 'center',
+      padding: theme.spacing.sm,
+      borderWidth: 1,
+      borderColor: theme.colors.gray[300],
+      borderRadius: theme.radius.lg,
+      backgroundColor: theme.colors.white,
+      marginBottom: theme.spacing.md,
+      width: isSmall ? '100%' : '70%',
+      alignSelf: 'center',
+    },
+
     buttonContainer: {
-      flexDirection: 'row', // Esto coloca los elementos en fila (horizontal)
-      justifyContent: 'center', // Centra los elementos horizontalmente
-      alignItems: 'center', // Centra los elementos verticalmente
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
       alignSelf: 'center',
       width: isDesktop ? '90%' : isTablet ? '90%' : '90%',
       padding: isMobile ? theme.spacing.lg : theme.spacing.lg,
@@ -45,18 +104,16 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
     },
     sectionContainer: {
       flex: 1,
-      width: isDesktop ? '100%' : isTablet ? '95%' : '100%',
+      width: isDesktop ? '100%' : isTablet ? '100%' : '100%',
       backgroundColor: theme.colors.background.light,
       borderTopLeftRadius: theme.radius.xl,
       borderTopRightRadius: theme.radius.xl,
-      padding: theme.spacing.sm,
-      marginBottom: theme.spacing.lg,
+      padding: theme.spacing.xl,
       alignSelf: 'center',
-
     },
     tabContainer: {
       flexDirection: 'row',
-      width: isSmall ? '90%' : isMobile ? '50%' : isTablet ? '40%' : '30%',
+      width: isSmall ? '90%' : isMobile ? '60%' : isTablet ? '50%' : '40%',
       backgroundColor: theme.colors.gray[200],
       borderRadius: theme.radius.xl,
       padding: theme.spacing.sm,
@@ -86,8 +143,6 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       color: theme.colors.black,
     },
 
-
-    // ===== Typography =====
     title: {
       fontSize: isSmall
         ? theme.typography.fontSize.lg
@@ -100,6 +155,7 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       fontFamily: theme.typography.fontFamily.bold,
       color: theme.colors.black,
       textAlign: 'center',
+      padding: theme.spacing.sm,
     },
     text: {
       fontSize: isSmall
@@ -122,7 +178,6 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       textAlign: 'center',
     },
 
-    // ===== Inputs =====
     input: {
       width: isSmall ? '100%' : isMobile ? '90%' : isTablet ? '80%' : '70%',
       alignSelf: 'center',
@@ -157,15 +212,7 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       marginLeft: "auto",
       padding: 8,
     },
-    input: {
-      flex: 1,
-      height: 48,
-      fontSize: 16,
-      color: "#333",
-    },
 
-
-    // ===== Buttons =====
     button: {
       width: isSmall ? '90%' : isMobile ? '50%' : isTablet ? '40%' : '30%',
       alignSelf: 'center',
@@ -197,7 +244,6 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       color: theme.buttonVariants.primary.textColor,
     },
 
-    // ===== Icono e imagen =====
     googleIcon: {
       height: isSmall ? 40 : isMobile ? 40 : 50,
       resizeMode: 'contain',
@@ -239,8 +285,6 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       marginBottom: theme.spacing.md,
     },
 
-
-    // ===== Spacing Helpers =====
     mbSm: { marginBottom: theme.spacing.sm },
     mbMd: { marginBottom: theme.spacing.md },
     mbLg: { marginBottom: theme.spacing.lg },
