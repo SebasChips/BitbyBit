@@ -11,7 +11,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { LogInEmailAndPass } from "../../controllers/auths";
 import useBreakpoint from "../../hooks/useBreakpoint";
 import getStyles from "../../constants/styles";
-import Icon from "react-native-vector-icons/Feather";
 import theme from "@/app/constants/theme";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -26,7 +25,7 @@ const Login = () => {
   if (!breakpointData.breakpoint) return null;
 
   const styles = getStyles(breakpointData);
-  //console.log("Breakpoint actual:", breakpointData.breakpoint);
+  console.log("Breakpoint actual:", breakpointData.breakpoint);
 
   const redirectUri = makeRedirectUri({ useProxy: true });
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -77,10 +76,10 @@ const Login = () => {
       <StatusBar backgroundColor={theme.colors.background.dark} barStyle="light-content" />
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.container}>
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scrollContent}>
-          <View style={[styles.card, styles.mbLg]}>
+          <View style={styles.topContainer}>
             <Image source={require("../../assets/images/bitty.png")} style={styles.loginImage} />
-            <Text style={[styles.title, { color: "#fff" }]}>¡Hola de nuevo!</Text>
-            <Text style={[styles.caption, styles.mbMd, { color: "#fff" }]}>Inicia sesión para continuar donde te quedaste</Text>
+            <Text style={styles.title}>¡Hola de nuevo!</Text>
+            <Text style={styles.caption}>Inicia sesión para continuar donde te quedaste</Text>
           </View>
           <View style={styles.sectionContainer}>
             <View style={styles.tabContainer}>
@@ -91,7 +90,7 @@ const Login = () => {
                   navigation.navigate("Login");
                 }}
               >
-                <Text style={[styles.tabText, selectedTab === "login" && styles.tabTextActive]}>Login</Text>
+                <Text style={[styles.tabText, selectedTab === "login" && styles.tabTextActive]}>Inicio</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -101,11 +100,11 @@ const Login = () => {
                   navigation.navigate("SignIn");
                 }}
               >
-                <Text style={[styles.tabText, selectedTab === "register" && styles.tabTextActive]}>Register</Text>
+                <Text style={[styles.tabText, selectedTab === "register" && styles.tabTextActive]}>Registro</Text>
               </TouchableOpacity>
             </View>
 
-            <View style={[styles.formContainer, styles.mbLg]}>
+            <View style={styles.formContainer}>
               <TextInput
                 style={styles.input}
                 placeholder="Correo electrónico"
@@ -129,8 +128,8 @@ const Login = () => {
                 <Text style={styles.buttonText}>Entrar</Text>
               </TouchableOpacity>
             </View>
-
-            <View style={[styles.formContainer, styles.mbMd]}>
+            
+            <View style={styles.googleContainer}>
               <Text style={styles.caption}>— o accede con —</Text>
               <TouchableOpacity onPress={() => handleLogin(1)} disabled={!request} style={styles.button}>
                 <Image source={require("../../assets/images/logo_google.png")} style={styles.googleIcon} />

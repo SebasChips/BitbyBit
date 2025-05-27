@@ -136,15 +136,10 @@ export const spacing = {
   xl: 32,
   xxl: 40,
   xxxl: 64,
+  xxxxl: 100,
 };
 
 export const typography = {
-  fontFamily: {
-    regular: 'system',
-    medium: 'system',
-    semiBold: 'system',
-    bold: 'system',
-  },
   fontSize: {
     xs: 12,
     sm: 16,
@@ -161,11 +156,6 @@ export const typography = {
     xl: 32,
     xxl: 40,
     huge: 48,
-  },
-  letterSpacing: {
-    tight: -0.5,
-    normal: 0,
-    wide: 0.5,
   },
 };
 

@@ -74,15 +74,14 @@ const SignIn = () => {
       <StatusBar backgroundColor={theme.colors.background.dark} barStyle="light-content" />
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.container}>
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scrollContent}>
-          <View style={[styles.card, styles.mbLg]}>
+          <View style={styles.topContainer}>
             <Image source={require("../../assets/images/bitty.png")} style={styles.loginImage} />
-            <Text style={[styles.title, { color: "#fff" }]}>¡Bienvenido!</Text>
-            <Text style={[styles.caption, styles.mbMd, { color: "#fff" }]}>Crea una cuenta para comenzar</Text>
+            <Text style={styles.title}>¡Bienvenido!</Text>
+            <Text style={styles.caption}>Crea una cuenta para comenzar</Text>
           </View>
 
           <View style={styles.sectionContainer}>
             <View style={styles.tabContainer}>
-              {/* Botón Login */}
               <TouchableOpacity
                 style={[styles.tab, selectedTab === "login" && styles.tabActive]}
                 onPress={() => {
@@ -90,7 +89,7 @@ const SignIn = () => {
                   navigation.navigate("Login");
                 }}
               >
-                <Text style={[styles.tabText, selectedTab === "login" && styles.tabTextActive]}>Login</Text>
+                <Text style={[styles.tabText, selectedTab === "login" && styles.tabTextActive]}>Inicio</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -100,11 +99,11 @@ const SignIn = () => {
                   navigation.navigate("SignIn");
                 }}
               >
-                <Text style={[styles.tabText, selectedTab === "register" && styles.tabTextActive]}>Register</Text>
+                <Text style={[styles.tabText, selectedTab === "register" && styles.tabTextActive]}>Registro</Text>
               </TouchableOpacity>
             </View>
 
-            <View style={[styles.formContainer, styles.mbLg]}>
+            <View style={styles.formContainer}>
               <TextInput
                 style={styles.input}
                 placeholder="Correo electrónico"
@@ -129,7 +128,7 @@ const SignIn = () => {
               </TouchableOpacity>
             </View>
 
-            <View style={[styles.formContainer, styles.mbMd]}>
+            <View style={styles.googleContainer}>
               <Text style={styles.caption}>— o registrate con —</Text>
               <TouchableOpacity onPress={() => promptAsync({ useProxy: true })} disabled={!request} style={styles.button}>
                 <Image source={require("../../assets/images/logo_google.png")} style={styles.googleIcon} />

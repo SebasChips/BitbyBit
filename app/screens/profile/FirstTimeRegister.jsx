@@ -82,10 +82,10 @@ export default function UserInfoForm() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.screen}>
       <StatusBar translucent={false} barStyle="dark-content" />
       <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-        <View style={styles.card}>
+        <View style={styles.container}>
           <Image source={require("../../assets/images/bitty.png")} style={styles.loginImage} />
 
           <Text style={styles.title}>Hola, queremos conocer un poco más de ti...</Text>
@@ -94,11 +94,9 @@ export default function UserInfoForm() {
             <Text style={[styles.caption, { textAlign: "center", marginBottom: theme.spacing.md }]}>Cerrar sesión</Text>
           </TouchableOpacity>
 
-          {/* Agrupamos las secciones del formulario en una fila responsive */}
           <View style={styles.formRow}>
-            {/* Información del padre */}
             <View style={styles.formSection}>
-              <Text style={styles.sectionTitle}>Información del Padre/Madre/Tutor</Text>
+              <Text style={styles.sectionTitle}>Información del Tutor</Text>
               <TextInput style={styles.input} placeholder="Nombre" value={fatherName} onChangeText={setFatherName} />
               <TextInput
                 style={styles.input}
@@ -109,15 +107,12 @@ export default function UserInfoForm() {
               />
             </View>
 
-            {/* Información del niño */}
             <View style={styles.formSection}>
               <Text style={styles.sectionTitle}>Información futur@ programador@</Text>
               <TextInput style={styles.input} placeholder="Nombre" value={childName} onChangeText={setChildName} />
               {renderDatePicker()}
             </View>
           </View>
-
-          {/* Selección de temas */}
           <View style={styles.formSection}>
             <Text style={styles.sectionTitle}>Selecciona hasta 5 temas de interés</Text>
             <View style={styles.topicContainer}>
@@ -137,7 +132,6 @@ export default function UserInfoForm() {
             <Text style={[styles.caption, { marginTop: theme.spacing.sm }]}>Seleccionados: {selectedTopics.length}/5</Text>
           </View>
 
-          {/* Botón continuar */}
           <TouchableOpacity
             style={[styles.button, styles.buttonPrimary]}
             onPress={() => registerUser(fatherEmail, childName, fatherName, date.toISOString(), navigation)}
