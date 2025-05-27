@@ -11,7 +11,7 @@ import { makeRedirectUri } from "expo-auth-session";
 import { doc, getDoc } from "firebase/firestore";
 
 import { baseStyles, textStyles, formStyles, buttonStyles, imageStyles, scrollStyles, tagStyles, cardStyles, modalStyles } from "../../constants/Styles";
-import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/Theme";
+import { colors, spacing, fontSizes, fontWeights, radii, opacities, layout, dimensions, imageSizes, shadows, zIndices, lineHeights, fontFamilies } from "../../constants/theme";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -23,7 +23,7 @@ const Login = () => {
   const [request, response, promptAsync] = Google.useAuthRequest({
     webClientId: "61966159852-30er87tn5uojd5l0p8ndhriu144tpuj0.apps.googleusercontent.com",
     expoClientId: "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
-    androidClientId: "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
+    androidClientId: "61966159852-s21btgh0rp3n6m5j2po5icfmjl2cakos.apps.googleusercontent.com",
     iosClientId: "61966159852-bk80mn0a9pfuitkj1i8qv0f4kqtug8nu.apps.googleusercontent.com",
     redirectUri,
     scopes: ["openid", "profile", "email"],
@@ -56,7 +56,7 @@ const Login = () => {
       LogInEmailAndPass(email, password, navigation);
     } else if (typeLogin === 1) {
       try {
-        await promptAsync({ useProxy: true });
+        await promptAsync({ useProxy: false });
       } catch (error) {
         console.error("Error al iniciar promptAsync:", error);
       }
