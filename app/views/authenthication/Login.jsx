@@ -9,7 +9,7 @@ import * as WebBrowser from "expo-web-browser";
 import { makeRedirectUri } from "expo-auth-session";
 import { doc, getDoc } from "firebase/firestore";
 import { LogInEmailAndPass } from "../../controllers/auths";
-import useBreakpoint from "../../hooks/useBreakpoint";
+import useBreakpoint from "@/app/hooks/UseBreakpoint";
 import getStyles from "../../constants/styles";
 import theme from "@/app/constants/theme";
 

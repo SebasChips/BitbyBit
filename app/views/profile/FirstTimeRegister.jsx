@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { checkUserSession, logOut } from "../../controllers/auths";
 import { registerUser } from "../../controllers/querys";
 
-import useBreakpoint from "@/app/hooks/useBreakpoint";
+import useBreakpoint from "@/app/hooks/UseBreakpoint";
 import getStyles from "../../constants/styles";
 import theme from "@/app/constants/theme";
 const topics = ["Videojuegos", "Robótica", "Matemáticas", "Dibujo", "Música", "Ciencia", "IA", "Idiomas"];

@@ -356,7 +356,7 @@ const FirstGame = ({ navigation, route }) => {
             <View style={styles.videoContainer}>
               {isWeb ? (
                 <video
-                  //src={require('../../../assets/video/firstvideo.mp4')}
+                  src={require('../../../assets/video/firstvideo.mp4')}
                   style={styles.webVideo}
                   controls
                   shouldPlay
@@ -366,7 +366,7 @@ const FirstGame = ({ navigation, route }) => {
               ) : (
                 <Video
                   ref={video}
-                  //source={require('../../../assets/video/firstvideo.mp4')}
+                  source={require('../../../assets/video/firstvideo.mp4')}
                   style={styles.video}
                   resizeMode="contain"
                   shouldPlay

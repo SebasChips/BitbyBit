@@ -7,7 +7,7 @@ import { db, auth } from "../../firebase/firebaseConfig.jsx";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { checkUserSession, logOut } from "../../controllers/auths";
 
-import useBreakpoint from "../../hooks/useBreakpoint.js";
+import useBreakpoint from "../../hooks/UseBreakpoint.js";
 import getStyles from "../../constants/styles.js";
 import theme from "@/app/constants/theme";
 

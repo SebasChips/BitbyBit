@@ -3,10 +3,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Screens
 import SignIn from './views/authenthication/SignIn';
-import Login from './views/authenthication/login';
+import Login from './views/authenthication/Login';
 
-import FirstTimeRegister from './views/profile/firstTimeRegister';
-import Main from './views/profile/main';
+import FirstTimeRegister from './views/profile/FirstTimeRegister';
+import Main from './views/profile/Main';
 
 import FirstGame from './views/lessons/lesson1/L1FirstGame';
 import SecondGame from './views/lessons/lesson1/L1SecondGame';
