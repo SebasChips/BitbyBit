@@ -6,8 +6,8 @@ import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db, auth } from "../../firebase/firebaseConfig.jsx";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import useBreakpoint from "../../hooks/useBreakpoint";
-import getStyles from "../../constants/styles";
+import useBreakpoint from "../../hooks/useBreakpoint.js";
+import getStyles from "../../constants/styles.js";
 import theme from "@/app/constants/theme";
 
 const Main = () => {
