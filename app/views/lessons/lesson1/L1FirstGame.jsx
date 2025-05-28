@@ -15,7 +15,7 @@ if (!isWeb) {
   ExpoAudio = require('expo-av').Audio;
 }
 
-const GameContainer = ({ navigation, route }) => {
+const FirstGame = ({ navigation, route }) => {
   //torres
   const [selectedTower, setSelectedTower] = useState(null);
   const [counter, setCounter] = useState(0);
@@ -306,7 +306,7 @@ const GameContainer = ({ navigation, route }) => {
 
 
       setTimeout(() => {
-        navigation.navigate('main');
+        navigation.navigate('Main');
       }, 3000);
 
 
@@ -356,7 +356,7 @@ const GameContainer = ({ navigation, route }) => {
             <View style={styles.videoContainer}>
               {isWeb ? (
                 <video
-                  src={require('../../../assets/video/firstvideo.mp4')}
+                  //src={require('../../../assets/video/firstvideo.mp4')}
                   style={styles.webVideo}
                   controls
                   shouldPlay
@@ -366,7 +366,7 @@ const GameContainer = ({ navigation, route }) => {
               ) : (
                 <Video
                   ref={video}
-                  source={require('../../../assets/video/firstvideo.mp4')}
+                  //source={require('../../../assets/video/firstvideo.mp4')}
                   style={styles.video}
                   resizeMode="contain"
                   shouldPlay
@@ -661,3 +661,5 @@ const styles = StyleSheet.create({
     marginLeft: 5
   }
 });
+
+export default FirstGame;

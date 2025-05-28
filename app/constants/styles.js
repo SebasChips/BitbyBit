@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import theme from './theme';
 
 const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
@@ -63,10 +63,12 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
         },
         card:
         {
-            alignSelf: 'center',
-            width: isSmall ? '85%' : isMobile ? '90%' : isTablet ? '80%' : '50%',
-            marginTop: isMobile ? theme.spacing.md : theme.spacing.lg,
+            justifyContent: 'space-around',
+            width: '100%',
             backgroundColor: theme.colors.background.dark,
+            borderBottomStartRadius: theme.radius.circular,
+            borderBottomEndRadius: theme.radius.circular,
+            padding: theme.spacing.md,
         },
 
 
@@ -188,7 +190,6 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
             color: theme.colors.black,
         },
         buttonstats: {
-            backgroundColor: theme.colors.secondary[200],
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
@@ -281,24 +282,51 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
         footer: {
             flexDirection: 'row',
             justifyContent: 'space-around',
-            alignItems: 'center',
-            backgroundColor: theme.colors.primary[600],
-            paddingVertical: 10,
-            borderTopWidth: 1,
-            borderTopColor: theme.colors.primary[100],
-            width: '100%',
+            alignSelf: 'center',
+            backgroundColor: theme.colors.background.dark,
+            borderRadius: theme.radius.circular,
+            padding: theme.spacing.md,
+            margin: theme.spacing.md,
+            width: isSmall ? '85%' : isMobile ? '90%' : isTablet ? '80%' : '40%',
         },
         footerButton: {
             alignItems: 'center',
             justifyContent: 'center',
         },
         footerText: {
-            color: '#fff',
+            color: theme.colors.white,
             fontSize: 12,
             marginTop: 2,
+        },
+        container2: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: isSmall ? '80%' : isMobile ? '80%' : isTablet ? '70%' : '50%',
+            alignSelf: 'center',
+            marginVertical: theme.spacing.md,
+        },
+        line: {
+            flex: 1,
+            height: 1,
+            backgroundColor: theme.colors.gray[300],
+        },
+        label: {
+            marginHorizontal: theme.spacing.sm,
+            fontSize: isSmall
+                ? theme.typography.fontSize.xs
+                : isMobile
+                    ? theme.typography.fontSize.sm
+                    : isTablet
+                        ? theme.typography.fontSize.md
+                        : theme.typography.fontSize.md, 
+            color: theme.colors.gray[500],
+            fontWeight: 'bold',
         },
     });
 
 };
+
+
+
 
 export default getStyles;
