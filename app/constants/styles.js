@@ -7,11 +7,10 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
     screen: { flex: 1 },
     container: { flex: 1, backgroundColor: theme.colors.background.dark, },
     scrollContent: { flexGrow: 1, justifyContent: "flex-start", },
-    card: { alignSelf: 'center', backgroundColor: theme.colors.status.dark, },
     box: { flex: 1, justifyContent: 'center', width: '100%', },
     //Contenedores backgroundColor: theme.colors.background.light,
     topContainer: {
-      flex: isSmall ? 0.4 : isMobile ? 0.5 : isTablet ? 0.6 : 0.7,
+      flex: isSmall ? 0.4 : isMobile ? 0.5 : isTablet ? 0.5 : 0.7,
       justifyContent: 'center',
       width: '100%',
     },
@@ -43,6 +42,15 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       backgroundColor: theme.colors.background.light,
       paddingTop: isSmall ? theme.spacing.lg : isMobile ? theme.spacing.xl : theme.spacing.xxl,
     },
+    topicContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      gap: theme.spacing.sm,
+      width: isSmall ? '65%' : isMobile ? '75%' : isTablet ? '60%' : '70%',
+      alignSelf: 'center',
+    },
+
     //
     buttonContainer: {
       flexDirection: 'row',
@@ -53,13 +61,15 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       padding: isMobile ? theme.spacing.lg : theme.spacing.lg,
       backgroundColor: theme.colors.primary[600],
     },
-    topicContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      gap: theme.spacing.sm,
-      marginTop: theme.spacing.sm,
+    card:
+    {
+      alignSelf: 'center',
+      width: isSmall ? '85%' : isMobile ? '90%' : isTablet ? '80%' : '50%',
+      marginTop: isMobile ? theme.spacing.md : theme.spacing.lg,
+      backgroundColor: theme.colors.background.dark,
     },
+
+
     //<------------------------------------------------>
     //textos
     title: {
@@ -74,12 +84,22 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       textAlign: 'center',
       padding: theme.spacing.sm,
     },
-    text: {
+    subTitle: {
       fontSize: isSmall
         ? theme.typography.fontSize.sm
-        : isTablet
+        : isMobile
           ? theme.typography.fontSize.md
-          : theme.typography.fontSize.lg,
+          : isTablet
+            ? theme.typography.fontSize.lg
+            : theme.typography.fontSize.xl,
+      color: theme.colors.white,
+      textAlign: 'center',
+      padding: theme.spacing.sm,
+    },
+    text: {
+      fontSize: isSmall ? theme.typography.fontSize.xs
+        : isMobile ? theme.typography.fontSize.sm
+          : theme.typography.fontSize.md,
       lineHeight: theme.typography.lineHeight.lg,
       color: theme.colors.gray[700],
       textAlign: 'center',
@@ -91,6 +111,7 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       lineHeight: theme.typography.lineHeight.sm,
       color: theme.colors.gray[500],
       textAlign: 'center',
+      marginBottom: theme.spacing.md,
     },
     //<------------------------------------------------>
     //inputs
@@ -100,18 +121,18 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       borderWidth: 1,
       borderColor: theme.colors.gray[400],
       borderRadius: theme.radius.xl,
-      paddingVertical: isSmall ? theme.spacing.sm : isMobile ? theme.spacing.md : theme.spacing.lg,
+      paddingVertical: isSmall ? theme.spacing.sm : isMobile ? theme.spacing.md : theme.spacing.sm,
       paddingHorizontal: theme.spacing.md,
-      fontSize: isSmall ? theme.typography.fontSize.xs : isMobile ? theme.typography.fontSize.sm : theme.typography.fontSize.md,
+      fontSize: isSmall ? theme.typography.fontSize.xs : isMobile ? theme.typography.fontSize.sm : theme.typography.fontSize.sm,
       color: theme.colors.black,
       marginBottom: theme.spacing.md,
     },
     //<------------------------------------------------>
     //botones
     button: {
-      width: isSmall ? '50%' : isMobile ? '50%' : isTablet ? '40%' : '30%',
+      width: isSmall ? '80%' : isMobile ? '80%' : isTablet ? '50%' : '30%',
       alignSelf: 'center',
-      paddingVertical: isSmall ? theme.spacing.sm : theme.spacing.md,
+      paddingVertical: isSmall ? theme.spacing.sm : isMobile ? theme.spacing.md : theme.spacing.sm,
       borderRadius: theme.radius.pill,
       alignItems: 'center',
     },
@@ -126,38 +147,92 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
       paddingHorizontal: theme.spacing.md,
       marginHorizontal: theme.spacing.md,
     },
+    buttonDanger: {
+      backgroundColor: theme.buttonVariants.danger.backgroundColor,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: isSmall ? '50%' : isMobile ? '50%' : isTablet ? '40%' : '30%',
+      paddingHorizontal: theme.spacing.md,
+      marginHorizontal: theme.spacing.md,
+    },
     buttonDisabled: {
       backgroundColor: theme.buttonVariants.disabled.backgroundColor,
     },
     buttonText: {
-      fontSize: isSmall ? theme.typography.fontSize.xs : isMobile ? theme.typography.fontSize.sm : theme.typography.fontSize.md,
+      fontSize: isSmall ? theme.typography.fontSize.xs : theme.typography.fontSize.sm,
       color: theme.buttonVariants.primary.textColor,
+    },
+    buttonTab: {
+      backgroundColor: theme.buttonVariants.disabled.backgroundColor,
+      flexDirection: 'row',
+      alignSelf: 'center',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: isSmall
+        ? 25
+        : isMobile
+          ? 40
+          : 45,
+      borderRadius: theme.radius.pill,
+      paddingHorizontal: theme.spacing.md,
+    },
+    buttonTabSelected: {
+      backgroundColor: theme.colors.primary[400], // o cualquier otro color que indique selección
+    },
+    selectedText: {
+      color: theme.colors.white,
+      fontWeight: 'bold',
+    },
+    unselectedText: {
+      color: theme.colors.black,
+    },
+    buttonstats: {
+      backgroundColor: theme.colors.secondary[200],
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: isSmall
+        ? 25
+        : isMobile
+          ? 40
+          : 45,
+      borderRadius: theme.radius.pill,
+      paddingHorizontal: theme.spacing.md,
     },
     //<------------------------------------------------>
     //imagenes
     googleIcon: {
-      height: isSmall ? 40 : isMobile ? 50 : 60,
+      width: isSmall
+        ? 20
+        : isMobile
+          ? 30
+          : 50,
+      height: isSmall
+        ? 20
+        : isMobile
+          ? 30
+          : 40,
       resizeMode: 'contain',
     },
 
     loginImage: {
       width: isSmall
-        ? 100
+        ? 70
         : isMobile
-          ? 140
+          ? 110
           : isTablet
-            ? 180
-            : 200,
+            ? 130
+            : 150,
       height: isSmall
-        ? 100
+        ? 70
         : isMobile
-          ? 140
+          ? 110
           : isTablet
-            ? 180
-            : 200,
+            ? 130
+            : 150,
       resizeMode: 'contain',
       alignSelf: 'center',
-      marginBottom: theme.spacing.lg,
     },
     image: {
       width: isSmall
@@ -178,7 +253,7 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
     //tab
     tab: {
       flex: 1,
-      paddingVertical: isSmall ? theme.spacing.xs : isMobile ? theme.spacing.sm : theme.spacing.md,
+      paddingVertical: isSmall ? theme.spacing.xs : theme.spacing.sm,
       //fontSize: isSmall ? theme.typography.fontSize.xs : isMobile ? theme.typography.fontSize.sm : theme.typography.fontSize.xl,
       alignItems: 'center',
       borderRadius: theme.radius.pill,
@@ -188,65 +263,42 @@ const getStyles = ({ isSmall, isMobile, isTablet, isDesktop }) => {
     },
     tabText: {
       color: theme.colors.gray[500],
-      fontSize: isSmall ? theme.typography.fontSize.xs : isMobile ? theme.typography.fontSize.sm : theme.typography.fontSize.md,
     },
     tabTextActive: {
       color: theme.colors.primary[600],
     },
-    ///Form
-    formRow: {
-      flexDirection: isDesktop ? "row" : "column",
-      justifyContent: "space-between",
-      gap: theme.spacing.lg,
-      flexWrap: "wrap",
-      padding: isMobile ? theme.spacing.sm : theme.spacing.md,
-    },
-    formSection: {
-      flex: 1,
-      alignItems: 'center',
-      alignSelf: 'center',
-      padding: isMobile ? theme.spacing.sm : theme.spacing.md,
-      width: isDesktop ? '40%' : isTablet ? '90%' : '90%',
-      backgroundColor: theme.colors.white,
-      borderRadius: theme.radius.md,
-    },
-    sectionTitle: {
-      fontSize: isMobile ? theme.typography.fontSize.xl : theme.typography.fontSize.xxl,
-      color: theme.colors.gray[700],
-      marginBottom: theme.spacing.md,
-      textAlign: 'center',
-    },
-    topicButton: {
-      backgroundColor: theme.colors.gray[200],
-      paddingVertical: theme.spacing.xs,
-      paddingHorizontal: theme.spacing.md,
-      borderRadius: theme.radius.xl,
-      margin: theme.spacing.xs,
-    },
-    topicButtonSelected: {
-      backgroundColor: theme.colors.primary[500],
-    },
-    topicText: {
-      fontSize: theme.typography.fontSize.sm,
-      color: theme.colors.black,
-    },
-    topicTextSelected: {
-      color: theme.colors.white,
-    },
-    datePickerText: {
-      fontSize: theme.typography.fontSize.md,
-      color: theme.colors.gray[700],
-      textAlign: 'center',
-      padding: theme.spacing.sm,
-      borderWidth: 1,
-      borderColor: theme.colors.gray[300],
-      borderRadius: theme.radius.lg,
-      backgroundColor: theme.colors.white,
-      marginBottom: theme.spacing.md,
-      width: isSmall ? '100%' : '70%',
+    //<------------------------------------------------>
+    //separacion
+    divider: {
+      height: 1,
+      width: '95%',
+      backgroundColor: theme.colors.gray[300], // o theme.colors.border.light si tenés definido
+      marginVertical: 12,
       alignSelf: 'center',
     },
+    //<------------------------------------------------>
+      //foooter
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        backgroundColor: theme.colors.primary[600],
+        paddingVertical: 10,
+        borderTopWidth: 1,
+        borderTopColor: theme.colors.primary[100],
+        width: '100%',
+      },
+      footerButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      footerText: {
+        color: '#fff',
+        fontSize: 12,
+        marginTop: 2,
+      },
   });
+
 };
 
 export default getStyles;
