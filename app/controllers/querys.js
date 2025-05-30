@@ -2,7 +2,7 @@ import { doc, setDoc, collection, addDoc } from "firebase/firestore";
 import Toast from 'react-native-toast-message';
 import { auth, db } from "../firebase/firebaseConfig";
 
-export const registerUser = async (email, nameKid, nameTutor, bornDateKid, navigation) => {
+export const registerUser = async (email, nameKid, nameTutor, bornDateKid, navigation, lastActivity) => {
   const user = auth.currentUser;
   const uid = user.uid;
 
@@ -24,6 +24,7 @@ export const registerUser = async (email, nameKid, nameTutor, bornDateKid, navig
       nameTutor,
       streak: 0,
       xp: 0,
+      lastActivity,
     });
 
     await setDoc(doc(db, "users", uid, "lessonsProgress", "lesson1"), {

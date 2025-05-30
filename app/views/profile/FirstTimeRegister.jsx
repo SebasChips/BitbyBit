@@ -160,7 +160,16 @@ export default function UserInfoForm() {
               <Text style={styles.caption}>Seleccionados: {selectedTopics.length}/5</Text>
 
               <TouchableOpacity
-                onPress={() => registerUser(fatherEmail, childName, fatherName, date.toISOString(), navigation)}
+                onPress={() =>
+                  registerUser(
+                    fatherEmail,
+                    childName,
+                    fatherName,
+                    date.toISOString(),
+                    navigation,
+                    "2025-05-02" // lastActivity
+                  )
+                }
                 style={[styles.button, styles.buttonPrimary]}
               >
                 <Text style={styles.buttonText}>Continuar</Text>
