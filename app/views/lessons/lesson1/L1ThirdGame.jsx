@@ -12,7 +12,7 @@ if (!isWeb) {
   ExpoAudio = require('expo-av').Audio;
 }
 
-const GameContainer = ({ navigation, route }) => {
+const ThirdGame = ({ navigation, route }) => {
   const [selectedTower, setSelectedTower] = useState(null);
   const [counter, setCounter] = useState(0);
   const [won, setWon] = useState(false);
@@ -301,4 +301,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default GameContainer;
+export default ThirdGame;

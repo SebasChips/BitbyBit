@@ -15,7 +15,7 @@ if (!isWeb) {
   ExpoAudio = require('expo-av').Audio;
 }
 
-const GameContainer = ({ navigation, route }) => {
+const FirstGame = ({ navigation, route }) => {
   //torres
   const [selectedTower, setSelectedTower] = useState(null);
   const [counter, setCounter] = useState(0);
@@ -49,6 +49,7 @@ const GameContainer = ({ navigation, route }) => {
     []
   ]);
 
+
   useEffect(() => {
     let isMounted = true;
     setVisible(true); 
@@ -59,6 +60,14 @@ const GameContainer = ({ navigation, route }) => {
         const { sound: dropSound } = await ExpoAudio.Sound.createAsync(require('../../../assets/audio/drop.mp3'));
         const { sound: wrongSound } = await ExpoAudio.Sound.createAsync(require('../../../assets/audio/wrong.mp3'));
         const { sound: winSound } = await ExpoAudio.Sound.createAsync(require('../../../assets/audio/win.mp3'));
+
+
+
+
+
+
+
+
 
         if (isMounted) {
           selectSoundRef.current = selectSound;
@@ -229,10 +238,17 @@ const GameContainer = ({ navigation, route }) => {
 
   const handleSelectTower = async (towerIndex) => {
     if (won) return;
+
     setCounter(prev => prev + 1);
     await playSelectSound();
     setSelectedTower(towerIndex);
   };
+
+
+
+
+
+
 
   const markLessonCompletedAndRedirect = async () => {
     try {
@@ -253,6 +269,7 @@ const GameContainer = ({ navigation, route }) => {
       const currentXp = userData.xp || 0;
       let xpEarned = alreadyCompleted ? 500 : 1000;
 
+
       const updates = {
         xp: currentXp + xpEarned
       };
@@ -261,10 +278,13 @@ const GameContainer = ({ navigation, route }) => {
         updates.completed = true;
         await updateDoc(lessonDocRef, { completed: true });
 
+
+
         const today = new Date();
         const todayStr = today.toISOString().split('T')[0];
         const lastActivity = userData.lastActivity || null;
         const currentStreak = userData.streak || 0;
+
 
         let newStreak = 1;
         if (lastActivity) {
@@ -282,9 +302,12 @@ const GameContainer = ({ navigation, route }) => {
 
       await updateDoc(userRef, updates);
 
+
+
       setTimeout(() => {
-        navigation.navigate('main');
+        navigation.navigate('Main');
       }, 3000);
+
 
     } catch (error) {
       console.error("Error al actualizar progreso o XP:", error);
@@ -310,6 +333,8 @@ const GameContainer = ({ navigation, route }) => {
         markLessonCompletedAndRedirect();
       }
     } else if (fromDisc !== toDisc) {
+
+
       await playWrongSound();
     }
 
@@ -495,6 +520,7 @@ const styles = StyleSheet.create({
   },
   winText: {
     fontSize: 32,
+
     fontWeight: 'bold',
     color: '#4a6da7',
     marginBottom: 10,
@@ -635,4 +661,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default GameContainer;
+export default FirstGame;
