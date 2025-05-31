@@ -25,7 +25,6 @@ const Login = () => {
   if (!breakpointData.breakpoint) return null;
 
   const styles = getStyles(breakpointData);
-  console.log("Breakpoint actual:", breakpointData.breakpoint);
 
   const redirectUri = makeRedirectUri({ useProxy: true });
   const [request, response, promptAsync] = Google.useAuthRequest({
