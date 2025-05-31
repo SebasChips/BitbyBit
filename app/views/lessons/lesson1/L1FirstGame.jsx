@@ -3,7 +3,7 @@ import { View, Text, Platform, Animated, Easing, StyleSheet, Modal, TouchableOpa
 import Tower from '../../../components/lesson1/tower';
 import HappyBackground from '../../../components/lesson1/HappyBackground';
 import { db, auth } from '../../../firebase/firebaseConfig';
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, setDoc } from 'firebase/firestore';
 import { Video } from 'expo-av';
 import { AntDesign } from '@expo/vector-icons';
 import ConfettiCannon from 'react-native-confetti-cannon';
@@ -60,14 +60,6 @@ const FirstGame = ({ navigation, route }) => {
         const { sound: dropSound } = await ExpoAudio.Sound.createAsync(require('../../../assets/audio/drop.mp3'));
         const { sound: wrongSound } = await ExpoAudio.Sound.createAsync(require('../../../assets/audio/wrong.mp3'));
         const { sound: winSound } = await ExpoAudio.Sound.createAsync(require('../../../assets/audio/win.mp3'));
-
-
-
-
-
-
-
-
 
         if (isMounted) {
           selectSoundRef.current = selectSound;
@@ -233,7 +225,7 @@ const FirstGame = ({ navigation, route }) => {
   };
 
   const checkWinCondition = (newTowers) => {
-    return newTowers[1].length === 3 || newTowers[2].length === 3;
+    return newTowers[2].length === 3;
   };
 
   const handleSelectTower = async (towerIndex) => {
@@ -245,74 +237,77 @@ const FirstGame = ({ navigation, route }) => {
   };
 
 
+const markLessonCompletedAndRedirect = async () => {
+  try {
+    const lessonId ='lesson1';
+
+    const userId = auth.currentUser?.uid;
+    if (!userId) return;
+    const lessonProgressRef = doc(db, 'users', userId, 'lessonsProgress', lessonId);
+    const lessonSnap = await getDoc(lessonProgressRef);
+    const alreadyCompleted = lessonSnap.exists() ? lessonSnap.data().completed : false;
+
+    const userRef = doc(db, 'users', userId);
+    const userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) return;
+    const userData = userSnap.data();
+
+    const currentXp = userData.xp || 0;
+    const xpEarned = alreadyCompleted ? 500 : 1000;
+
+    const updates = {
+      xp: currentXp + xpEarned
+    };
+
+    if (!alreadyCompleted) {
+      //  Marcar como completado en la subcolección lessonProgress
+      await updateDoc(lessonProgressRef, { completed: true });
 
 
+      //  Lógica de racha (streak)
+      const today = new Date();
+      const todayStr = today.toISOString().split('T')[0];
+      const lastActivity = userData.lastActivity || null;
+      const currentStreak = userData.streak || 0;
 
+      let newStreak = 1;
+      if (lastActivity) {
+        const lastDate = new Date(lastActivity);
+        const diffTime = today.getTime() - lastDate.getTime();
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-
-  const markLessonCompletedAndRedirect = async () => {
-    try {
-      const lessonId = route.params?.lessonId || 'lesson1';
-      const lessonDocRef = doc(db, 'lessons', lessonId);
-      const lessonSnap = await getDoc(lessonDocRef);
-      const alreadyCompleted = lessonSnap.exists() ? lessonSnap.data().completed : false;
-
-      const userId = auth.currentUser?.uid;
-      if (!userId) return;
-
-      const userRef = doc(db, 'users', userId);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) return;
-      const userData = userSnap.data();
-
-      const currentXp = userData.xp || 0;
-      let xpEarned = alreadyCompleted ? 500 : 1000;
-
-
-      const updates = {
-        xp: currentXp + xpEarned
-      };
-
-      if (!alreadyCompleted) {
-        updates.completed = true;
-        await updateDoc(lessonDocRef, { completed: true });
-
-
-
-        const today = new Date();
-        const todayStr = today.toISOString().split('T')[0];
-        const lastActivity = userData.lastActivity || null;
-        const currentStreak = userData.streak || 0;
-
-
-        let newStreak = 1;
-        if (lastActivity) {
-          const lastDate = new Date(lastActivity);
-          const diffTime = today.getTime() - lastDate.getTime();
-          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-          if (diffDays === 1) newStreak = currentStreak + 1;
-          else if (diffDays === 0) newStreak = currentStreak;
-        }
-
-        updates.streak = newStreak;
-        updates.lastActivity = todayStr;
+        if (diffDays === 1) newStreak = currentStreak + 1;
+        else if (diffDays === 0) newStreak = currentStreak;
       }
 
-      await updateDoc(userRef, updates);
+      updates.streak = newStreak;
+      updates.lastActivity = todayStr;
 
 
-
-      setTimeout(() => {
-        navigation.navigate('Main');
-      }, 3000);
-
-
-    } catch (error) {
-      console.error("Error al actualizar progreso o XP:", error);
+      // Agregar nueva lección
+    const lesson2Ref = doc(db, 'users', userId, 'lessonsProgress', 'lesson2');
+    const lesson2Snap = await getDoc(lesson2Ref);      
+    if (!lesson2Snap.exists()) {
+        await setDoc(lesson2Ref, {
+          attempts: 0,
+          completed: false,
+          levelLesson: 2,
+          score: 0
+        });
+      }
     }
-  };
+
+    await updateDoc(userRef, updates);
+
+    setTimeout(() => {
+      navigation.navigate('Main');
+    }, 3000);
+
+  } catch (error) {
+    console.error("Error al actualizar progreso o XP:", error);
+  }
+};
+
 
   const handleMoveDisc = async (targetTowerIndex) => {
     if (won || selectedTower === null) return;
@@ -358,7 +353,6 @@ const FirstGame = ({ navigation, route }) => {
                   src={require('../../../assets/video/firstvideo.mp4')}
                   style={styles.webVideo}
                   controls
-                  shouldPlay
                   autoPlay
                   loop={false}
                 />
@@ -368,7 +362,6 @@ const FirstGame = ({ navigation, route }) => {
                   source={require('../../../assets/video/firstvideo.mp4')}
                   style={styles.video}
                   resizeMode="contain"
-                  shouldPlay
                   isLooping={false}
                   useNativeControls
                 />

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform, Image, StatusBar } from "react-native";
+import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform, StatusBar } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db, auth } from "../../firebase/firebaseConfig.jsx";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { checkUserSession, logOut } from "../../controllers/auths";
+import { logOut } from "../../controllers/auths";
 
 import useBreakpoint from "../../hooks/UseBreakpoint.js";
 import getStyles from "../../constants/styles.js";
@@ -20,120 +20,107 @@ const Main = () => {
 
   const [user, setUser] = useState(null);
   const [lessons, setLessons] = useState([]);
+  const [lessonProgress, setLessonProgress] = useState({});
   const [currentLesson, setCurrentLesson] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const DividerWithLabel = ({ label }) => {
-    return (
-      <View style={styles.container2}>
-        <View style={styles.line} />
-        <Text style={styles.label}>{label}</Text>
-        <View style={styles.line} />
-      </View>
-    );
+  const DividerWithLabel = ({ label }) => (
+    <View style={styles.container2}>
+      <View style={styles.line} />
+      <Text style={styles.label}>{label}</Text>
+      <View style={styles.line} />
+    </View>
+  );
+
+ useEffect(() => {
+  const loadData = async () => {
+    const MIN_LOADING_TIME = 700;
+    const startTime = Date.now();
+
+    try {
+      const userId = auth.currentUser?.uid;
+      if (!userId) throw new Error("Usuario no autenticado");
+
+      // Obtener usuario
+      const userDoc = await getDoc(doc(db, "users", userId));
+      if (!userDoc.exists()) throw new Error("Usuario no encontrado");
+
+      const userData = userDoc.data();
+      setUser(userData);
+      setCurrentLesson(userData.currentLesson || "lesson1");
+
+      // Obtener lecciones
+      const lessonsSnapshot = await getDocs(collection(db, "lessons"));
+      const lessonsList = lessonsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      const sortedLessons = lessonsList.sort((a, b) =>
+        parseInt(a.id.replace("lesson", "")) - parseInt(b.id.replace("lesson", ""))
+      );
+      setLessons(sortedLessons);
+
+      // Obtener progreso
+      const progressSnapshot = await getDocs(collection(db, "users", userId, "lessonsProgress"));
+      const progress = {};
+      progressSnapshot.forEach(doc => {
+        progress[doc.id] = doc.data();
+      });
+
+      setLessonProgress(progress);
+    } catch (error) {
+      console.error("Error al cargar datos:", error);
+    } finally {
+      const elapsed = Date.now() - startTime;
+      const waitTime = Math.max(0, MIN_LOADING_TIME - elapsed);
+      setTimeout(() => setLoading(false), waitTime);
+    }
   };
 
-  useEffect(() => {
-    const loadData = async () => {
-      // Simula un tiempo mínimo de carga, por ejemplo, 1 segundo
-      const MIN_LOADING_TIME = 700; // 1 segundo en milisegundos
-      const startTime = Date.now();
+  loadData();
+}, []);
 
-      try {
-        const userId = auth.currentUser?.uid;
-        const userDocRef = doc(db, "users", userId);
-        const userSnap = await getDoc(userDocRef);
-
-        if (userSnap.exists()) {
-          const userData = userSnap.data();
-          setCurrentLesson(userData.currentLesson || "lesson1");
-          setUser(userData);
-
-          const lessonsCol = await getDocs(collection(db, "lessons"));
-          const lessonsData = [];
-
-          lessonsCol.forEach((doc) => {
-            lessonsData.push({ id: doc.id, ...doc.data() });
-          });
-
-          const sortedLessons = lessonsData.sort((a, b) => {
-            const n1 = parseInt(a.id.replace("lesson", ""));
-            const n2 = parseInt(b.id.replace("lesson", ""));
-            return n1 - n2;
-          });
-
-          setLessons(sortedLessons);
-        }
-      } catch (error) {
-        console.error("Error al cargar datos:", error);
-        // Maneja el error, quizás mostrando un mensaje al usuario
-      } finally {
-        const endTime = Date.now();
-        const elapsedTime = endTime - startTime;
-        const remainingTime = MIN_LOADING_TIME - elapsedTime;
-
-        if (remainingTime > 0) {
-          // Si los datos se cargaron más rápido que el tiempo mínimo, espera el resto
-          setTimeout(() => {
-            setLoading(false);
-          }, remainingTime);
-        } else {
-          // Si los datos tardaron más que el tiempo mínimo, oculta la pantalla de carga inmediatamente
-          setLoading(false);
-        }
-      }
-    };
-
-    loadData();
-  }, []);
 
   const renderLessonNode = (lesson, index) => {
-    const prevLesson = lessons[index - 1];
-    const isFirst = index === 0;
-    const isUnlocked = isFirst || prevLesson?.completed;
-    const isCompleted = lesson.completed;
-    const isCurrent = lesson.id === currentLesson;
+  const prevLessonId = lessons[index - 1]?.id;
+  const isFirst = index === 0;
+  const isCompleted = lessonProgress[lesson.id]?.completed === true;
+  const isUnlocked = isFirst || (prevLessonId && lessonProgress[prevLessonId]?.completed === true);
 
-    // Default: bloqueado (rojo)
-    let backgroundColor = theme.colors.status.error; // Rojo
-    let iconName = "close-circle";
-    let iconColor = "#FFF";
-    let borderColor = theme.colors.black;
+  let bgColor = theme.colors.status.error;
+  let icon = "close-circle";
+  let iconColor = "#FFF";
 
-    if (isCompleted) {
-      backgroundColor = theme.colors.status.success; // Verde
-      iconName = "checkmark-circle";
-      iconColor = "#FFF";
-      borderColor = theme.colors.black;
-    } else if (isUnlocked) {
-      backgroundColor = theme.colors.status.warning; // Amarillo
-      iconName = "play";
-      iconColor = "#FFF";
-      borderColor = theme.colors.black;
-    }
+  if (isCompleted) {
+    bgColor = theme.colors.status.success;
+    icon = "checkmark-circle";
+  } else if (isUnlocked) {
+    bgColor = theme.colors.status.warning;
+    icon = "play";
+  }
 
-    return (
-      <View key={lesson.id} style={{ alignItems: "center", marginVertical: 8 }}>
-        <TouchableOpacity
-          onPress={() => isUnlocked && navigation.navigate(lesson.rute)}
-          disabled={!isUnlocked}
-          style={{
-            width: 100,
-            height: 100,
-            borderRadius: 16,
-            backgroundColor,
-            borderWidth: 2,
-            borderColor,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Ionicons name={iconName} size={36} color={iconColor} />
-        </TouchableOpacity>
-        <Text style={[styles.text, { fontWeight: "bold", marginTop: 8 }]}>{lesson.title}</Text>
-      </View>
-    );
-  };
+
+  return (
+    <View key={lesson.id} style={{ alignItems: "center", marginVertical: 8 }}>
+      <TouchableOpacity
+        disabled={!isUnlocked}
+        onPress={() => isUnlocked && navigation.navigate(lesson.rute)}
+        style={{
+          width: 100,
+          height: 100,
+          borderRadius: 16,
+          backgroundColor: bgColor,
+          borderWidth: 2,
+          borderColor: theme.colors.black,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Ionicons name={icon} size={36} color={iconColor} />
+      </TouchableOpacity>
+      <Text style={[styles.text, { marginTop: 8, fontWeight: "bold" }]}>{lesson.title}</Text>
+    </View>
+  );
+};
+
 
   const renderConnector = () => (
     <View style={{ height: 50, alignItems: "center", justifyContent: "center" }}>
@@ -152,7 +139,7 @@ const Main = () => {
       await logOut(auth);
       navigation.reset({
         index: 0,
-        routes: [{ name: "Login" }], // Asegúrate de que "Login" sea el nombre correcto de tu pantalla de login
+        routes: [{ name: "Login" }],
       });
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
@@ -161,32 +148,20 @@ const Main = () => {
 
   if (loading) {
     return (
-      <SafeAreaView
-      style={{
-        flex: 1, // Hace que ocupe todo el espacio disponible
-        justifyContent: 'center', // Centra verticalmente
-        alignItems: 'center', // Centra horizontalmente
-        backgroundColor: theme.colors.background.dark, // Color de fondo
-      }}
-    >
-      <StatusBar backgroundColor={theme.colors.background.dark} barStyle="light-content" />
-      <View
-        style={{
-          alignItems: 'center', // Centra el icono y el texto entre sí
-        }}
-      >
-        <Ionicons name="book" size={60} color="#4FC3F7" />
-        <Text
-          style={{
-            marginTop: 10, // Espacio entre el icono y el texto
-            color: '#FFFFFF', // Color del texto
-            fontSize: 18,
-          }}
-        >
-          Cargando aventuras...
-        </Text>
-      </View>
-    </SafeAreaView>
+      <SafeAreaView style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: theme.colors.background.dark,
+      }}>
+        <StatusBar backgroundColor={theme.colors.background.dark} barStyle="light-content" />
+        <View style={{ alignItems: 'center' }}>
+          <Ionicons name="book" size={60} color="#4FC3F7" />
+          <Text style={{ marginTop: 10, color: '#FFFFFF', fontSize: 18 }}>
+            Cargando aventuras...
+          </Text>
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -209,7 +184,6 @@ const Main = () => {
                 <View style={styles.buttonstats}>
                   <Text style={[styles.text, { color: "#FFF" }]}>Nv. {Math.floor(user.xp / 100) + 1}</Text>
                 </View>
-
               </View>
             </View>
           )}
@@ -218,7 +192,6 @@ const Main = () => {
           </View>
           <Text style={styles.caption}>Tu Camino de Aprendizaje</Text>
           <DividerWithLabel label="Torres de Hannoi" />
-
           <View>
             <View>
               {lessons.slice(0, 3).map((lesson, index) => (
@@ -235,12 +208,10 @@ const Main = () => {
             <Ionicons name="log-out-outline" size={24} color="#FFF" />
             <Text style={styles.footerText}>Salir</Text>
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate("Home")}>
             <Ionicons name="home" size={24} color="#FFF" />
             <Text style={styles.footerText}>Inicio</Text>
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate("Profile")}>
             <Ionicons name="person" size={24} color="#FFF" />
             <Text style={styles.footerText}>Perfil</Text>
