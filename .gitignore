@@ -43,4 +43,5 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# @end expo-cli
+# firebasecredentials
+app/firebase/firebaseConfig.jsx

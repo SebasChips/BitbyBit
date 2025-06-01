@@ -4,25 +4,22 @@
     "slug": "BitByBit",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/iconapp.png",
-    "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.BitbyBit"
-    },
+    "icon": "./assets/icon.png", 
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
+        "foregroundImage": "./assets/icon-foreground.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.BitbyBit"
     },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.BitbyBit"
+    },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/icon.png"
     },
     "plugins": [
       "expo-router",
