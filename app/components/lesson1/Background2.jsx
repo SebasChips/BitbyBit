@@ -6,8 +6,8 @@ const { width, height } = Dimensions.get('window');
 
 const VibrantBackground = ({ children }) => {
   // Animaciones para los elementos dinámicos
-  const pulseAnim = new Animated.Value(0);
-  const sunAnim = new Animated.Value(0);
+  const pulseAnim = React.useRef(new Animated.Value(0)).current;
+  const sunAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
     // Animación de pulso para el sol
@@ -50,141 +50,147 @@ const VibrantBackground = ({ children }) => {
   });
 
   return (
-    <LinearGradient
-      colors={['#FF512F', '#DD2476', '#8A2BE2']}
-      style={styles.container}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-    >
-      {/* Sol animado */}
-      <Animated.View style={[
-        styles.sun, 
-        { 
-          transform: [
-            { scale: sunScale },
-            { rotate: sunRotation }
-          ] 
-        }
-      ]}>
-        <LinearGradient
-          colors={['#FFD700', '#FF8C00']}
-          style={styles.sunInner}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-        />
-      </Animated.View>
-
-      {/* Rayos de sol */}
-      <View style={styles.sunRays}>
-        {[...Array(12)].map((_, i) => (
-          <Animated.View 
-            key={i}
-            style={[
-              styles.sunRay,
-              { 
-                transform: [
-                  { rotate: `${i * 30}deg` },
-                  { translateY: -50 }
-                ] 
-              }
-            ]}
+    <View style={styles.outerContainer}>
+      <LinearGradient
+        colors={['#FF512F', '#DD2476', '#8A2BE2']}
+        style={styles.container}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      >
+        {/* Sol animado */}
+        <Animated.View style={[
+          styles.sun, 
+          { 
+            transform: [
+              { scale: sunScale },
+              { rotate: sunRotation }
+            ] 
+          }
+        ]}>
+          <LinearGradient
+            colors={['#FFD700', '#FF8C00']}
+            style={styles.sunInner}
+            start={{ x: 0.5, y: 0 }}
+            end={{ x: 0.5, y: 1 }}
           />
-        ))}
-      </View>
+        </Animated.View>
 
-      {/* Nubes animadas */}
-      <View style={styles.cloudsContainer}>
-        {[...Array(5)].map((_, i) => (
+        {/* Rayos de sol */}
+        <View style={styles.sunRays}>
+          {[...Array(12)].map((_, i) => (
+            <Animated.View 
+              key={i}
+              style={[
+                styles.sunRay,
+                { 
+                  transform: [
+                    { rotate: `${i * 30}deg` },
+                    { translateY: -50 }
+                  ] 
+                }
+              ]}
+            />
+          ))}
+        </View>
+
+        {/* Nubes animadas */}
+        <View style={styles.cloudsContainer}>
+          {[...Array(5)].map((_, i) => (
+            <Animated.View 
+              key={i}
+              style={[
+                styles.cloud,
+                {
+                  left: Math.random() * width,
+                  top: Math.random() * (height * 0.3),
+                  opacity: 0.7 + Math.random() * 0.3,
+                  transform: [{
+                    translateX: pulseAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, (Math.random() - 0.5) * 20]
+                    })
+                  }]
+                }
+              ]}
+            />
+          ))}
+        </View>
+
+        {/* Montañas vibrantes */}
+        <View style={[styles.mountain, styles.mountainFar]} />
+        <View style={[styles.mountain, styles.mountainMid]} />
+        <View style={[styles.mountain, styles.mountainClose]} />
+
+        {/* Río luminoso */}
+        <View style={styles.river}>
+          <LinearGradient
+            colors={['rgba(255, 255, 255, 0.4)', 'rgba(255, 215, 0, 0.3)']}
+            style={styles.riverSurface}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          />
           <Animated.View 
-            key={i}
             style={[
-              styles.cloud,
+              styles.riverLight,
               {
-                left: Math.random() * width,
-                top: Math.random() * (height * 0.3),
-                opacity: 0.7 + Math.random() * 0.3,
                 transform: [{
                   translateX: pulseAnim.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [0, (Math.random() - 0.5) * 20]
+                    outputRange: [-width, width]
                   })
                 }]
               }
             ]}
           />
-        ))}
-      </View>
+        </View>
 
-      {/* Montañas vibrantes */}
-      <View style={[styles.mountain, styles.mountainFar]} />
-      <View style={[styles.mountain, styles.mountainMid]} />
-      <View style={[styles.mountain, styles.mountainClose]} />
+        {/* Área de contenido */}
+        <View style={styles.contentArea}>
+          {children}
+        </View>
 
-      {/* Río luminoso */}
-      <View style={styles.river}>
+        {/* Efecto de brillo en el suelo */}
         <LinearGradient
-          colors={['rgba(255, 255, 255, 0.4)', 'rgba(255, 215, 0, 0.3)']}
-          style={styles.riverSurface}
+          colors={['rgba(255, 255, 255, 0.1)', 'rgba(221, 36, 118, 0.3)']}
+          style={styles.groundGlow}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
+          end={{ x: 0, y: 1 }}
         />
-        <Animated.View 
-          style={[
-            styles.riverLight,
-            {
-              transform: [{
-                translateX: pulseAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-width, width]
-                })
-              }]
-            }
-          ]}
-        />
-      </View>
 
-      {/* Área de contenido */}
-      <View style={styles.contentArea}>
-        {children}
-      </View>
-
-      {/* Efecto de brillo en el suelo */}
-      <LinearGradient
-        colors={['rgba(255, 255, 255, 0.1)', 'rgba(221, 36, 118, 0.3)']}
-        style={styles.groundGlow}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-      />
-
-      {/* Partículas flotantes */}
-      <View style={styles.particles}>
-        {[...Array(30)].map((_, i) => (
-          <Animated.View 
-            key={i}
-            style={[
-              styles.particle,
-              {
-                left: Math.random() * width,
-                top: Math.random() * height,
-                backgroundColor: `hsl(${Math.random() * 60 + 20}, 100%, 70%)`,
-                width: Math.random() * 8 + 2,
-                height: Math.random() * 8 + 2,
-                transform: [{
-                  translateY: pulseAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, (Math.random() - 0.5) * 10]
-                  })
-                }]
-              }
-            ]}
-          />
-        ))}
-      </View>
-    </LinearGradient>
+        {/* Partículas flotantes */}
+        <View style={styles.particles}>
+          {[...Array(30)].map((_, i) => (
+            <Animated.View 
+              key={i}
+              style={[
+                styles.particle,
+                {
+                  left: Math.random() * width,
+                  top: Math.random() * height,
+                  backgroundColor: `hsl(${Math.random() * 60 + 20}, 100%, 70%)`,
+                  width: Math.random() * 8 + 2,
+                  height: Math.random() * 8 + 2,
+                  transform: [{
+                    translateY: pulseAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, (Math.random() - 0.5) * 10]
+                    })
+                  }]
+                }
+              ]}
+            />
+          ))}
+        </View>
+      </LinearGradient>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  outerContainer: {
+    flex: 1,
+    position: 'relative',
+  },
   container: {
     flex: 1,
     position: 'relative',
@@ -283,14 +289,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
   contentArea: {
-    position: 'absolute',
-    bottom: 0,
+    flex: 1,
     width: '100%',
-    height: height * 0.4,
     zIndex: 15,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
+    paddingTop: 60, 
     paddingBottom: 20,
-    pointerEvents: 'box-none',
   },
   groundGlow: {
     position: 'absolute',

@@ -1,73 +1,154 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform, Image, StatusBar } from "react-native";
+import { SafeAreaView, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform, Image, StatusBar, ActivityIndicator } from "react-native";
 
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
-import { auth, db } from "../../firebase/firebaseConfig";
-import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import * as Google from "expo-auth-session/providers/google";
-import * as WebBrowser from "expo-web-browser";
-import { makeRedirectUri } from "expo-auth-session";
-import { doc, getDoc } from "firebase/firestore";
-import { RegisterEmailAndPass } from "../../controllers/auths";
-import useBreakpoint from "../../hooks/UseBreakpoint";
+import { checkUserSession, logOut } from "../../controllers/auths";
+import { registerUser } from "../../controllers/querys";
+
+import useBreakpoint from "@/app/hooks/UseBreakpoint";
 import getStyles from "../../constants/styles";
 import theme from "@/app/constants/theme";
 
-WebBrowser.maybeCompleteAuthSession();
+const topics = ["Videojuegos", "Robótica", "Matemáticas", "Dibujo", "Música", "Ciencia", "IA", "Idiomas"];
 
-const SignIn = () => {
-  const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [selectedTab, setSelectedTab] = useState("register");
-
+export default function UserInfoForm() {
   const breakpointData = useBreakpoint();
   if (!breakpointData.breakpoint) return null;
 
   const styles = getStyles(breakpointData);
-  //console.log("Breakpoint actual:", breakpointData.breakpoint);
+  const navigation = useNavigation();
 
-  const redirectUri = makeRedirectUri({ useProxy: true });
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    webClientId: "61966159852-30er87tn5uojd5l0p8ndhriu144tpuj0.apps.googleusercontent.com",
-    expoClientId: "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
-    androidClientId: "61966159852-jp4u85h56v7f36gnf1mq8lqn1u70gh24.apps.googleusercontent.com",
-    iosClientId: "61966159852-bk80mn0a9pfuitkj1i8qv0f4kqtug8nu.apps.googleusercontent.com",
-    redirectUri,
-    scopes: ["openid", "profile", "email"],
-  });
+  const [fatherName, setFatherName] = useState("");
+  const [fatherEmail, setFatherEmail] = useState("");
+  const [childName, setChildName] = useState("");
+  const [selectedTopics, setSelectedTopics] = useState([]);
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (response?.type === "success") {
-      const { id_token, access_token } = response.params;
-      const credential = GoogleAuthProvider.credential(id_token, access_token);
+    const unsubscribe = checkUserSession((user) => {
+      if (!user) {
+        navigation.navigate("Login");
+      } else {
+        setFatherEmail(user.email);
+        setFatherName(user.displayName);
+        setIsLoading(false);
+      }
+    });
+    return () => unsubscribe();
+  }, [navigation]);
 
-      signInWithCredential(auth, credential)
-        .then(async () => {
-          const user = auth.currentUser;
-          const uid = user.uid;
-          const docRef = doc(db, "users", uid);
-          const docSnap = await getDoc(docRef);
+  const formatDate = (date) =>
+    date
+      .toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+      })
+      .replace(/\//g, "/");
 
-          if (docSnap.exists()) {
-            navigation.navigate("Main");
-          } else {
-            navigation.navigate("FirstTimeRegister");
-          }
-        })
-        .catch((error) => {
-          console.error("Error en signInWithCredential:", error);
-        });
-    }
-  }, [response]);
-
-  const handleGoogleLogin = async () => {
-    try {
-      await promptAsync({ useProxy: true });
-    } catch (error) {
-      console.error("Error al iniciar sesión con Google:", error);
+  const onChangeDate = (event, selectedDate) => {
+    if (Platform.OS === "web") {
+      setDate(new Date(event.target.value));
+    } else {
+      const currentDate = selectedDate || date;
+      setShowDatePicker(Platform.OS === "ios");
+      setDate(currentDate);
     }
   };
+
+  const toggleTopic = (topic) => {
+    if (selectedTopics.includes(topic)) {
+      setSelectedTopics(selectedTopics.filter((t) => t !== topic));
+    } else if (selectedTopics.length < 5) {
+      setSelectedTopics([...selectedTopics, topic]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!childName || !fatherName || selectedTopics.length === 0) {
+      alert("Por favor completa todos los campos obligatorios");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await registerUser(
+        fatherEmail,
+        childName,
+        fatherName,
+        date.toISOString(),
+        navigation,
+        "2025-05-02" // lastActivity
+      );
+    } catch (error) {
+      console.error("Error al registrar usuario:", error);
+      alert("Ocurrió un error al registrar la información");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const renderDatePicker = () => {
+    if (Platform.OS === "web") {
+      return (
+        <View style={[styles.input, { padding: 0 }]}>
+          <input
+            type="date"
+            value={date.toISOString().split("T")[0]}
+            onChange={(e) => {
+              if (e.target.value) {
+                setDate(new Date(e.target.value));
+              }
+            }}
+            style={{
+              fontSize: 16,
+              border: "none",
+              backgroundColor: "transparent",
+              padding: theme.spacing.sm,
+            }}
+          />
+        </View>
+      );
+    } else {
+      return (
+        <>
+          <TouchableOpacity 
+            onPress={() => setShowDatePicker(true)} 
+            style={[styles.input, { justifyContent: "center" }]}
+            disabled={isSubmitting}
+          >
+            <Text style={[styles.text, styles.datePickerText]}>{formatDate(date)}</Text>
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePicker 
+              testID="dateTimePicker" 
+              value={date} 
+              mode="date" 
+              is24Hour={true} 
+              display="default" 
+              onChange={onChangeDate} 
+            />
+          )}
+        </>
+      );
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={[styles.screen, { justifyContent: "center", alignItems: "center" }]}>
+        <StatusBar backgroundColor={theme.colors.background.dark} barStyle="light-content" />
+        <ActivityIndicator size="large" color={theme.colors.primary[400]} />
+        <Text style={[styles.text, { color: theme.colors.white, marginTop: 20 }]}>
+          Cargando información...
+        </Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -76,62 +157,98 @@ const SignIn = () => {
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scrollContent}>
           <View style={styles.topContainer}>
             <Image source={require("../../assets/images/bitty.png")} style={styles.loginImage} />
-            <Text style={styles.title}>¡Bienvenido!</Text>
-            <Text style={styles.caption}>Crea una cuenta para comenzar</Text>
+            <TouchableOpacity
+                onPress={logOut}
+                style={[styles.button, styles.buttonDanger]}
+                disabled={isSubmitting}
+              >
+                <Text style={styles.buttonText}>Cerrar sesión</Text>
+              </TouchableOpacity>
+            <Text style={styles.subTitle}>Queremos conocer un poco más de ti...</Text>
+            <Text style={styles.caption}>RELLENA LOS SIGUIENTES CAMPOS</Text>
           </View>
-
+          
+          
           <View style={styles.sectionContainer}>
-            <View style={styles.tabContainer}>
-              <TouchableOpacity
-                style={[styles.tab, selectedTab === "login" && styles.tabActive]}
-                onPress={() => {
-                  setSelectedTab("login");
-                  navigation.navigate("Login");
-                }}
-              >
-                <Text style={[styles.tabText, selectedTab === "login" && styles.tabTextActive]}>Inicio</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[styles.tab, selectedTab === "register" && styles.tabActive]}
-                onPress={() => {
-                  setSelectedTab("register");
-                  navigation.navigate("SignIn");
-                }}
-              >
-                <Text style={[styles.tabText, selectedTab === "register" && styles.tabTextActive]}>Registro</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.formContainer}>
+            <View style={styles.formSection}>
+              <Text style={styles.sectionTitle}>Información del Tutor</Text>
+              <Text style={styles.inputLabel}>Nombre completo</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Correo electrónico"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
+                value={fatherName}
+                onChangeText={setFatherName}
+                placeholder="Ingresa tu nombre"
                 placeholderTextColor="#999"
+                autoCapitalize="words"
+                editable={!isSubmitting}
               />
-
-              <TextInput
-                style={styles.input}
-                placeholder="Contraseña"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                placeholderTextColor="#999"
-              />
-
-              <TouchableOpacity onPress={() => RegisterEmailAndPass(email, password)} style={[styles.button, styles.buttonPrimary]}>
-                <Text style={styles.buttonText}>Registrarme</Text>
-              </TouchableOpacity>
             </View>
 
-            <View style={styles.googleContainer}>
-              <Text style={styles.caption}>— o registrate con —</Text>
-              <TouchableOpacity onPress={() => promptAsync({ useProxy: true })} disabled={!request} style={styles.button}>
-                <Image source={require("../../assets/images/logo_google.png")} style={styles.googleIcon} />
+            <View style={styles.divider} />
+
+            <View style={styles.formSection}>
+              <Text style={styles.sectionTitle}>Información del Niño</Text>
+              <Text style={styles.inputLabel}>Nombre completo</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Nombre del niño"
+                placeholderTextColor="#999"
+                value={childName}
+                autoCapitalize="words"
+                onChangeText={setChildName}
+                editable={!isSubmitting}
+              />
+              
+              <Text style={styles.inputLabel}>Fecha de Nacimiento</Text>
+              {renderDatePicker()}
+            </View>
+
+            <View style={styles.divider} />
+
+            <View style={styles.formSection}>
+              <Text style={styles.sectionTitle}>Intereses del Niño</Text>
+              <Text style={styles.inputLabel}>Selecciona hasta 5 temas de interés</Text>
+              <View style={styles.topicContainer}>
+                {topics.map((topic) => {
+                  const isSelected = selectedTopics.includes(topic);
+                  return (
+                    <TouchableOpacity
+                      key={topic}
+                      onPress={() => !isSubmitting && toggleTopic(topic)}
+                      style={[
+                        styles.buttonTab, 
+                        isSelected && styles.buttonTabSelected,
+                        isSubmitting && styles.buttonDisabled
+                      ]}
+                      disabled={isSubmitting}
+                    >
+                      <Text style={isSelected ? styles.selectedText : styles.unselectedText}>
+                        {topic}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+              <Text style={[styles.caption, { color: selectedTopics.length === 5 ? theme.colors.success : theme.colors.gray[500] }]}>
+                Seleccionados: {selectedTopics.length}/5
+              </Text>
+            </View>
+
+            <View style={styles.buttonGroup}>
+              <TouchableOpacity
+                onPress={handleSubmit}
+                style={[
+                  styles.button, 
+                  styles.buttonPrimary,
+                  isSubmitting && styles.buttonDisabled
+                ]}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator color={theme.colors.white} />
+                ) : (
+                  <Text style={styles.buttonText}>Continuar</Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>
@@ -139,6 +256,4 @@ const SignIn = () => {
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
-};
-
-export default SignIn;
+}

@@ -181,9 +181,7 @@ const Main = () => {
                   <Ionicons name="star" size={20} color="#FFC107" />
                   <Text style={[styles.text, { color: "#FFF" }]}>{user.xp} XP</Text>
                 </View>
-                <View style={styles.buttonstats}>
-                  <Text style={[styles.text, { color: "#FFF" }]}>Nv. {Math.floor(user.xp / 100) + 1}</Text>
-                </View>
+
               </View>
             </View>
           )}

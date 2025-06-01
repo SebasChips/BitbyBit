@@ -157,7 +157,7 @@ export default function UserInfoForm() {
                   );
                 })}
               </View>
-              <Text style={styles.caption}>Seleccionados: {selectedTopics.length}/5</Text>
+              <Text style={[styles.caption,{ marginTop: theme.spacing.md }]}>Seleccionados: {selectedTopics.length}/5</Text>
 
               <TouchableOpacity
                 onPress={() =>
