@@ -6,6 +6,7 @@ const { width, height } = Dimensions.get('window');
 
 const HappyBackground = ({ children }) => {
   return (
+    <View style={styles.outerContainer}>
     <LinearGradient
       colors={['#0f2027', '#203a43', '#2c5364']}
       style={styles.container}
@@ -59,10 +60,15 @@ const HappyBackground = ({ children }) => {
         end={{ x: 0, y: 1 }}
       />
     </LinearGradient>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  outerContainer: {
+    flex: 1,
+    position: 'relative', 
+  },
   container: {
     flex: 1,
     position: 'relative',
@@ -117,16 +123,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
- contentArea: {
-  position: 'absolute',
-  bottom: 0,
-  width: '100%',
-  height: height * 0.4,
-  zIndex: 15, // Mayor que los demás elementos
-  justifyContent: 'flex-end',
-  paddingBottom: 20,
-  pointerEvents: 'box-none',
-},
+ contentArea: {  
+    flex: 1,
+    width: '100%',
+    zIndex: 15,
+    justifyContent: 'flex-start',
+    paddingTop: 60,
+    paddingBottom: 20,
+  },
   groundFog: {
     position: 'absolute',
     bottom: 0,
