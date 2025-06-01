@@ -1,21 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform, Image, StatusBar } from "react-native";
-
+import { 
+  SafeAreaView, 
+  View, 
+  Text, 
+  TextInput, 
+  TouchableOpacity, 
+  ScrollView, 
+  Platform, 
+  Image, 
+  StatusBar
+} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import { checkUserSession, logOut } from "../../controllers/auths";
 import { registerUser } from "../../controllers/querys";
+import styles from "../../constants/userInfoStyles";
 
-import useBreakpoint from "@/app/hooks/UseBreakpoint";
-import getStyles from "../../constants/styles";
-import theme from "@/app/constants/theme";
-const topics = ["Videojuegos", "Robótica", "Matemáticas", "Dibujo", "Música", "Ciencia", "IA", "Idiomas"];
+const topics = [
+  "🎮 Videojuegos", 
+  "🤖 Robótica", 
+  "🧮 Matemáticas", 
+  "🎨 Dibujo", 
+  "🎵 Música", 
+  "🔬 Ciencia", 
+  "🧠 IA", 
+  "🌍 Idiomas"
+];
 
 export default function UserInfoForm() {
-  const breakpointData = useBreakpoint();
-  if (!breakpointData.breakpoint) return null;
-
-  const styles = getStyles(breakpointData);
   const navigation = useNavigation();
 
   const [fatherName, setFatherName] = useState("");
@@ -38,13 +50,11 @@ export default function UserInfoForm() {
   }, [navigation]);
 
   const formatDate = (date) =>
-    date
-      .toLocaleDateString("es-MX", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "2-digit",
-      })
-      .replace(/\//g, "/");
+    date.toLocaleDateString("es-MX", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }).replace(/\//g, "/");
 
   const onChangeDate = (event, selectedDate) => {
     if (Platform.OS === "web") {
@@ -66,8 +76,10 @@ export default function UserInfoForm() {
 
   const renderDatePicker = () => {
     if (Platform.OS === "web") {
-      return (
-        <View style={[styles.input, { padding: 0 }]}>
+    return (
+      <View style={styles.webDateContainer}>
+        <Text style={styles.inputLabel}>Fecha de Nacimiento</Text>
+        <View style={styles.webDateInputWrapper}>
           <input
             type="date"
             value={date.toISOString().split("T")[0]}
@@ -76,108 +88,145 @@ export default function UserInfoForm() {
                 setDate(new Date(e.target.value));
               }
             }}
-            style={{
-              fontSize: 16,
-              border: "none",
-              backgroundColor: "transparent",
-              padding: theme.spacing.sm,
-            }}
+            style={styles.webDateInputNative}
           />
+          <View style={styles.webDateInputDisplay}>
+          </View>
         </View>
+      </View>
       );
     } else {
       return (
         <>
-          <TouchableOpacity onPress={() => setShowDatePicker(true)} style={[styles.input, { justifyContent: "center" }]}>
-            <Text style={[styles.text, styles.datePickerText]}>{formatDate(date)}</Text>
+          <TouchableOpacity 
+            onPress={() => setShowDatePicker(true)} 
+            style={styles.datePickerButton}
+          >
+            <Text style={styles.datePickerText}>{formatDate(date)}</Text>
+            <Text style={styles.calendarIcon}>📅</Text>
           </TouchableOpacity>
           {showDatePicker && (
-            <DateTimePicker testID="dateTimePicker" value={date} mode="date" is24Hour={true} display="default" onChange={onChangeDate} />
+            <View style={styles.datePickerWrapper}>
+              <DateTimePicker 
+                value={date} 
+                mode="date" 
+                display="spinner"
+                onChange={onChangeDate} 
+                style={styles.datePicker}
+              />
+            </View>
           )}
         </>
       );
     }
   };
 
-  return (
+    return (
     <SafeAreaView style={styles.screen}>
-      <StatusBar backgroundColor={theme.colors.background.dark} barStyle="light-content" />
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.container}>
-        <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scrollContent}>
-          <View style={styles.topContainer}>
-            <Image source={require("../../assets/images/bitty.png")} style={styles.loginImage} />
-            <Text style={styles.subTitle}> Queremos conocer un poco más de ti...</Text>
-            <Text style={styles.caption}> RELLENA LOS SIGUIENTES CAMPOS</Text>
-            <TouchableOpacity onPress={logOut} style={[styles.button, styles.buttonDanger]}>
+      <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
+      
+      <ScrollView 
+        contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.headerContainer}>
+          <Image 
+            source={require("../../assets/images/bitty.png")} 
+            style={styles.headerImage} 
+          />
+          
+          <Text style={styles.title}>¡Completa el formulario!</Text>
+          <Text style={styles.subtitle}>Queremos conocer un poco más de ti...</Text>
+        </View>
+        
+        <View style={styles.formContainer}>
+          {/* Sección del Tutor */}
+          <View style={styles.formSection}>
+            <Text style={styles.sectionTitle}>👤 Información del Tutor</Text>
+            
+            <Text style={styles.inputLabel}>Nombre completo</Text>
+            <TextInput
+              style={styles.input}
+              value={fatherName}
+              onChangeText={setFatherName}
+              placeholder="Ingresa tu nombre"
+              placeholderTextColor="#999"
+              autoCapitalize="words"
+            />
+          </View>
+
+          <View style={styles.divider} />
+
+          {/* Sección del Niño */}
+          <View style={styles.formSection}>
+            <Text style={styles.sectionTitle}>👦🏽 Información del Niño</Text>
+            
+            <Text style={styles.inputLabel}>Nombre completo</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Nombre del niño"
+              placeholderTextColor="#999"
+              value={childName}
+              autoCapitalize="words"
+              onChangeText={setChildName}
+            /> 
+            
+            {renderDatePicker()}
+          </View>
+
+          <View style={styles.divider} />
+
+          {/* Sección de Intereses */}
+          <View style={styles.formSection}>
+            <Text style={styles.sectionTitle}>❤️ Intereses del Niño</Text>
+            <Text style={styles.inputLabel}>Selecciona hasta 5 temas de interés</Text>
+            
+            <View style={styles.topicsContainer}>
+              {topics.map((topic) => {
+                const isSelected = selectedTopics.includes(topic);
+                return (
+                  <TouchableOpacity
+                    key={topic}
+                    onPress={() => toggleTopic(topic)}
+                    style={[
+                      styles.topicButton,
+                      isSelected && styles.topicButtonSelected
+                    ]}
+                  >
+                    <Text style={isSelected ? styles.selectedTopicText : styles.unselectedTopicText}>
+                      {topic}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+            
+            <Text style={[
+              styles.topicsCounter,
+              selectedTopics.length === 5 && styles.topicsCounterFull
+            ]}>
+              Seleccionados: {selectedTopics.length}/5
+            </Text>
+          </View>
+
+          {/* Botones */}
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              onPress={logOut}
+              style={[styles.button, styles.logoutButton]}
+            >
               <Text style={styles.buttonText}>Cerrar sesión</Text>
             </TouchableOpacity>
+            
+            <TouchableOpacity
+              onPress={() => registerUser(fatherEmail, childName, fatherName, date.toISOString().split('T')[0], navigation, new Date().toISOString().split('T')[0])}
+              style={[styles.button, styles.submitButton]}
+            >
+              <Text style={styles.buttonText}>Continuar</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.sectionContainer}>
-            <View>
-              <Text style={styles.caption}>Nombre del Tutor</Text>
-              <TextInput
-                style={styles.input}
-                value={fatherName}
-                onChangeText={setFatherName}
-                placeholder="Nombre"
-                placeholderTextColor="#999"
-                autoCapitalize="none"
-              />
-            </View>
-
-            <View style={styles.divider} />
-
-            <View>
-              <Text style={styles.caption}>Nombre del Futuro Programador</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nombre"
-                placeholderTextColor="#999"
-                value={childName}
-                utoCapitalize="none"
-                onChangeText={setChildName}
-              />
-              <Text style={styles.caption}>Fecha de Nacimiento</Text>
-              {renderDatePicker()}
-            </View>
-
-            <View>
-              <Text style={styles.caption}>Selecciona 5 temas de interés para el niñ@</Text>
-              <View style={styles.topicContainer}>
-                {topics.map((topic) => {
-                  const isSelected = selectedTopics.includes(topic);
-                  return (
-                    <TouchableOpacity
-                      key={topic}
-                      onPress={() => toggleTopic(topic)}
-                      style={[styles.buttonTab, isSelected && styles.buttonTabSelected]}
-                    >
-                      <Text style={isSelected ? styles.selectedText : styles.unselectedText}>{topic}</Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-              <Text style={[styles.caption,{ marginTop: theme.spacing.md }]}>Seleccionados: {selectedTopics.length}/5</Text>
-
-              <TouchableOpacity
-                onPress={() =>
-                  registerUser(
-                    fatherEmail,
-                    childName,
-                    fatherName,
-                    date.toISOString(),
-                    navigation,
-                    "2025-05-02" // lastActivity
-                  )
-                }
-                style={[styles.button, styles.buttonPrimary]}
-              >
-                <Text style={styles.buttonText}>Continuar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

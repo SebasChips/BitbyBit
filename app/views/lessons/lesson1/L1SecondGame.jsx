@@ -2,8 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Platform, Animated, Easing, Modal, TouchableOpacity } from 'react-native';
 import Tower from '../../../components/lesson1/tower';
 import VibrantBackground from '../../../components/lesson1/Background2';
-import { db, auth } from '../../../firebase/firebaseConfig';
-import { doc, updateDoc, getDoc, setDoc } from 'firebase/firestore';
+import { lessonComplete } from "../../../controllers/lessons";
 import { Video } from 'expo-av';
 import { AntDesign } from '@expo/vector-icons';
 import ConfettiCannon from 'react-native-confetti-cannon';
@@ -158,72 +157,6 @@ const SecondGame = ({ navigation }) => {
     setSelectedTower(towerIndex);
   };
 
-  const markLessonCompletedAndRedirect = async () => {
-    try {
-      const lessonId ='lesson2';
-      const userId = auth.currentUser?.uid;
-      if (!userId) return;
-      
-      const lessonProgressRef = doc(db, 'users', userId, 'lessonsProgress', lessonId);
-      const lessonSnap = await getDoc(lessonProgressRef);
-      const alreadyCompleted = lessonSnap.exists() ? lessonSnap.data().completed : false;
-
-      const userRef = doc(db, 'users', userId);
-      const userSnap = await getDoc(userRef);
-      if (!userSnap.exists()) return;
-      
-      const userData = userSnap.data();
-      const currentXp = userData.xp || 0;
-      const xpEarned = alreadyCompleted ? 500 : 1000;
-      setXp(xpEarned)
-
-      const updates = {
-        xp: currentXp + xpEarned
-      };
-
-      if (!alreadyCompleted) {
-        await updateDoc(lessonProgressRef, { completed: true });
-
-        const today = new Date();
-        const todayStr = today.toISOString().split('T')[0];
-        const lastActivity = userData.lastActivity || null;
-        const currentStreak = userData.streak || 0;
-
-        let newStreak = 1;
-        if (lastActivity) {
-          const lastDate = new Date(lastActivity);
-          const diffTime = today.getTime() - lastDate.getTime();
-          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-          if (diffDays === 1) newStreak = currentStreak + 1;
-          else if (diffDays === 0) newStreak = currentStreak;
-        }
-
-        updates.streak = newStreak;
-        updates.lastActivity = todayStr;
-
-        const lesson2Ref = doc(db, 'users', userId, 'lessonsProgress', 'lesson3');
-        const lesson2Snap = await getDoc(lesson2Ref);      
-        if (!lesson2Snap.exists()) {
-          await setDoc(lesson2Ref, {
-            attempts: 0,
-            completed: false,
-            levelLesson: 2,
-            score: 0
-          });
-        }
-      }
-
-      await updateDoc(userRef, updates);
-
-      setTimeout(() => {
-        navigation.navigate('Main');
-      }, 3000);
-
-    } catch (error) {
-      console.error("Error al actualizar progreso o XP:", error);
-    }
-  };
 
   const handleMoveDisc = async (targetTowerIndex) => {
     if (won || selectedTower === null) return;
@@ -238,23 +171,32 @@ const SecondGame = ({ navigation }) => {
       setTowers(newTowers);
 
       if (checkWinCondition(newTowers)) {
-        await playWinSound();
-        setWon(true);
-        const winAnimation = startWinAnimation(
-                  positionAnim,    
-                  opacityAnim,      
-                  rotateAnim,      
-                  scaleAnim,       
-                  starScaleAnims,  
-                  confettiRef      
-                );
-          
-      winAnimation.start();
-        if (confettiRef.current) {
-        confettiRef.current.start();
-      }
-        markLessonCompletedAndRedirect();
-      }
+           setWon(true);
+     
+           const winAnimation = startWinAnimation(
+             positionAnim,    
+             opacityAnim,      
+             rotateAnim,      
+             scaleAnim,       
+             starScaleAnims,  
+             confettiRef      
+           );
+     
+           winAnimation.start();
+           if (confettiRef.current) {
+             confettiRef.current.start();
+           }
+     
+           (async () => {
+             await playWinSound();
+             const xpEarned = await lessonComplete('lesson2', 'lesson3');
+             setXp(xpEarned);
+           })();
+     
+           setTimeout(() => {
+             navigation.navigate('Main');
+           }, 3000);
+         }
     } else if (fromDisc !== toDisc) {
       await playWrongSound();
     }
