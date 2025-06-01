@@ -10,7 +10,13 @@ This is an [Expo](https://expo.dev) and pure ReactNative project
    npm install
    ```
 
-2. Start the app
+2. Add a config file for the firebase database
+
+   ```bash
+    app/firebase/firebaseConfig
+   ```
+
+3. Start the app
 
    ```bash
     npx expo start
