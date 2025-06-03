@@ -14,6 +14,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import { checkUserSession, logOut } from "../../controllers/auths";
 import { registerUser } from "../../controllers/querys";
+import Toast from 'react-native-toast-message';
 import styles from "../../constants/userInfoStyles";
 
 const topics = [
@@ -56,15 +57,38 @@ export default function UserInfoForm() {
       year: "numeric",
     }).replace(/\//g, "/");
 
-  const onChangeDate = (event, selectedDate) => {
-    if (Platform.OS === "web") {
-      setDate(new Date(event.target.value));
+const onChangeDate = (event, selectedDate) => {
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
+  if (Platform.OS === "web") {
+    const selected = new Date(event.target.value);
+    if (selected <= today) {
+      setDate(selected);
     } else {
-      const currentDate = selectedDate || date;
+      Toast.show({
+        type: 'error',
+        text1: 'Fecha no válida',
+        text2: 'Solo puedes seleccionar fechas hasta hoy',
+        visibilityTime: 3000,
+        position: 'bottom',
+      });
+    }
+  } else {
+    const currentDate = selectedDate || date;
+    if (currentDate <= today) {
       setShowDatePicker(Platform.OS === "ios");
       setDate(currentDate);
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Fecha no válida',
+        text2: 'Solo puedes seleccionar fechas hasta hoy',
+        visibilityTime: 3000,
+        position: 'bottom',
+      });
     }
-  };
+  }
+};
 
   const toggleTopic = (topic) => {
     if (selectedTopics.includes(topic)) {
@@ -88,6 +112,7 @@ export default function UserInfoForm() {
                 setDate(new Date(e.target.value));
               }
             }}
+            max={new Date().toISOString().split('T')[0]}
             style={styles.webDateInputNative}
           />
           <View style={styles.webDateInputDisplay}>
@@ -113,6 +138,7 @@ export default function UserInfoForm() {
                 display="spinner"
                 onChange={onChangeDate} 
                 style={styles.datePicker}
+                maximumDate={new Date()}
               />
             </View>
           )}

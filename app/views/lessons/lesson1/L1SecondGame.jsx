@@ -9,6 +9,8 @@ import ConfettiCannon from 'react-native-confetti-cannon';
 import {startWinAnimation} from '../../../components/lesson1/Animations';
 
 import { getStyles } from '../../../constants/gamesLesson1';
+import { useNavigation } from "@react-navigation/native";
+
 
 const isWeb = Platform.OS === 'web';
 const styles = getStyles(Platform.OS);
@@ -18,8 +20,11 @@ if (!isWeb) {
   ExpoAudio = require('expo-av').Audio;
 }
 
-const SecondGame = ({ navigation }) => {
+const SecondGame = () => {
+    const navigation = useNavigation();
+  
   //torres
+  
   const [selectedTower, setSelectedTower] = useState(null);
   const [counter, setCounter] = useState(0);
   const [won, setWon] = useState(false);
@@ -249,6 +254,7 @@ const SecondGame = ({ navigation }) => {
                   ref={video}
                   source={require('../../../assets/video/firstvideo.mp4')}
                   style={styles.video}
+                  shouldPlay={true}
                   resizeMode="contain"
                   isLooping={false}
                   useNativeControls

@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png", 
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon-foreground.png",
+        "foregroundImage": "./assets/images/iconapp.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.BitbyBit"
