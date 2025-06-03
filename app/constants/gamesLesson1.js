@@ -34,16 +34,16 @@ export const getStyles = (platformOS, isWeb) => StyleSheet.create({
 
   restartButtonContainer: {
     position: 'absolute',
-    top: platformOS === 'ios' ? 50 : 30,
+    top: 5,
     right: 20,
     zIndex: 100,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(87, 130, 185, 0.2)',
     borderRadius: 20,
     padding: 8,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
+    borderColor: 'rgba(87, 130, 185, 0.2)',
   },
 
   restartButtonText: {
@@ -55,16 +55,16 @@ export const getStyles = (platformOS, isWeb) => StyleSheet.create({
 
   backButtonContainer: {
     position: 'absolute',
-    top: platformOS === 'ios' ? 50 : 30,
+    top: 5,
     left: 20,
     zIndex: 100,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(87, 130, 185, 0.2)',
     borderRadius: 20,
     padding: 8,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
+    borderColor: 'rgba(87, 130, 185, 0.2)',
   },
 
   // Win animation styles

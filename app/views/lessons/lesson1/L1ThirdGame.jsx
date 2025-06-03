@@ -3,11 +3,12 @@ import { View, Text, Platform, Animated, Easing, Modal, TouchableOpacity } from 
 import Tower from '../../../components/lesson1/tower';
 import EpicFinalBackground from '../../../components/lesson1/Background3';
 import { lessonComplete } from "../../../controllers/lessons";
-import { Video } from 'expo-av';
 import { AntDesign } from '@expo/vector-icons';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import {startWinAnimation} from '../../../components/lesson1/Animations';
 import { getStyles } from '../../../constants/gamesLesson1';
+import { useNavigation } from "@react-navigation/native";
+
 
 
 const isWeb = Platform.OS === 'web';
@@ -18,7 +19,9 @@ if (!isWeb) {
   ExpoAudio = require('expo-av').Audio;
 }
 
-const ThirdGame = ({ navigation }) => {
+const ThirdGame = () => {
+    const navigation = useNavigation();
+  
   //torres
   const [selectedTower, setSelectedTower] = useState(null);
   const [counter, setCounter] = useState(0);
@@ -43,10 +46,7 @@ const ThirdGame = ({ navigation }) => {
     new Animated.Value(1)
   ]).current;
 
-  //Video
-  const [visible, setVisible] = useState(false);
-  const video = useRef(null);
-
+ 
   const [towers, setTowers] = useState([
     [5, 4, 3, 2, 1],
     [],
@@ -236,26 +236,6 @@ const ThirdGame = ({ navigation }) => {
       <Modal visible={visible} animationType="fade" transparent={true}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <View style={styles.videoContainer}>
-              {isWeb ? (
-                <video
-                  src={require('../../../assets/video/firstvideo.mp4')}
-                  style={styles.webVideo}
-                  controls
-                  autoPlay
-                  loop={false}
-                />
-              ) : (
-                <Video
-                  ref={video}
-                  source={require('../../../assets/video/firstvideo.mp4')}
-                  style={styles.video}
-                  resizeMode="contain"
-                  isLooping={false}
-                  useNativeControls
-                />
-              )}
-            </View>
 
             <View style={styles.instructionsBox}>
               <Text style={styles.instructionsTitle}>¡Bienvenido al Juego de las Torres de Hanoi!</Text>

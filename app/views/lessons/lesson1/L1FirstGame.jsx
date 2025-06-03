@@ -8,6 +8,8 @@ import { AntDesign } from '@expo/vector-icons';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { getStyles } from '../../../constants/gamesLesson1';
 import {startWinAnimation} from '../../../components/lesson1/Animations';
+import { useNavigation } from "@react-navigation/native";
+
 const isWeb = Platform.OS === 'web';
 const styles = getStyles(Platform.OS);
 
@@ -16,7 +18,9 @@ if (!isWeb) {
   ExpoAudio = require('expo-av').Audio;
 }
 
-const FirstGame = ({ navigation }) => {
+const FirstGame = () => {
+    const navigation = useNavigation();
+  
   //torres
   const [selectedTower, setSelectedTower] = useState(null);
   const [counter, setCounter] = useState(0);
@@ -249,6 +253,7 @@ const FirstGame = ({ navigation }) => {
                   source={require('../../../assets/video/firstvideo.mp4')}
                   style={styles.video}
                   resizeMode="contain"
+                  shouldPlay={true}
                   isLooping={false}
                   useNativeControls
                 />

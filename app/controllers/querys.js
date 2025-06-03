@@ -1,4 +1,4 @@
-import { doc, setDoc, collection, addDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import Toast from 'react-native-toast-message';
 import { auth, db } from "../firebase/firebaseConfig";
 
@@ -42,5 +42,23 @@ export const registerUser = async (email, nameKid, nameTutor, bornDateKid, navig
       text1: 'Error',
       text2: 'No se pudo registrar el usuario',
     });
+  }
+};
+export const getUserData = async () => {
+  try {
+    const session = auth.currentUser;
+    if (!session) return null;
+    
+    const userId = session.uid;
+    const userRef = doc(db, 'users', userId);
+    const userSnap = await getDoc(userRef);
+    
+    if (userSnap.exists()) {
+      return userSnap.data();
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting user data:", error);
+    return null;
   }
 };
