@@ -48,16 +48,15 @@ export default StyleSheet.create({
   
   // Form
   formContainer: {
-    marginTop: -20,
+    marginTop: 20,
     backgroundColor: '#ffffff',
     borderRadius: 20,
     marginHorizontal: 20,
     padding: 25,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 10,
-    elevation: 5,
   },
   formSection: {
     marginBottom: 25,
